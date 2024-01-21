@@ -16,56 +16,95 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.swervemodules.MAXSwerveModule;
+import frc.robot.subsystems.swervemodules.SDSSwerveModule;
+import frc.robot.subsystems.swervemodules.SwerveModule;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
     // Create MAXSwerveModules
-    private final SwerveModule m_frontLeft = new MAXSwerveModule(
-        DriveConstants.kFrontLeftDrivingCanId,
-        DriveConstants.kFrontLeftTurningCanId,
-        DriveConstants.kFrontLeftChassisAngularOffset);
-
-    private final SwerveModule m_frontRight = new MAXSwerveModule(
-        DriveConstants.kFrontRightDrivingCanId,
-        DriveConstants.kFrontRightTurningCanId,
-        DriveConstants.kFrontRightChassisAngularOffset);
-
-    private final SwerveModule m_rearLeft = new MAXSwerveModule(
-        DriveConstants.kRearLeftDrivingCanId,
-        DriveConstants.kRearLeftTurningCanId,
-        DriveConstants.kBackLeftChassisAngularOffset);
-
-    private final SwerveModule m_rearRight = new MAXSwerveModule(
-        DriveConstants.kRearRightDrivingCanId,
-        DriveConstants.kRearRightTurningCanId,
-        DriveConstants.kBackRightChassisAngularOffset);
+    private final SwerveModule m_frontLeft;
+    private final SwerveModule m_frontRight; 
+    private final SwerveModule m_rearLeft;
+    private final SwerveModule m_rearRight;
 
     // The gyro sensor
     private final AHRS m_gyro = new AHRS();
 
     // Slew rate filter variables for controlling lateral acceleration
-    private double m_currentRotation = 0.0;
-    private double m_currentTranslationDir = 0.0;
-    private double m_currentTranslationMag = 0.0;
+    private double m_currentRotation;
+    private double m_currentTranslationDir;
+    private double m_currentTranslationMag;
 
     private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
     private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
     private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
     // Odometry class for tracking robot pose
-    SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-        DriveConstants.kDriveKinematics,
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
+    public SwerveDriveOdometry m_odometry;
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
+        if (DriveConstants.isMAXSwerveModules) {
+            m_frontLeft = new MAXSwerveModule(
+                DriveConstants.kFrontLeftDrivingCanId,
+                DriveConstants.kFrontLeftTurningCanId,
+                DriveConstants.kFrontLeftChassisAngularOffset);
+
+            m_frontRight = new MAXSwerveModule(
+                DriveConstants.kFrontRightDrivingCanId,
+                DriveConstants.kFrontRightTurningCanId,
+                DriveConstants.kFrontRightChassisAngularOffset);
+
+            m_rearLeft = new MAXSwerveModule(
+                DriveConstants.kRearLeftDrivingCanId,
+                DriveConstants.kRearLeftTurningCanId,
+                DriveConstants.kBackLeftChassisAngularOffset);
+
+            m_rearRight = new MAXSwerveModule(
+                DriveConstants.kRearRightDrivingCanId,
+                DriveConstants.kRearRightTurningCanId,
+                DriveConstants.kBackRightChassisAngularOffset);
+        } else {
+            m_frontLeft = new SDSSwerveModule(
+                DriveConstants.kFrontLeftDrivingCanId,
+                DriveConstants.kFrontLeftTurningCanId,
+                DriveConstants.kFrontLeftTurningCANcoderId,
+                DriveConstants.kFrontLeftTurningOffset,
+                DriveConstants.kFrontLeftChassisAngularOffset);
+
+            m_frontRight = new SDSSwerveModule(
+                DriveConstants.kFrontRightDrivingCanId,
+                DriveConstants.kFrontRightTurningCanId,
+                DriveConstants.kFrontRightTurningCANcoderId,
+                DriveConstants.kFrontRightTurningOffset,
+                DriveConstants.kFrontRightChassisAngularOffset);
+
+            m_rearLeft = new SDSSwerveModule(
+                DriveConstants.kRearLeftDrivingCanId,
+                DriveConstants.kRearLeftTurningCanId,
+                DriveConstants.kRearLeftTurningCANcoderId,
+                DriveConstants.kRearLeftTurningOffset,
+                DriveConstants.kBackLeftChassisAngularOffset);
+
+            m_rearRight = new SDSSwerveModule(
+                DriveConstants.kRearRightDrivingCanId,
+                DriveConstants.kRearRightTurningCanId,
+                DriveConstants.kRearRightTurningCANcoderId,
+                DriveConstants.kRearRightTurningOffset,
+                DriveConstants.kBackRightChassisAngularOffset);
+        }
+        
+        m_odometry = new SwerveDriveOdometry(
+            DriveConstants.kDriveKinematics,
+            Rotation2d.fromDegrees(m_gyro.getAngle()),
+            new SwerveModulePosition[] {
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_rearLeft.getPosition(),
+                m_rearRight.getPosition()
+        });
     }
 
     @Override
