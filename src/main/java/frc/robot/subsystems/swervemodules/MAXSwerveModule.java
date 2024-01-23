@@ -114,6 +114,6 @@ public class MAXSwerveModule extends SwerveModule {
      * @param desiredState Desired state with speed and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
-        super.setDesiredState(desiredState, m_turningEncoder.getPosition(), m_chassisAngularOffset);
+        super.setDesiredState(desiredState, m_turningEncoder.getPosition(), m_chassisAngularOffset, SwerveModuleState::optimize);
     }
 }

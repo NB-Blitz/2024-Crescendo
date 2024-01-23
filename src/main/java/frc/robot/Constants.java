@@ -145,9 +145,6 @@ public final class Constants {
     public static final class SDSModuleConstants {
         // TODO: Confirm all values
 
-        // Don't invert the turning encoder, since we're using the SDS module.
-        public static final boolean kTurningEncoderInverted = true;
-
         // Calculations required for driving motor conversion factors and feed forward
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
@@ -163,7 +160,7 @@ public final class Constants {
 
         // SDS MK4 L1 turning gear ratio is 12.8:1
         public static final double kTurningMotorReduction = 12.8;
-        public static final double kTurningEncoderPositionFactor = (1 / kTurningMotorReduction) * (2 * Math.PI); // radians
+        public static final double kTurningEncoderPositionFactor = (2 * Math.PI) / kTurningMotorReduction; // radians
         public static final double kTurningEncoderVelocityFactor = kTurningEncoderPositionFactor / 60.0; // radians per second
 
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians

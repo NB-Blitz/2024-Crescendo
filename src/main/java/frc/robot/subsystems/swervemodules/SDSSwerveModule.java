@@ -13,10 +13,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.SwerveModuleConstants;
+import frc.utils.SwerveUtils;
 import frc.robot.Constants.SDSModuleConstants;
 
 public class SDSSwerveModule extends SwerveModule {
-    public final CANcoder m_turningCANcoder;
+    private final CANcoder m_turningCANcoder;
     private final RelativeEncoder m_turningEncoder;
 
     private final double m_turningOffset;
@@ -48,10 +49,6 @@ public class SDSSwerveModule extends SwerveModule {
         // APIs.
         m_turningEncoder.setPositionConversionFactor(SDSModuleConstants.kTurningEncoderPositionFactor);
         m_turningEncoder.setVelocityConversionFactor(SDSModuleConstants.kTurningEncoderVelocityFactor);
-
-        // Invert the turning encoder, since the output shaft rotates in the opposite direction of
-        // the steering motor in the MAXSwerve Module.
-        //m_turningEncoder.setInverted(SDSModuleConstants.kTurningEncoderInverted);
 
         // Enable PID wrap around for the turning motor. This will allow the PID
         // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -94,7 +91,7 @@ public class SDSSwerveModule extends SwerveModule {
         Timer.delay(1.0);
         syncTurningEncoders();
 
-        m_desiredState.angle = new Rotation2d(Math.abs(m_turningEncoder.getPosition() % (2 * Math.PI)));
+        m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
         m_drivingEncoder.setPosition(0);
     }
 
@@ -106,7 +103,7 @@ public class SDSSwerveModule extends SwerveModule {
     public SwerveModuleState getState() {
         // Apply chassis angular offset to the encoder position to get the position
         // relative to the chassis.
-        return super.getState(Math.abs(m_turningEncoder.getPosition() % (2 * Math.PI)), m_chassisAngularOffset);
+        return super.getState(m_turningEncoder.getPosition(), m_chassisAngularOffset);
     }
 
     /**
@@ -126,7 +123,8 @@ public class SDSSwerveModule extends SwerveModule {
      * @param desiredState Desired state with speed and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
-        super.setDesiredState(desiredState, Math.abs(m_turningEncoder.getPosition() % (2 * Math.PI)), m_chassisAngularOffset);
+        /* Uses a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and REV onboard are not */
+        super.setDesiredState(desiredState, m_turningEncoder.getPosition(), m_chassisAngularOffset, SwerveUtils::optimize);
     }
     
     public void syncTurningEncoders() {
