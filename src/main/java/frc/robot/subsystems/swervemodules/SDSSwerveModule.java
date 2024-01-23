@@ -3,6 +3,7 @@ package frc.robot.subsystems.swervemodules;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -15,7 +16,7 @@ import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.SDSModuleConstants;
 
 public class SDSSwerveModule extends SwerveModule {
-    private final CANcoder m_turningCANcoder;
+    public final CANcoder m_turningCANcoder;
     private final RelativeEncoder m_turningEncoder;
 
     private final double m_turningOffset;
@@ -50,7 +51,7 @@ public class SDSSwerveModule extends SwerveModule {
 
         // Invert the turning encoder, since the output shaft rotates in the opposite direction of
         // the steering motor in the MAXSwerve Module.
-        m_turningEncoder.setInverted(SDSModuleConstants.kTurningEncoderInverted);
+        //m_turningEncoder.setInverted(SDSModuleConstants.kTurningEncoderInverted);
 
         // Enable PID wrap around for the turning motor. This will allow the PID
         // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -90,9 +91,10 @@ public class SDSSwerveModule extends SwerveModule {
         m_drivingSpark.burnFlash();
         m_turningSpark.burnFlash();
 
+        Timer.delay(1.0);
         syncTurningEncoders();
 
-        m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
+        m_desiredState.angle = new Rotation2d(Math.abs(m_turningEncoder.getPosition() % (2 * Math.PI)));
         m_drivingEncoder.setPosition(0);
     }
 
@@ -104,7 +106,7 @@ public class SDSSwerveModule extends SwerveModule {
     public SwerveModuleState getState() {
         // Apply chassis angular offset to the encoder position to get the position
         // relative to the chassis.
-        return super.getState(m_turningEncoder.getPosition(), m_chassisAngularOffset);
+        return super.getState(Math.abs(m_turningEncoder.getPosition() % (2 * Math.PI)), m_chassisAngularOffset);
     }
 
     /**
@@ -124,7 +126,7 @@ public class SDSSwerveModule extends SwerveModule {
      * @param desiredState Desired state with speed and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
-        super.setDesiredState(desiredState, m_turningEncoder.getPosition(), m_chassisAngularOffset);
+        super.setDesiredState(desiredState, Math.abs(m_turningEncoder.getPosition() % (2 * Math.PI)), m_chassisAngularOffset);
     }
     
     public void syncTurningEncoders() {
@@ -132,5 +134,9 @@ public class SDSSwerveModule extends SwerveModule {
         double absolutePosition = m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI; // radians
         double adjustedPosition = absolutePosition - Math.toRadians(m_turningOffset);
         m_turningEncoder.setPosition(adjustedPosition);
+    }
+
+    public double getCANcoderPosition() {
+        return m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - m_turningOffset;
     }
 }

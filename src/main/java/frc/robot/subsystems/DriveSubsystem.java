@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.swervemodules.MAXSwerveModule;
 import frc.robot.subsystems.swervemodules.SDSSwerveModule;
@@ -58,13 +59,13 @@ public class DriveSubsystem extends SubsystemBase {
                 DriveConstants.kFrontRightChassisAngularOffset);
 
             m_rearLeft = new MAXSwerveModule(
-                DriveConstants.kRearLeftDrivingCanId,
-                DriveConstants.kRearLeftTurningCanId,
+                DriveConstants.kBackLeftDrivingCanId,
+                DriveConstants.kBackLeftTurningCanId,
                 DriveConstants.kBackLeftChassisAngularOffset);
 
             m_rearRight = new MAXSwerveModule(
-                DriveConstants.kRearRightDrivingCanId,
-                DriveConstants.kRearRightTurningCanId,
+                DriveConstants.kBackRightDrivingCanId,
+                DriveConstants.kBackRightTurningCanId,
                 DriveConstants.kBackRightChassisAngularOffset);
         } else {
             m_frontLeft = new SDSSwerveModule(
@@ -82,17 +83,17 @@ public class DriveSubsystem extends SubsystemBase {
                 DriveConstants.kFrontRightChassisAngularOffset);
 
             m_rearLeft = new SDSSwerveModule(
-                DriveConstants.kRearLeftDrivingCanId,
-                DriveConstants.kRearLeftTurningCanId,
-                DriveConstants.kRearLeftTurningCANcoderId,
-                DriveConstants.kRearLeftTurningOffset,
+                DriveConstants.kBackLeftDrivingCanId,
+                DriveConstants.kBackLeftTurningCanId,
+                DriveConstants.kBackLeftTurningCANcoderId,
+                DriveConstants.kBackLeftTurningOffset,
                 DriveConstants.kBackLeftChassisAngularOffset);
 
             m_rearRight = new SDSSwerveModule(
-                DriveConstants.kRearRightDrivingCanId,
-                DriveConstants.kRearRightTurningCanId,
-                DriveConstants.kRearRightTurningCANcoderId,
-                DriveConstants.kRearRightTurningOffset,
+                DriveConstants.kBackRightDrivingCanId,
+                DriveConstants.kBackRightTurningCanId,
+                DriveConstants.kBackRightTurningCANcoderId,
+                DriveConstants.kBackRightTurningOffset,
                 DriveConstants.kBackRightChassisAngularOffset);
         }
         
@@ -118,6 +119,19 @@ public class DriveSubsystem extends SubsystemBase {
                 m_rearLeft.getPosition(),
                 m_rearRight.getPosition()
             });
+
+        SmartDashboard.putNumber("Position (x)", getOdometry().getPoseMeters().getX());
+        SmartDashboard.putNumber("Position (y)", getOdometry().getPoseMeters().getY());
+        SmartDashboard.putNumber("Position (rot)", getOdometry().getPoseMeters().getRotation().getDegrees());
+
+        SmartDashboard.putNumber("FL Rel Encoder", m_frontLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FL Abs Encoder", ((SDSSwerveModule)m_frontLeft).getCANcoderPosition());
+        SmartDashboard.putNumber("FR Rel Encoder", m_frontRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FR Abs Encoder", ((SDSSwerveModule)m_frontRight).getCANcoderPosition());
+        SmartDashboard.putNumber("BL Rel Encoder", m_rearLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("BL Abs Encoder", ((SDSSwerveModule)m_rearLeft).getCANcoderPosition());
+        SmartDashboard.putNumber("BR Rel Encoder", m_rearRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("BR Abs Encoder", ((SDSSwerveModule)m_rearRight).getCANcoderPosition());
     }
 
     /**
@@ -272,5 +286,9 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public double getTurnRate() {
         return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    }
+
+    public SwerveDriveOdometry getOdometry() {
+        return m_odometry;
     }
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -50,9 +51,9 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> m_robotDrive.drive(
-                    -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
-                    MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
-                    MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kDriveDeadband),
+                    0.2 * -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
+                    0.2 * MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
+                    0.2 * MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kDriveDeadband),
                     true, true),
                 m_robotDrive));
     }
@@ -67,6 +68,11 @@ public class RobotContainer {
         new JoystickButton(m_driverController, OIConstants.kDriveBrakeButton)
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.setX(),
+                m_robotDrive));
+
+        new JoystickButton(m_driverController, OIConstants.kDriveGyroResetButton)
+            .onTrue(new RunCommand(
+                () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
     }
 
