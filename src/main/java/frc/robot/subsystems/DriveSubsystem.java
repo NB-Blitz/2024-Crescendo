@@ -16,12 +16,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.swervemodules.MAXSwerveModule;
 import frc.robot.subsystems.swervemodules.SDSSwerveModule;
 import frc.robot.subsystems.swervemodules.SwerveModule;
 import frc.utils.SwerveUtils;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
     // Create MAXSwerveModules
@@ -120,9 +120,9 @@ public class DriveSubsystem extends SubsystemBase {
                 m_rearRight.getPosition()
             });
 
-        SmartDashboard.putNumber("Position (x)", getOdometry().getPoseMeters().getX());
-        SmartDashboard.putNumber("Position (y)", getOdometry().getPoseMeters().getY());
-        SmartDashboard.putNumber("Position (rot)", getOdometry().getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("Position (x)", getPose().getX());
+        SmartDashboard.putNumber("Position (y)", getPose().getY());
+        SmartDashboard.putNumber("Position (rot)", getPose().getRotation().getDegrees());
 
         SmartDashboard.putNumber("FL Rel Encoder", m_frontLeft.getState().angle.getDegrees());
         SmartDashboard.putNumber("FL Abs Encoder", ((SDSSwerveModule)m_frontLeft).getCANcoderPosition());
@@ -286,9 +286,5 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public double getTurnRate() {
         return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-    }
-
-    public SwerveDriveOdometry getOdometry() {
-        return m_odometry;
     }
 }
