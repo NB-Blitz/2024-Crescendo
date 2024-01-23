@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,8 +19,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MAXModuleConstants;
 import frc.robot.subsystems.swervemodules.MAXSwerveModule;
@@ -31,6 +37,8 @@ public class DriveSubsystem extends SubsystemBase {
     private final SwerveModule m_frontRight; 
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
+
+    private ChassisSpeeds m_currentChassisSpeeds;
 
     // The gyro sensor
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -104,6 +112,27 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
         });
+
+        // Configure AutoBuilder last
+        AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            AutoConstants.kPathFollowerConfig, // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                Optional<Alliance> alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this // Reference to this subsystem to set requirements
+        );
     }
 
     @Override
@@ -156,6 +185,30 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             },
             pose);
+    }
+
+    /**
+     * Returns the current non-field relative chassis speeds.
+     * 
+     * @return Robot relative chassis speeds
+     */
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return m_currentChassisSpeeds;
+    }
+
+    /**
+     * Drive the robot with non-field relative chassis speeds.
+     * Used for PathPlanner/autonomous.
+     * 
+     * @param chassisSpeeds Robot relative chassis speeds
+     */
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+        drive(
+            chassisSpeeds.vxMetersPerSecond,
+            chassisSpeeds.vyMetersPerSecond,
+            chassisSpeeds.omegaRadiansPerSecond,
+            false,
+            true);
     }
 
     /**
@@ -220,6 +273,8 @@ public class DriveSubsystem extends SubsystemBase {
         double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
         SmartDashboard.putNumberArray("Dir Inputs", new double[]{xSpeedCommanded, ySpeedCommanded, m_currentRotation});
+
+        m_currentChassisSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
 
         SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             fieldRelative

@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -41,10 +43,12 @@ public final class Constants {
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
         // Chassis configuration
-        public static final double kTrackWidth = Units.inchesToMeters(18.5);
+        // Drive base radius in meters. Distance from robot center to furthest module.
+        public static final double kDriveBaseRadius = 0.4; // TODO: Change to correct value
         // Distance between centers of right and left wheels on robot
-        public static final double kWheelBase = Units.inchesToMeters(19.5);
+        public static final double kTrackWidth = Units.inchesToMeters(18.5);
         // Distance between front and back wheels on robot
+        public static final double kWheelBase = Units.inchesToMeters(19.5);
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -183,18 +187,14 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
-
-        // Constraint for the motion profiled robot angle controller
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+        // TODO: Make a better way to change PID constants between module types
+        public static final HolonomicPathFollowerConfig kPathFollowerConfig = new HolonomicPathFollowerConfig(
+            new PIDConstants(SDSModuleConstants.kDrivingP, SDSModuleConstants.kDrivingI, SDSModuleConstants.kDrivingD), // Translation PID constants
+            new PIDConstants(SDSModuleConstants.kTurningP, SDSModuleConstants.kTurningI, SDSModuleConstants.kTurningD), // Rotation PID constants
+            DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
+            DriveConstants.kDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        );
     }
 
     public static final class NeoMotorConstants {
