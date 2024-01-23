@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.utils.SwerveUtils;
 
 public abstract class SwerveModule {
-    // TODO: Should these be accessed with super. for clarity?
     protected final CANSparkBase m_drivingSpark;
     protected final CANSparkMax m_turningSpark;
 

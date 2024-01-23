@@ -56,7 +56,6 @@ public final class Constants {
         public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
         // SPARK CAN IDs
-        // TODO: Set all IDs and offsets
         public static final int kFrontLeftDrivingCanId = 2;
         public static final int kFrontRightDrivingCanId = 4;
         public static final int kBackLeftDrivingCanId = 5;
@@ -67,7 +66,6 @@ public final class Constants {
         public static final int kBackLeftTurningCanId = 6;
         public static final int kBackRightTurningCanId = 7;
 
-        // TODO: Match these in Phoenix Tuner
         public static final int kFrontLeftTurningCANcoderId = 13;
         public static final int kFrontRightTurningCANcoderId = 14;
         public static final int kBackLeftTurningCANcoderId = 15;
