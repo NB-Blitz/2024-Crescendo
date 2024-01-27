@@ -1,12 +1,13 @@
 package frc.robot.subsystems.swervemodules;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -27,14 +28,18 @@ public class SDSSwerveModule extends SwerveModule {
      * CANcoder, and PID controller. This configuration is specific to the SDS
      * Swerve Module built with NEOs, SPARKS, and a CTRE CANcoder.
      */
-    public SDSSwerveModule(int drivingCANId, int turningCANId, int turningEncoderCANId, double turningOffset, double chassisAngularOffset) {
-        super(new CANSparkMax(drivingCANId, MotorType.kBrushless), turningCANId, chassisAngularOffset);
+    public SDSSwerveModule(int drivingCANId, int turningCANId, int turningEncoderCANId, double turningOffset) {
+        super(new CANSparkMax(drivingCANId, MotorType.kBrushless), turningCANId);
 
         m_turningOffset = turningOffset;
         
         // Setup encoders and PID controllers for the driving and turning SPARKS.
         m_turningCANcoder = new CANcoder(turningEncoderCANId);
-        m_turningCANcoder.getConfigurator().apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1));
+        MagnetSensorConfigs canCoderConfig = new MagnetSensorConfigs();
+        canCoderConfig = canCoderConfig.withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1);
+        canCoderConfig = canCoderConfig.withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+        m_turningCANcoder.getConfigurator().apply(canCoderConfig);
+        
         m_turningEncoder = super.m_turningSpark.getEncoder();
         super.m_turningPIDController.setFeedbackDevice(m_turningEncoder);
 
@@ -50,16 +55,10 @@ public class SDSSwerveModule extends SwerveModule {
         m_turningEncoder.setPositionConversionFactor(SDSModuleConstants.kTurningEncoderPositionFactor);
         m_turningEncoder.setVelocityConversionFactor(SDSModuleConstants.kTurningEncoderVelocityFactor);
 
-        // Enable PID wrap around for the turning motor. This will allow the PID
-        // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
-        // to 10 degrees will go through 0 rather than the other direction which is a
-        // longer route.
-        super.m_turningPIDController.setPositionPIDWrappingEnabled(true);
-        super.m_turningPIDController.setPositionPIDWrappingMinInput(SDSModuleConstants.kTurningEncoderPositionPIDMinInput);
-        super.m_turningPIDController.setPositionPIDWrappingMaxInput(SDSModuleConstants.kTurningEncoderPositionPIDMaxInput);
+        // Disable PID wrap around for the SDS turning motor.
+        super.m_turningPIDController.setPositionPIDWrappingEnabled(false);
 
-        // Set the PID gains for the driving motor. Note these are example gains, and you
-        // may need to tune them for your own robot!
+        // Set the PID gains for the driving motor.
         super.m_drivingPIDController.setP(SDSModuleConstants.kDrivingP);
         super.m_drivingPIDController.setI(SDSModuleConstants.kDrivingI);
         super.m_drivingPIDController.setD(SDSModuleConstants.kDrivingD);
@@ -68,8 +67,7 @@ public class SDSSwerveModule extends SwerveModule {
             SwerveModuleConstants.kDrivingMinOutput,
             SwerveModuleConstants.kDrivingMaxOutput);
 
-        // Set the PID gains for the turning motor. Note these are example gains, and you
-        // may need to tune them for your own robot!
+        // Set the PID gains for the turning motor.
         super.m_turningPIDController.setP(SDSModuleConstants.kTurningP);
         super.m_turningPIDController.setI(SDSModuleConstants.kTurningI);
         super.m_turningPIDController.setD(SDSModuleConstants.kTurningD);
@@ -88,9 +86,11 @@ public class SDSSwerveModule extends SwerveModule {
         super.m_drivingSpark.burnFlash();
         super.m_turningSpark.burnFlash();
 
+        // Give the SPARKS time to burn the configurations to their flash.
+        Timer.delay(1);
+
         syncTurningEncoders();
 
-        super.m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
         super.m_drivingEncoder.setPosition(0);
     }
 
@@ -99,10 +99,11 @@ public class SDSSwerveModule extends SwerveModule {
      *
      * @return The current state of the module.
      */
+    @Override
     public SwerveModuleState getState() {
         // Apply chassis angular offset to the encoder position to get the position
         // relative to the chassis.
-        return super.getState(m_turningEncoder.getPosition(), super.m_chassisAngularOffset);
+        return super.getState(m_turningEncoder.getPosition(), 0);
     }
 
     /**
@@ -110,10 +111,11 @@ public class SDSSwerveModule extends SwerveModule {
      *
      * @return The current position of the module.
      */
+    @Override
     public SwerveModulePosition getPosition() {
         // Apply chassis angular offset to the encoder position to get the position
         // relative to the chassis.
-        return super.getPosition(m_turningEncoder.getPosition(), super.m_chassisAngularOffset);
+        return super.getPosition(m_turningEncoder.getPosition(), 0);
     }
 
     /**
@@ -121,13 +123,21 @@ public class SDSSwerveModule extends SwerveModule {
      *
      * @param desiredState Desired state with speed and angle.
      */
+    @Override
     public void setDesiredState(SwerveModuleState desiredState) {
-        /* Uses a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and REV onboard are not */
-        super.setDesiredState(desiredState, m_turningEncoder.getPosition(), super.m_chassisAngularOffset, SwerveUtils::optimize);
+        // Optimize the reference state to avoid spinning further than 90 degrees.
+        // Uses a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and REV onboard are not.
+        SwerveModuleState optimizedDesiredState = SwerveUtils.optimize(desiredState, getState().angle);
+
+        // Command driving and turning SPARKS towards their respective setpoints.
+        super.m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        super.m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
     }
     
+    /**
+     * Set the NEO's built-in relative encoder's position to the CANcoder's position.
+     */
     public void syncTurningEncoders() {
-        // TODO: Review this
         double absolutePosition = m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * Constants.TWO_PI; // radians
         double adjustedPosition = absolutePosition - Math.toRadians(m_turningOffset);
         if (adjustedPosition < 0) {
@@ -136,7 +146,17 @@ public class SDSSwerveModule extends SwerveModule {
         m_turningEncoder.setPosition(adjustedPosition);
     }
 
+    /**
+     * Get the CANcoder's position in degrees with the offset applied.
+     * If the result is negative, adjust it to the wrapped positive value.
+     * 
+     * @return CANcoder minus offset position, from 0 to 360 degrees
+     */
     public double getCANcoderPosition() {
-        return m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - m_turningOffset;
+        double adjustedPosition = m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - m_turningOffset;
+        if (adjustedPosition < 0) {
+            adjustedPosition = 360 - Math.abs(adjustedPosition);
+        }
+        return adjustedPosition;
     }
 }
