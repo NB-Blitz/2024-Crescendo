@@ -3,7 +3,6 @@ package frc.robot.subsystems.swervemodules;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -14,6 +13,7 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.utils.SwerveUtils;
+import frc.robot.Constants;
 import frc.robot.Constants.SDSModuleConstants;
 
 public class SDSSwerveModule extends SwerveModule {
@@ -88,7 +88,6 @@ public class SDSSwerveModule extends SwerveModule {
         super.m_drivingSpark.burnFlash();
         super.m_turningSpark.burnFlash();
 
-        Timer.delay(1.0);
         syncTurningEncoders();
 
         super.m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
@@ -129,8 +128,11 @@ public class SDSSwerveModule extends SwerveModule {
     
     public void syncTurningEncoders() {
         // TODO: Review this
-        double absolutePosition = m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI; // radians
+        double absolutePosition = m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * Constants.TWO_PI; // radians
         double adjustedPosition = absolutePosition - Math.toRadians(m_turningOffset);
+        if (adjustedPosition < 0) {
+            adjustedPosition = Constants.TWO_PI - Math.abs(adjustedPosition);
+        }
         m_turningEncoder.setPosition(adjustedPosition);
     }
 
