@@ -1,5 +1,9 @@
 package frc.utils;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
+
 public class SwerveUtils {
 
     /**
@@ -41,7 +45,7 @@ public class SwerveUtils {
         }
         else if (difference > Math.PI) { //does the system need to wrap over eventually?
             //handle the special case where you can reach the target in one step while also wrapping
-            if (_current + 2*Math.PI - _target < _stepsize || _target + 2*Math.PI - _current < _stepsize) {
+            if (_current + Constants.TWO_PI - _target < _stepsize || _target + Constants.TWO_PI - _current < _stepsize) {
                 return _target;
             }
             else {
@@ -62,7 +66,7 @@ public class SwerveUtils {
      */
     public static double AngleDifference(double _angleA, double _angleB) {
         double difference = Math.abs(_angleA - _angleB);
-        return difference > Math.PI? (2 * Math.PI) - difference : difference;
+        return difference > Math.PI ? Constants.TWO_PI - difference : difference;
     }
 
     /**
@@ -71,19 +75,66 @@ public class SwerveUtils {
      * @return An angle (in radians) from 0 and 2*PI (exclusive).
      */
     public static double WrapAngle(double _angle) {
-        double twoPi = 2*Math.PI;
-
-        if (_angle == twoPi) { // Handle this case separately to avoid floating point errors with the floor after the division in the case below
+        if (_angle == Constants.TWO_PI) { // Handle this case separately to avoid floating point errors with the floor after the division in the case below
             return 0.0;
         }
-        else if (_angle > twoPi) {
-            return _angle - twoPi*Math.floor(_angle / twoPi);
+        else if (_angle > Constants.TWO_PI) {
+            return _angle - Constants.TWO_PI * Math.floor(_angle / Constants.TWO_PI);
         }
         else if (_angle < 0.0) {
-            return _angle + twoPi*(Math.floor((-_angle) / twoPi)+1);
+            return _angle + Constants.TWO_PI * (Math.floor((-_angle) / Constants.TWO_PI)+1);
         }
         else {
             return _angle;
         }
+    }
+
+    /**
+     * Minimize the change in heading the desired swerve module state would require by potentially
+     * reversing the direction the wheel spins. Customized from WPILib's version to include placing
+     * in appropriate scope for CTRE onboard control.
+     *
+     * @param desiredState The desired state.
+     * @param currentAngle The current module angle.
+     */
+    public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
+        double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
+        double targetSpeed = desiredState.speedMetersPerSecond;
+        double delta = targetAngle - currentAngle.getDegrees();
+        if (Math.abs(delta) > 90) {
+            targetSpeed = -targetSpeed;
+            targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+        }
+        return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
+    }
+
+    /**
+     * @param scopeReference Current Angle
+     * @param newAngle Target Angle
+     * @return Closest angle within scope
+     */
+    private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
+        double lowerBound;
+        double upperBound;
+        double lowerOffset = scopeReference % 360;
+        if (lowerOffset >= 0) {
+            lowerBound = scopeReference - lowerOffset;
+            upperBound = scopeReference + (360 - lowerOffset);
+        } else {
+            upperBound = scopeReference - lowerOffset;
+            lowerBound = scopeReference - (360 + lowerOffset);
+        }
+        while (newAngle < lowerBound) {
+            newAngle += 360;
+        }
+        while (newAngle > upperBound) {
+            newAngle -= 360;
+        }
+        if (newAngle - scopeReference > 180) {
+            newAngle -= 360;
+        } else if (newAngle - scopeReference < -180) {
+            newAngle += 360;
+        }
+        return newAngle;
     }
 }

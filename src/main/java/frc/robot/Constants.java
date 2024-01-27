@@ -24,6 +24,8 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double TWO_PI = 2 * Math.PI;
+
     public static final class DriveConstants {
         public static final boolean isMAXSwerveModules = false;
 
@@ -32,7 +34,7 @@ public final class Constants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
         public static final double kMaxSpeedMetersPerSecond = 4.8;
-        public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+        public static final double kMaxAngularSpeed = TWO_PI; // radians per second
 
         public static final double kDirectionSlewRate = 1.2; // radians per second
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
@@ -49,38 +51,30 @@ public final class Constants {
             new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-        // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
-        public static final double kFrontRightChassisAngularOffset = 0;
-        public static final double kBackLeftChassisAngularOffset = Math.PI;
-        public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
         // SPARK CAN IDs
-        // TODO: Set all IDs and offsets
         public static final int kFrontLeftDrivingCanId = 2;
         public static final int kFrontRightDrivingCanId = 4;
-        public static final int kRearLeftDrivingCanId = 5;
-        public static final int kRearRightDrivingCanId = 8;
+        public static final int kBackLeftDrivingCanId = 5;
+        public static final int kBackRightDrivingCanId = 8;
 
         public static final int kFrontLeftTurningCanId = 1;
         public static final int kFrontRightTurningCanId = 3;
-        public static final int kRearLeftTurningCanId = 6;
-        public static final int kRearRightTurningCanId = 7;
+        public static final int kBackLeftTurningCanId = 6;
+        public static final int kBackRightTurningCanId = 7;
 
-        // TODO: Match these in Phoenix Tuner
         public static final int kFrontLeftTurningCANcoderId = 13;
         public static final int kFrontRightTurningCANcoderId = 14;
-        public static final int kRearLeftTurningCANcoderId = 15;
-        public static final int kRearRightTurningCANcoderId = 16;
+        public static final int kBackLeftTurningCANcoderId = 15;
+        public static final int kBackRightTurningCANcoderId = 16;
 
         // Turning encoder offsets for SDS modules
         // We can't use REV Hardware Client's calibration tool with CANcoders
         public static final double kFrontLeftTurningOffset = 110.7;
         public static final double kFrontRightTurningOffset = 241.9;
-        public static final double kRearLeftTurningOffset = 199.68;
-        public static final double kRearRightTurningOffset = 25.5;
+        public static final double kBackLeftTurningOffset = 199.7;
+        public static final double kBackRightTurningOffset = 25.5;
 
-        public static final boolean kGyroReversed = false;
+        public static final boolean kGyroReversed = true;
     }
 
     public static final class SwerveModuleConstants {
@@ -99,6 +93,12 @@ public final class Constants {
 
     public static final class MAXModuleConstants {
         // TODO: Confirm all values
+
+        // Angular offsets of the modules relative to the chassis in radians
+        public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+        public static final double kFrontRightChassisAngularOffset = 0;
+        public static final double kBackLeftChassisAngularOffset = Math.PI;
+        public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
         // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
         // This changes the drive speed of the module (a pinion gear with more teeth will result in a
@@ -122,8 +122,8 @@ public final class Constants {
         public static final double kDrivingEncoderVelocityFactor = ((kWheelDiameterMeters * Math.PI)
             / kDrivingMotorReduction) / 60.0; // meters per second
 
-        public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
-        public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+        public static final double kTurningEncoderPositionFactor = TWO_PI; // radians
+        public static final double kTurningEncoderVelocityFactor = TWO_PI / 60.0; // radians per second
 
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
@@ -143,11 +143,6 @@ public final class Constants {
     }
 
     public static final class SDSModuleConstants {
-        // TODO: Confirm all values
-
-        // Don't invert the turning encoder, since we're using the SDS module.
-        public static final boolean kTurningEncoderInverted = false;
-
         // Calculations required for driving motor conversion factors and feed forward
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
@@ -163,30 +158,28 @@ public final class Constants {
 
         // SDS MK4 L1 turning gear ratio is 12.8:1
         public static final double kTurningMotorReduction = 12.8;
-        public static final double kTurningEncoderPositionFactor = (1 / kTurningMotorReduction) * (2 * Math.PI); // radians
+        public static final double kTurningEncoderPositionFactor = TWO_PI / kTurningMotorReduction; // radians
         public static final double kTurningEncoderVelocityFactor = kTurningEncoderPositionFactor / 60.0; // radians per second
 
-        public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
-        public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
-
-        public static final double kDrivingP = 0.04;
+        public static final double kDrivingP = 0.24;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
-        public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
+        public static final double kDrivingFF = 0.16;
 
-        public static final double kTurningP = 1;
+        public static final double kTurningP = 0.4;
         public static final double kTurningI = 0;
         public static final double kTurningD = 0;
         public static final double kTurningFF = 0;
 
-        public static final int kDrivingMotorCurrentLimit = 50; // amps
-        public static final int kTurningMotorCurrentLimit = 20; // amps
+        public static final int kDrivingMotorCurrentLimit = 35; // amps
+        public static final int kTurningMotorCurrentLimit = 35; // amps
     }
 
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
-        public static final double kDriveDeadband = 0.05;
-        public static final int kDriveBrakeButton = 5;
+        public static final double kDriveDeadband = 0.3;
+        public static final int kDriveBrakeButton = 6;
+        public static final int kDriveGyroResetButton = 11;
     }
 
     public static final class AutoConstants {
