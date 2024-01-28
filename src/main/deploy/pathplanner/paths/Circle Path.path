@@ -9,55 +9,55 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.0,
-        "y": 3.0
+        "y": 3.85
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 2.0
+        "x": 2.25,
+        "y": 3.75
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 2.0
+        "x": 2.1,
+        "y": 3.75
       },
       "nextControl": {
-        "x": 5.0,
-        "y": 2.0
+        "x": 2.4,
+        "y": 3.75
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.0,
+        "x": 2.5,
         "y": 4.0
       },
       "prevControl": {
-        "x": 6.0,
-        "y": 3.0
+        "x": 2.5,
+        "y": 3.85
       },
       "nextControl": {
-        "x": 6.0,
-        "y": 5.0
+        "x": 2.5,
+        "y": 4.15
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 2.25,
+        "y": 4.25
       },
       "prevControl": {
-        "x": 5.0,
-        "y": 6.0
+        "x": 2.4,
+        "y": 4.25
       },
       "nextControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 2.1,
+        "y": 4.25
       },
       "isLocked": false,
       "linkedName": null
@@ -69,7 +69,7 @@
       },
       "prevControl": {
         "x": 2.0,
-        "y": 5.0
+        "y": 4.15
       },
       "nextControl": null,
       "isLocked": false,
@@ -80,10 +80,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 0.3,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 540.0
   },
   "goalEndState": {
     "velocity": 0,

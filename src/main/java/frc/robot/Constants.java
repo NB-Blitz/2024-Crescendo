@@ -44,7 +44,7 @@ public final class Constants {
 
         // Chassis configuration
         // Drive base radius in meters. Distance from robot center to furthest module.
-        public static final double kDriveBaseRadius = 0.4; // TODO: Change to correct value
+        public static final double kDriveBaseRadius = 0.34; // TODO: Rough estimate, get more accurate
         // Distance between centers of right and left wheels on robot
         public static final double kTrackWidth = Units.inchesToMeters(18.5);
         // Distance between front and back wheels on robot
@@ -165,15 +165,17 @@ public final class Constants {
         public static final double kTurningEncoderPositionFactor = TWO_PI / kTurningMotorReduction; // radians
         public static final double kTurningEncoderVelocityFactor = kTurningEncoderPositionFactor / 60.0; // radians per second
 
-        public static final double kDrivingP = 0.24;
+        public static final double kDrivingP = 0.2;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
-        public static final double kDrivingFF = 0.16;
+        public static final double kDrivingFF = 0;
 
         public static final double kTurningP = 0.4;
         public static final double kTurningI = 0;
         public static final double kTurningD = 0;
         public static final double kTurningFF = 0;
+
+        public static final boolean kDrivingInverted = true;
 
         public static final int kDrivingMotorCurrentLimit = 35; // amps
         public static final int kTurningMotorCurrentLimit = 35; // amps

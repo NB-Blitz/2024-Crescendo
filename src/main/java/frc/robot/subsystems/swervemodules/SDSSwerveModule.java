@@ -76,6 +76,8 @@ public class SDSSwerveModule extends SwerveModule {
             SwerveModuleConstants.kTurningMinOutput,
             SwerveModuleConstants.kTurningMaxOutput);
 
+        super.m_drivingSpark.setInverted(SDSModuleConstants.kDrivingInverted);
+
         super.m_drivingSpark.setIdleMode(SwerveModuleConstants.kDrivingMotorIdleMode);
         super.m_turningSpark.setIdleMode(SwerveModuleConstants.kTurningMotorIdleMode);
         super.m_drivingSpark.setSmartCurrentLimit(SDSModuleConstants.kDrivingMotorCurrentLimit);

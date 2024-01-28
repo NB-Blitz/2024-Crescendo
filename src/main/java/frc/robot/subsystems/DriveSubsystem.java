@@ -38,7 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
 
-    private ChassisSpeeds m_currentChassisSpeeds;
+    private ChassisSpeeds m_currentChassisSpeeds = new ChassisSpeeds();
 
     // The gyro sensor
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -208,7 +208,7 @@ public class DriveSubsystem extends SubsystemBase {
             chassisSpeeds.vyMetersPerSecond,
             chassisSpeeds.omegaRadiansPerSecond,
             false,
-            true);
+            false);
     }
 
     /**
@@ -319,6 +319,7 @@ public class DriveSubsystem extends SubsystemBase {
     /** Zeroes the heading of the robot. */
     public void zeroHeading() {
         m_gyro.reset();
+        resetOdometry(getPose());
     }
 
     /**
