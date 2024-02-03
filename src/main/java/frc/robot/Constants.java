@@ -202,7 +202,16 @@ public final class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final int kLeftMotorCANID = -1; //TODOChange these CAN IDs to actual values
+        public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
         public static final int kRightMotorCANID = -1; //TODO
+    }
+
+    public static final class IntakeConstants {
+        public static final int kIntakeMotorCANID = -1;//TODO Change these
+        public static final int kDeployMotorCANID = -2;
+        public static final int kIntakeUpSwitchID = -3;
+        public static final int kNoteSwitchID = -3;
+
+        public static final double bottomLimit = 100; //Bottom angle limit in degrees
     }
 }
