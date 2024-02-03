@@ -18,6 +18,7 @@ public class IntakeModule {
 
     private double targetAngle = 0;
     private double rollerSpeed = 0;
+    private boolean calibrated = false;
 
     public IntakeModule() {
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
@@ -28,15 +29,18 @@ public class IntakeModule {
      * @return True when calibration is complete, false when calibration is in progress.
      */
     public boolean calibrate() {
-        if(m_intakeUpSwitch.get() == true){
-            m_deployMotor.set(0);
-            m_deployEncoder.setPosition(0);   
-            return true;         
+        if (!calibrated) {
+            if(m_intakeUpSwitch.get() == true){
+                m_deployMotor.set(0);
+                m_deployEncoder.setPosition(0);
+                calibrated = true;
+            }
+            else{
+                m_deployMotor.set(0.1);
+                calibrated = false;
+            }
         }
-        else{
-            m_deployMotor.set(0.1);
-            return false;
-        }
+        return calibrated;
     }
 
     /**
