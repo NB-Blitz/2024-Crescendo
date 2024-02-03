@@ -14,10 +14,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ManipulatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -33,9 +35,10 @@ import java.util.List;
 public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-
+    private final ManipulatorSubsystem m_robotManipulator = new ManipulatorSubsystem();
     // The driver's controller
     Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
+    XboxController m_manipController = new XboxController(1);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -73,6 +76,30 @@ public class RobotContainer {
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
+
+        new JoystickButton(m_manipController, 1)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.ampShootPositionButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 2)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.intakePositionButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 3)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.intakeButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 4)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.loadPositionButtonHandler(),
+                m_robotManipulator));
+        new JoystickButton(m_manipController, 5)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.shootButtonHandler(),
+                m_robotManipulator));
     }
 
     /**

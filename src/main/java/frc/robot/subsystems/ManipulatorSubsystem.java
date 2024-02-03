@@ -13,9 +13,9 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        m_IntakeModule.updateIntake();
+        m_ShooterModule.runShooter();
     }
-    
     public void shootButtonHandler() {
 
     }
