@@ -77,25 +77,28 @@ public class RobotContainer {
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
 
-        new JoystickButton(m_manipController, 1)
+        new JoystickButton(m_manipController, OIConstants.kControllerButtonA)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.ampShootPositionButtonHandler(),
                 m_robotManipulator));
 
-        new JoystickButton(m_manipController, 2)
+        new JoystickButton(m_manipController, OIConstants.kControllerButtonLB)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.intakePositionButtonHandler(),
                 m_robotManipulator));
+
+//TODO Add Trigger Mapping for Button Number 3 and 5 to LT and RT, respectully
 
         new JoystickButton(m_manipController, 3)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.intakeButtonHandler(),
                 m_robotManipulator));
 
-        new JoystickButton(m_manipController, 4)
+        new JoystickButton(m_manipController, OIConstants.kControllerButtonRB)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.loadPositionButtonHandler(),
                 m_robotManipulator));
+
         new JoystickButton(m_manipController, 5)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.shootButtonHandler(),
