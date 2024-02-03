@@ -1,19 +1,20 @@
 package frc.robot.subsystems;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import frc.robot.Constants.ShooterConstants;
 
 
 public class ShooterModule {
     
-    private final TalonSRX shooterMotorRight;
-    private final TalonSRX shooterMotorLeft;
+    private final CANSparkMax shooterMotorRight;
+    private final CANSparkMax shooterMotorLeft;
 
     private double wheelSpeed;
 
     public ShooterModule() {
-
-        this.shooterMotorLeft = //new talonSRX(constant);
-        this.shooterMotorRight = //;
+        shooterMotorLeft = new CANSparkMax(ShooterConstants.kLeftMotorCANID, MotorType.kBrushless);
+        shooterMotorRight = new CANSparkMax(ShooterConstants.kRightMotorCANID, MotorType.kBrushless);
 
     }
 
@@ -30,8 +31,8 @@ public class ShooterModule {
 
     //sets shooter motors using wheelSpeed variable 
     public void runShooter() {
-        shooterMotorLeft.speed(wheelSpeed);
-        shooterMotorRight.speed(-wheelSpeed);
+        shooterMotorLeft.set(wheelSpeed);
+        shooterMotorRight.set(-wheelSpeed);
 
     }
 

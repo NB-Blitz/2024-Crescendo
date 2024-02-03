@@ -200,4 +200,9 @@ public final class Constants {
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
     }
+
+    public static final class ShooterConstants {
+        public static final int kLeftMotorCANID = -1; //TODOChange these CAN IDs to actual values
+        public static final int kRightMotorCANID = -1; //TODO
+    }
 }
