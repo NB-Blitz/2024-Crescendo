@@ -33,6 +33,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void intakeButtonHandler() {
-        
+        if(m_IntakeModule.getCurrentPosition()==0){//This means you are in loading position
+            m_IntakeModule.setIntakeSpeed(1);
+            m_ShooterModule.setShooterSpeed(1);
+        } else if (m_IntakeModule.getCurrentPosition()==120){//This means you are in shooting position
+            m_IntakeModule.setIntakeSpeed(1);
+        }
     }
 }
