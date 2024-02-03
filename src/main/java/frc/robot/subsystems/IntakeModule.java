@@ -22,6 +22,14 @@ public class IntakeModule {
 
     public IntakeModule() {
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
+
+        m_intakePIDController.setP(IntakeConstants.kIntakeP);
+        m_intakePIDController.setI(IntakeConstants.kIntakeI);
+        m_intakePIDController.setD(IntakeConstants.kIntakeD);
+        m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
+        m_intakePIDController.setOutputRange(
+            IntakeConstants.kShootingMinOutput,
+            IntakeConstants.kShootingMaxOutput);
     }
 
     /**
@@ -46,10 +54,12 @@ public class IntakeModule {
     /**
      * This functions set the target position for the PID
      * to move the intake arm to.
-     * @param angle This is the target angle in degrees
+     * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        targetAngle = angle;
+        if( angle <= IntakeConstants.bottomLimit && angle >= 0) {
+            targetAngle = angle;
+        }
     }
 
     /**
