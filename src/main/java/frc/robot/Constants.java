@@ -180,6 +180,17 @@ public final class Constants {
         public static final double kDriveDeadband = 0.3;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
+
+        public static final int kControllerButtonA = 1;
+        public static final int kControllerButtonB = 2;
+        public static final int kControllerButtonX = 3;
+        public static final int kControllerButtonY = 4;
+        public static final int kControllerButtonLB = 5;
+        public static final int kControllerButtonRB = 6;
+        public static final int kControllerButtonTwoSquares = 7;
+        public static final int kControllerButtonMenu = 8;
+        public static final int kControllerButtonLStick = 9;
+        public static final int kControllerButtonRStick = 10;
     }
 
     public static final class AutoConstants {
