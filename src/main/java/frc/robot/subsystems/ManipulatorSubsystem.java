@@ -21,10 +21,12 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void loadPositionButtonHandler() {
+        m_IntakeModule.setTargetPosition(0);
 
     }
 
     public void ampShootPositionButtonHandler() {
+        m_IntakeModule.setTargetPosition(90);
 
     }
 
