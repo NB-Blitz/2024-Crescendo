@@ -57,7 +57,7 @@ public class IntakeModule {
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        if( angle <= IntakeConstants.bottomLimit && angle >= 0) {
+        if( angle <= IntakeConstants.kFloorIntakePosition && angle >= IntakeConstants.kTopPosition) {
             targetAngle = angle;
         }
     }

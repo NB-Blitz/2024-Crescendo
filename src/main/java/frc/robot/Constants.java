@@ -177,6 +177,7 @@ public final class Constants {
 
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
+        public static final int kManipControllerPort = 1;
         public static final double kDriveDeadband = 0.3;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
@@ -223,14 +224,14 @@ public final class Constants {
         public static final int kIntakeUpSwitchID = -3;
         public static final int kNoteSwitchID = -3;
 
-        public static final double bottomLimit = 100; //Bottom angle limit in degrees, inclusive
-
         public static final double kIntakeP = 0.24;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0.16;
         public static final double kShootingMaxOutput = 1.0;
         public static final double kShootingMinOutput = -1.0;
-        public static final double kAmpShootingPosition = 90.0;
+        public static final double kTopPosition = 0.0; // Degrees
+        public static final double kAmpShootingPosition = 90.0; // Degrees
+        public static final double kFloorIntakePosition = 120.0; //Bottom angle limit in degrees, inclusive
     }
 }
