@@ -29,7 +29,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void intakePositionButtonHandler() {
-
+        m_IntakeModule.setTargetPosition(120);
     }
 
     public void intakeButtonHandler() {
