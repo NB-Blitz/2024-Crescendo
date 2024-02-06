@@ -152,7 +152,7 @@ public class SDSSwerveModule extends SwerveModule {
      * 
      * @return CANcoder minus offset position, from 0 to 360 degrees
      */
-    public double getCANcoderPosition() {
+    public double getAbsoluteEncoderPos() {
         double adjustedPosition = m_turningCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - m_turningOffset;
         if (adjustedPosition < 0) {
             adjustedPosition = 360 - Math.abs(adjustedPosition);
