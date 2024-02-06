@@ -58,6 +58,8 @@ public class RobotContainer {
                     MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kDriveDeadband),
                     true, true),
                 m_robotDrive));
+
+        // Add default command for the Manipulator
     }
 
     /**

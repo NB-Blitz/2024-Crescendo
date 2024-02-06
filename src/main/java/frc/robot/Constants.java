@@ -216,6 +216,8 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
         public static final int kRightMotorCANID = -1; //TODO
+
+        //TODO create constants for motor speed for shooting speaker, shooting amp, and intake
     }
 
     public static final class IntakeConstants {
@@ -224,7 +226,7 @@ public final class Constants {
         public static final int kIntakeUpSwitchID = -3;
         public static final int kNoteSwitchID = -3;
 
-        public static final double kIntakeP = 0.24;
+        public static final double kIntakeP = 0.24; // TODO Change these PID values
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0.16;
@@ -233,5 +235,8 @@ public final class Constants {
         public static final double kTopPosition = 0.0; // Degrees
         public static final double kAmpShootingPosition = 90.0; // Degrees
         public static final double kFloorIntakePosition = 120.0; //Bottom angle limit in degrees, inclusive
+        // TODO create constant for scaling joystick input into position.
+        // TODO create a constant for relative encoder conversion factor.
+        // TODO create motor speed constants for intaking, feeding, unjamming, and shooting.
     }
 }

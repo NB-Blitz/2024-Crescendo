@@ -20,6 +20,8 @@ public class IntakeModule {
     private double rollerSpeed = 0;
     private boolean calibrated = false;
 
+    // TODO configure motor controllers
+    // TODO configure relative encoder
     public IntakeModule() {
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
 
@@ -37,6 +39,7 @@ public class IntakeModule {
      * @return True when calibration is complete, false when calibration is in progress.
      */
     public boolean calibrate() {
+        // TODO determine if calibration can be done in the update function and moved to Manipulator
         if (!calibrated) {
             if(m_intakeUpSwitch.get() == true){
                 m_deployMotor.set(0);
@@ -44,7 +47,7 @@ public class IntakeModule {
                 calibrated = true;
             }
             else{
-                m_deployMotor.set(0.1);
+                m_deployMotor.set(0.1); //TODO replace with constant
                 calibrated = false;
             }
         }
@@ -57,7 +60,8 @@ public class IntakeModule {
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        if( angle <= IntakeConstants.kFloorIntakePosition && angle >= IntakeConstants.kTopPosition) {
+        // TODO might be worth checking the top limit switch
+        if( angle >= IntakeConstants.kFloorIntakePosition && angle <= IntakeConstants.kTopPosition) {
             targetAngle = angle;
         }
     }
@@ -76,6 +80,7 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
+        //TODO check note switch and do not allow intake when pressed
         rollerSpeed = speed;
     }
 
@@ -93,7 +98,9 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
+        //TODO if we have a note and roller speed is positive, set roller speed to 0
+        //TODO if the top limit switch is pressed, set the relative encoder position to 0
         m_intakeMotor.set(rollerSpeed);
+        m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
     }
 }
