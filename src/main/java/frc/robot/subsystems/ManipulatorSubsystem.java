@@ -51,11 +51,12 @@ public class ManipulatorSubsystem extends SubsystemBase {
         }
     }
 
-    public void run(){//TODO Add joy stick axis as a paramter
-        /*TODO
-         * Check if there is joystick input
-         *      if there is, set the target postition of the arm
-         *      the current position + (axis value * scaling constant)
-         */
+    public void run(double armJoystick){
+        if(armJoystick != 0){ 
+            double scaledInput = IntakeConstants.kJoystickScaling*armJoystick;
+            double currentPos = m_IntakeModule.getCurrentPosition();
+            double targetPos = currentPos+scaledInput;
+            m_IntakeModule.setTargetPosition(targetPos);
+        }
     }
 }
