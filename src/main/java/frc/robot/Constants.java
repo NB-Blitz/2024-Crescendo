@@ -126,14 +126,14 @@ public final class Constants {
         public static final double kTurningEncoderVelocityFactor = TWO_PI / 60.0; // radians per second
 
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
-        public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
+        public static final double kTurningEncoderPositionPIDMaxInput = TWO_PI; // radians
 
         public static final double kDrivingP = 0.04;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
         public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
 
-        public static final double kTurningP = 1;
+        public static final double kTurningP = 0.3;
         public static final double kTurningI = 0;
         public static final double kTurningD = 0;
         public static final double kTurningFF = 0;
@@ -189,6 +189,7 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
         public static final double kDriveDeadband = 0.3;
+        public static final double kTwistDeadband = 0.5;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
     }
