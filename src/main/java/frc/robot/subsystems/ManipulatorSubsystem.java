@@ -43,11 +43,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     //TODO add small tolerances to the position requirements
     public void intakeButtonHandler() {
-        if(m_IntakeModule.getCurrentPosition()==IntakeConstants.kTopPosition){//This means you are in loading position
+        if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){//This means you are in loading position
             m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakePlayerSpeed); 
             m_ShooterModule.setShooterSpeed(ShooterConstants.kIntakeSpeed); 
         }
-        else if (m_IntakeModule.getCurrentPosition()==IntakeConstants.kFloorIntakePosition){//This means you are in shooting position
+        else if (m_IntakeModule.getCurrentPosition() > IntakeConstants.kFloorIntakePosition-IntakeConstants.kArmAngleBuffer && m_IntakeModule.getCurrentPosition()< IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer){//This means you are in shooting position
             m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakeGroundSpeed); 
             
         }

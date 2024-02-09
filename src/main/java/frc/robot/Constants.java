@@ -222,6 +222,7 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
+        public static final int kArmAngleBuffer = 5;
         public static final int kIntakeMotorCANID = -1;//TODO Change these
         public static final int kDeployMotorCANID = -2;
         public static final int kIntakeUpSwitchID = -3;
