@@ -216,8 +216,9 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
         public static final int kRightMotorCANID = -1; //TODO
-
-        //TODO create constants for motor speed for shooting speaker, shooting amp, and intake
+        public static final double kIntakeSpeed = 0.05; //speed of the shooter when intaking frm the shooter station.
+        public static final double kShootingSpeakerSpeed = -0.05;
+        //TODO create constants for motor speed for shooting speaker, shooting amp, 
     }
 
     public static final class IntakeConstants {
@@ -236,7 +237,9 @@ public final class Constants {
         public static final double kTopPosition = 0.0; // Degrees
         public static final double kAmpShootingPosition = 90.0; // Degrees
         public static final double kFloorIntakePosition = 120.0; //Bottom angle limit in degrees, inclusive
+        public static final double kIntakePlayerSpeed = 0.05; //Speed of the intake motor when picking up from the player station.
+        public static final double kIntakeGroundSpeed = 0.05; //sets the motor speed of the motor on the intake arm to pick up the note
         // TODO create a constant for relative encoder conversion factor.
-        // TODO create motor speed constants for intaking, feeding, unjamming, and shooting.
+        // TODO create motor speed constants for feeding, unjamming, and shooting.
     }
 }

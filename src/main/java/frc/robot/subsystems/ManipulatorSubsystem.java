@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class ManipulatorSubsystem extends SubsystemBase {
 
@@ -43,11 +44,12 @@ public class ManipulatorSubsystem extends SubsystemBase {
     //TODO add small tolerances to the position requirements
     public void intakeButtonHandler() {
         if(m_IntakeModule.getCurrentPosition()==IntakeConstants.kTopPosition){//This means you are in loading position
-            m_IntakeModule.setIntakeSpeed(1); //TODO replace with a constant
-            m_ShooterModule.setShooterSpeed(1); //TODO replace with a constant
+            m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakePlayerSpeed); 
+            m_ShooterModule.setShooterSpeed(ShooterConstants.kIntakeSpeed); 
         }
         else if (m_IntakeModule.getCurrentPosition()==IntakeConstants.kFloorIntakePosition){//This means you are in shooting position
-            m_IntakeModule.setIntakeSpeed(1); //TODO replace with a constant
+            m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakeGroundSpeed); 
+            
         }
     }
 
