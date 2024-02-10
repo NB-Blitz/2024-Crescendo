@@ -80,8 +80,11 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        //TODO Morning check note switch and do not allow intake when pressed
-        rollerSpeed = speed;
+        if(m_noteSwitch.get() == 1 && speed > 0){
+            rollerSpeed = 0;
+        }else{
+            rollerSpeed = speed;
+        }
     }
 
     /**
