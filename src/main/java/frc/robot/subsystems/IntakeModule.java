@@ -20,8 +20,8 @@ public class IntakeModule {
     private double rollerSpeed = 0;
     private boolean calibrated = false;
 
-    // TODO configure motor controllers
-    // TODO configure relative encoder
+    // TODO Morning configure motor controllers
+    // TODO Morning configure relative encoder
     public IntakeModule() {
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
 
@@ -39,7 +39,7 @@ public class IntakeModule {
      * @return True when calibration is complete, false when calibration is in progress.
      */
     public boolean calibrate() {
-        // TODO determine if calibration can be done in the update function and moved to Manipulator
+        // TODO Morning determine if calibration can be done in the update function and moved to Manipulator
         if (!calibrated) {
             if(m_intakeUpSwitch.get() == true){
                 m_deployMotor.set(0);

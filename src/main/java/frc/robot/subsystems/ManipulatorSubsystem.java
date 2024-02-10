@@ -41,7 +41,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_IntakeModule.setTargetPosition(IntakeConstants.kFloorIntakePosition);
     }
 
-    //TODO add small tolerances to the position requirements
     public void intakeButtonHandler() {
         if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){//This means you are in loading position
             m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakePlayerSpeed); 
