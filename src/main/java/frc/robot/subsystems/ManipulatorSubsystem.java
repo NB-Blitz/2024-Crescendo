@@ -24,7 +24,15 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_ShooterModule.runShooter();
     }
     public void shootButtonHandler() {
-        //TODO Morning
+        if(m_IntakeModule.getNoteLimitSwitch()){
+            if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){//This means you are in loading position
+                m_ShooterModule.setShooterSpeed(-1); 
+                m_IntakeModule.setIntakeSpeed(-1); 
+            }
+            else if (m_IntakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer && m_IntakeModule.getCurrentPosition()< IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer){//This means you are aiming for the amp
+                m_IntakeModule.setIntakeSpeed(-1); 
+            }
+        }
     }
 
     public void loadPositionButtonHandler() {
