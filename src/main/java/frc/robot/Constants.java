@@ -227,10 +227,10 @@ public final class Constants {
 
     public static final class ShooterConstants {
         public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
-        public static final int kRightMotorCANID = -1; //TODO
+        public static final int kRightMotorCANID = -1; 
         public static final double kIntakeSpeed = 0.05; //speed of the shooter when intaking frm the shooter station.
         public static final double kShootingSpeakerSpeed = -0.05;
-        //TODO Afternoon create constants for motor speed for shooting speaker, shooting amp, 
+        public static final double kAmpShooterSpeed = -0.05;
     }
 
     public static final class IntakeConstants {
@@ -239,6 +239,7 @@ public final class Constants {
         public static final int kDeployMotorCANID = -2;
         public static final int kIntakeUpSwitchID = -3;
         public static final int kNoteSwitchID = -3;
+        public static final double kAmpShooterSpeed = -0.05;
 
         public static final double kIntakeP = 0.24; // TODO Change these PID values
         public static final double kIntakeI = 0;
@@ -252,7 +253,8 @@ public final class Constants {
         public static final double kFloorIntakePosition = 120.0; //Bottom angle limit in degrees, inclusive
         public static final double kIntakePlayerSpeed = 0.05; //Speed of the intake motor when picking up from the player station.
         public static final double kIntakeGroundSpeed = 0.05; //sets the motor speed of the motor on the intake arm to pick up the note
-        // TODO Afternoon create a constant for relative encoder conversion factor.
-        // TODO Afternoon motor speed constants for feeding, unjamming, and shooting.
+        public static final double kUnjammingSpeed = -0.05; // TODO Afternoon create a constant for relative encoder conversion factor.
+        public static final double kFeedingSpeed = -0.05;
+        public static final double kCalibrationSpeed = 0.05;
     }
 }
