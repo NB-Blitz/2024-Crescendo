@@ -50,6 +50,13 @@ public class RobotContainer {
                     true, true),
                 m_robotDrive));
 
+        m_robotManipulator.setDefaultCommand(
+            
+            new RunCommand(
+                () -> m_robotManipulator.run(
+                    MathUtil.applyDeadband(m_manipController.getRightY(), OIConstants.kDriveDeadband)),
+                m_robotManipulator));
+
         // Add default command for the Manipulator
     }
 
