@@ -24,9 +24,9 @@ public class IntakeModule {
     public IntakeModule() {
         m_deployMotor.restoreFactoryDefaults();
         m_intakeMotor.restoreFactoryDefaults();
-        //TODO Afernoon create intake constants to replace SDS constants
-        m_deployEncoder.setPositionConversionFactor(SDSModuleConstants.kDrivingEncoderPositionFactor); //TODO Change Conversion Factor
-        m_deployEncoder.setVelocityConversionFactor(SDSModuleConstants.kDrivingEncoderVelocityFactor);
+        
+        m_deployEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
+        m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
         m_intakePIDController.setPositionPIDWrappingEnabled(false);
         m_intakePIDController.setP(IntakeConstants.kIntakeP);
@@ -36,10 +36,10 @@ public class IntakeModule {
         m_intakePIDController.setOutputRange(
             IntakeConstants.kShootingMinOutput,
             IntakeConstants.kShootingMaxOutput);
-        m_intakeMotor.setIdleMode(SwerveModuleConstants.kDrivingMotorIdleMode);
-        m_deployMotor.setIdleMode(SwerveModuleConstants.kTurningMotorIdleMode);
-        m_intakeMotor.setSmartCurrentLimit(SDSModuleConstants.kDrivingMotorCurrentLimit);
-        m_deployMotor.setSmartCurrentLimit(SDSModuleConstants.kTurningMotorCurrentLimit);
+        m_intakeMotor.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
+        m_deployMotor.setIdleMode(IntakeConstants.kDeployMotorIdleMode);
+        m_intakeMotor.setSmartCurrentLimit(IntakeConstants.kIntakeMotorCurrentLimit);
+        m_deployMotor.setSmartCurrentLimit(IntakeConstants.kDeployMotorCurrentLimit);
 
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
