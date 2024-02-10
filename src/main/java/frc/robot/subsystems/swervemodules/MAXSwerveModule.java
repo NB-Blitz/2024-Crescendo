@@ -138,4 +138,14 @@ public class MAXSwerveModule extends SwerveModule {
         super.m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         super.m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
     }
+
+    /**
+     * Returns the current position of the REV Through Bore Encoder.
+     * 
+     * @return Current position, from 0 to 360 degrees
+     */
+    @Override
+    public double getAbsoluteEncoderPos() {
+        return Math.toDegrees(m_turningEncoder.getPosition());
+    }
 }

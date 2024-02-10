@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MAXModuleConstants;
+import frc.robot.Constants.SDSModuleConstants;
 import frc.robot.subsystems.swervemodules.MAXSwerveModule;
 import frc.robot.subsystems.swervemodules.SDSSwerveModule;
 import frc.robot.subsystems.swervemodules.SwerveModule;
@@ -43,6 +44,8 @@ public class DriveSubsystem extends SubsystemBase {
     private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
     private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
     private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+    private SwerveDriveKinematics m_kinematics;
 
     // Odometry class for tracking robot pose
     public SwerveDriveOdometry m_odometry;
@@ -69,6 +72,8 @@ public class DriveSubsystem extends SubsystemBase {
                 DriveConstants.kBackRightDrivingCanId,
                 DriveConstants.kBackRightTurningCanId,
                 MAXModuleConstants.kBackRightChassisAngularOffset);
+
+            m_kinematics = MAXModuleConstants.kDriveKinematics;
         } else {
             m_frontLeft = new SDSSwerveModule(
                 DriveConstants.kFrontLeftDrivingCanId,
@@ -93,17 +98,19 @@ public class DriveSubsystem extends SubsystemBase {
                 DriveConstants.kBackRightTurningCanId,
                 DriveConstants.kBackRightTurningCANcoderId,
                 DriveConstants.kBackRightTurningOffset);
+
+            m_kinematics = SDSModuleConstants.kDriveKinematics;
         }
-        
+
         m_odometry = new SwerveDriveOdometry(
-            DriveConstants.kDriveKinematics,
+            m_kinematics,
             getHeading(),
             new SwerveModulePosition[] {
                 m_frontLeft.getPosition(),
                 m_frontRight.getPosition(),
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
-        });
+            });
     }
 
     @Override
@@ -123,13 +130,13 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Position (rot)", getPose().getRotation().getDegrees());
 
         SmartDashboard.putNumber("FL Rel Encoder", m_frontLeft.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FL Abs Encoder", ((SDSSwerveModule)m_frontLeft).getCANcoderPosition());
+        SmartDashboard.putNumber("FL Abs Encoder", m_frontLeft.getAbsoluteEncoderPos());
         SmartDashboard.putNumber("FR Rel Encoder", m_frontRight.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FR Abs Encoder", ((SDSSwerveModule)m_frontRight).getCANcoderPosition());
+        SmartDashboard.putNumber("FR Abs Encoder", m_frontRight.getAbsoluteEncoderPos());
         SmartDashboard.putNumber("BL Rel Encoder", m_backLeft.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BL Abs Encoder", ((SDSSwerveModule)m_backLeft).getCANcoderPosition());
+        SmartDashboard.putNumber("BL Abs Encoder", m_backLeft.getAbsoluteEncoderPos());
         SmartDashboard.putNumber("BR Rel Encoder", m_backRight.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BR Abs Encoder", ((SDSSwerveModule)m_backRight).getCANcoderPosition());
+        SmartDashboard.putNumber("BR Abs Encoder", m_backRight.getAbsoluteEncoderPos());
     }
 
     /**
@@ -221,7 +228,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumberArray("Dir Inputs", new double[]{xSpeedCommanded, ySpeedCommanded, m_currentRotation});
 
-        SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, getHeading())
                 : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
