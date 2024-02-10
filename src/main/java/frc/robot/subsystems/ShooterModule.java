@@ -12,10 +12,10 @@ public class ShooterModule {
 
     private double wheelSpeed;
 
+    // TODO Afternoon Configure Motor Controllers
     public ShooterModule() {
         shooterMotorLeft = new CANSparkMax(ShooterConstants.kLeftMotorCANID, MotorType.kBrushless);
         shooterMotorRight = new CANSparkMax(ShooterConstants.kRightMotorCANID, MotorType.kBrushless);
-
     }
 
     // Sets wheelSpeed variable, double input
@@ -33,7 +33,5 @@ public class ShooterModule {
     public void runShooter() {
         shooterMotorLeft.set(wheelSpeed);
         shooterMotorRight.set(-wheelSpeed);
-
     }
-
 }

@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.IntakeConstants;
@@ -23,6 +24,7 @@ public class IntakeModule {
     public IntakeModule() {
         m_deployMotor.restoreFactoryDefaults();
         m_intakeMotor.restoreFactoryDefaults();
+        //TODO Afernoon create intake constants to replace SDS constants
         m_deployEncoder.setPositionConversionFactor(SDSModuleConstants.kDrivingEncoderPositionFactor); //TODO Change Conversion Factor
         m_deployEncoder.setVelocityConversionFactor(SDSModuleConstants.kDrivingEncoderVelocityFactor);
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
@@ -53,7 +55,7 @@ public class IntakeModule {
      * @return True when calibration is complete, false when calibration is in progress.
      */
     public boolean calibrate() {
-        // TODO Morning determine if calibration can be done in the update function and moved to Manipulator
+        // TODO Afternoon use calibrate function in manipulator
         if (!calibrated) {
             if(m_intakeUpSwitch.get() == true){
                 m_deployMotor.set(0);
@@ -61,7 +63,7 @@ public class IntakeModule {
                 calibrated = true;
             }
             else{
-                m_deployMotor.set(0.1); //TODO replace with constant
+                m_deployMotor.set(0.1); //TODO Afternoon replace with constant
                 calibrated = false;
             }
         }
@@ -74,7 +76,7 @@ public class IntakeModule {
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        // TODO might be worth checking the top limit switch
+        // TODO Afternoon might be worth checking the top limit switch
         if( angle >= IntakeConstants.kFloorIntakePosition && angle <= IntakeConstants.kTopPosition) {
             targetAngle = angle;
         }
@@ -94,7 +96,7 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        if(m_noteSwitch.get() == 1 && speed > 0){
+        if(m_noteSwitch.get() == true && speed > 0){
             rollerSpeed = 0;
         }else{
             rollerSpeed = speed;
