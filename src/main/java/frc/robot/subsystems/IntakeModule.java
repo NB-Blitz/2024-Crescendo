@@ -20,11 +20,13 @@ public class IntakeModule {
     private double rollerSpeed = 0;
     private boolean calibrated = false;
 
-    // TODO Morning configure motor controllers
-    // TODO Morning configure relative encoder
     public IntakeModule() {
+        m_deployMotor.restoreFactoryDefaults();
+        m_intakeMotor.restoreFactoryDefaults();
+        m_deployEncoder.setPositionConversionFactor(SDSModuleConstants.kDrivingEncoderPositionFactor); //TODO Change Conversion Factor
+        m_deployEncoder.setVelocityConversionFactor(SDSModuleConstants.kDrivingEncoderVelocityFactor);
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
-
+        m_intakePIDController.setPositionPIDWrappingEnabled(false);
         m_intakePIDController.setP(IntakeConstants.kIntakeP);
         m_intakePIDController.setI(IntakeConstants.kIntakeI);
         m_intakePIDController.setD(IntakeConstants.kIntakeD);
@@ -32,6 +34,18 @@ public class IntakeModule {
         m_intakePIDController.setOutputRange(
             IntakeConstants.kShootingMinOutput,
             IntakeConstants.kShootingMaxOutput);
+        m_intakeMotor.setIdleMode(SwerveModuleConstants.kDrivingMotorIdleMode);
+        m_deployMotor.setIdleMode(SwerveModuleConstants.kTurningMotorIdleMode);
+        m_intakeMotor.setSmartCurrentLimit(SDSModuleConstants.kDrivingMotorCurrentLimit);
+        m_deployMotor.setSmartCurrentLimit(SDSModuleConstants.kTurningMotorCurrentLimit);
+
+        // Save the SPARK configurations. If a SPARK browns out during
+        // operation, it will maintain the above configurations.
+        m_intakeMotor.burnFlash();
+        m_deployMotor.burnFlash();
+
+        // Give the SPARKS time to burn the configurations to their flash.
+        Timer.delay(1);
     }
 
     /**
