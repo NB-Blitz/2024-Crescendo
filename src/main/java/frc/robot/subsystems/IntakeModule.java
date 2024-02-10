@@ -101,8 +101,14 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        //TODO Morning if we have a note and roller speed is positive, set roller speed to 0
-        //TODO Morning if the top limit switch is pressed, set the relative encoder position to 0
+        // if we have a note and roller speed is positive, set roller speed to 0
+        if(m_noteSwitch.get() && rollerSpeed > 0){
+            rollerSpeed = 0;
+        }
+        //if the top limit switch is pressed, set the relative encoder position to 0
+        if(m_intakeUpSwitch.get()){
+            m_deployEncoder.setPosition(0.0);
+        }
         m_intakeMotor.set(rollerSpeed);
         m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
     }
