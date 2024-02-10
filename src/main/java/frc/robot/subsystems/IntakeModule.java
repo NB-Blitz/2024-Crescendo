@@ -80,7 +80,7 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        //TODO check note switch and do not allow intake when pressed
+        //TODO Morning check note switch and do not allow intake when pressed
         rollerSpeed = speed;
     }
 
@@ -98,8 +98,8 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        //TODO if we have a note and roller speed is positive, set roller speed to 0
-        //TODO if the top limit switch is pressed, set the relative encoder position to 0
+        //TODO Morning if we have a note and roller speed is positive, set roller speed to 0
+        //TODO Morning if the top limit switch is pressed, set the relative encoder position to 0
         m_intakeMotor.set(rollerSpeed);
         m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
     }
