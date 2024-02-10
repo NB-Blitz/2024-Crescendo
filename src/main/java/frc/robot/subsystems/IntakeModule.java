@@ -24,9 +24,9 @@ public class IntakeModule {
     public IntakeModule() {
         m_deployMotor.restoreFactoryDefaults();
         m_intakeMotor.restoreFactoryDefaults();
-        //TODO Afernoon create intake constants to replace SDS constants
-        m_deployEncoder.setPositionConversionFactor(SDSModuleConstants.kDrivingEncoderPositionFactor); //TODO Change Conversion Factor
-        m_deployEncoder.setVelocityConversionFactor(SDSModuleConstants.kDrivingEncoderVelocityFactor);
+        
+        m_deployEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
+        m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
         m_intakePIDController.setPositionPIDWrappingEnabled(false);
         m_intakePIDController.setP(IntakeConstants.kIntakeP);
@@ -36,10 +36,10 @@ public class IntakeModule {
         m_intakePIDController.setOutputRange(
             IntakeConstants.kShootingMinOutput,
             IntakeConstants.kShootingMaxOutput);
-        m_intakeMotor.setIdleMode(SwerveModuleConstants.kDrivingMotorIdleMode);
-        m_deployMotor.setIdleMode(SwerveModuleConstants.kTurningMotorIdleMode);
-        m_intakeMotor.setSmartCurrentLimit(SDSModuleConstants.kDrivingMotorCurrentLimit);
-        m_deployMotor.setSmartCurrentLimit(SDSModuleConstants.kTurningMotorCurrentLimit);
+        m_intakeMotor.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
+        m_deployMotor.setIdleMode(IntakeConstants.kDeployMotorIdleMode);
+        m_intakeMotor.setSmartCurrentLimit(IntakeConstants.kIntakeMotorCurrentLimit);
+        m_deployMotor.setSmartCurrentLimit(IntakeConstants.kDeployMotorCurrentLimit);
 
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
@@ -76,8 +76,7 @@ public class IntakeModule {
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        // TODO Afternoon might be worth checking the top limit switch
-        if( angle >= IntakeConstants.kFloorIntakePosition && angle <= IntakeConstants.kTopPosition) {
+        if( angle <= IntakeConstants.kFloorIntakePosition && angle >= IntakeConstants.kTopPosition) {
             targetAngle = angle;
         }
     }
@@ -117,6 +116,9 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
+        if(!calibrated) {
+            calibrate();
+        }
         // if we have a note and roller speed is positive, set roller speed to 0
         if(m_noteSwitch.get() && rollerSpeed > 0){
             rollerSpeed = 0;
@@ -126,6 +128,8 @@ public class IntakeModule {
             m_deployEncoder.setPosition(0.0);
         }
         m_intakeMotor.set(rollerSpeed);
-        m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
+        if(calibrated) {
+            m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
+        }
     }
 }

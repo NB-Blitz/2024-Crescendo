@@ -234,6 +234,12 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
+        public static final double kInatkeEncoderPositionFactor = 0;
+        public static final double kIntakeEncoderVelocityFactor = 0;
+        public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode kDeployMotorIdleMode = IdleMode.kBrake; 
+        public static final int kIntakeMotorCurrentLimit = 0;
+        public static final int kDeployMotorCurrentLimit = 0;
         public static final int kArmAngleBuffer = 5;
         public static final int kIntakeMotorCANID = -1;//TODO Change these
         public static final int kDeployMotorCANID = -2;

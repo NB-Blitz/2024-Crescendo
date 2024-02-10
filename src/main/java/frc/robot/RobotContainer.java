@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -29,7 +29,7 @@ public class RobotContainer {
     private final ManipulatorSubsystem m_robotManipulator = new ManipulatorSubsystem();
     // The driver's controller
     Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
-    XboxController m_manipController = new XboxController(OIConstants.kManipControllerPort);
+    CommandXboxController m_manipController = new CommandXboxController(OIConstants.kManipControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -70,29 +70,27 @@ public class RobotContainer {
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
 
-        new JoystickButton(m_manipController, OIConstants.kControllerButtonA)
+        m_manipController.a()
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.ampShootPositionButtonHandler(),
                 m_robotManipulator));
 
-        new JoystickButton(m_manipController, OIConstants.kControllerButtonLB)
+        m_manipController.b()
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.intakePositionButtonHandler(),
                 m_robotManipulator));
 
-//TODO Afternoon Add Trigger Mapping for Button Number 3 and 5 to LT and RT, respectully
-
-        new JoystickButton(m_manipController, 3)
+        m_manipController.leftTrigger(0.5)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.intakeButtonHandler(),
                 m_robotManipulator));
 
-        new JoystickButton(m_manipController, OIConstants.kControllerButtonRB)
+        m_manipController.rightBumper()
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.loadPositionButtonHandler(),
                 m_robotManipulator));
 
-        new JoystickButton(m_manipController, 5)
+        m_manipController.rightTrigger(0.5)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.shootButtonHandler(),
                 m_robotManipulator));
