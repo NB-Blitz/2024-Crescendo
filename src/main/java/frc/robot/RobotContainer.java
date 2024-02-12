@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -11,10 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
-
-import com.pathplanner.lib.auto.AutoBuilder;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -44,10 +45,10 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> m_robotDrive.drive(
-                    0.3 * -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
-                    0.3 * -MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
-                    0.5 * -MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kTwistDeadband),
-                    true, true),
+                    -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kTwistDeadband),
+                    true, false),
                 m_robotDrive));
 
         // Build an auto chooser. This will use Commands.none() as the default option.

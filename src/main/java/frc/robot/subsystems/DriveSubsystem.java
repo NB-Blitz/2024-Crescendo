@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MAXModuleConstants;
@@ -39,8 +40,6 @@ public class DriveSubsystem extends SubsystemBase {
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
 
-    private ChassisSpeeds m_currentChassisSpeeds = new ChassisSpeeds();
-
     // The gyro sensor
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -54,6 +53,8 @@ public class DriveSubsystem extends SubsystemBase {
     private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
     private SwerveDriveKinematics m_kinematics;
+
+    private ChassisSpeeds m_robotRelativeSpeeds = new ChassisSpeeds();
 
     // Odometry class for tracking robot pose
     public SwerveDriveOdometry m_odometry;
@@ -200,7 +201,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @return Robot relative chassis speeds
      */
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return m_currentChassisSpeeds;
+        return m_robotRelativeSpeeds;
     }
 
     /**
@@ -248,10 +249,10 @@ public class DriveSubsystem extends SubsystemBase {
             double currentTime = WPIUtilJNI.now() * 1e-6;
             double elapsedTime = currentTime - m_prevTime;
             double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
-            if (angleDif < 0.45*Math.PI) {
+            if (angleDif < 0.45 * Math.PI) {
                 m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
                 m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
-            } else if (angleDif > 0.85*Math.PI) {
+            } else if (angleDif > 0.85 * Math.PI) {
                 if (m_currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
                     // keep currentTranslationDir unchanged
                     m_currentTranslationMag = m_magLimiter.calculate(0.0);
@@ -281,7 +282,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumberArray("Dir Inputs", new double[]{xSpeedCommanded, ySpeedCommanded, m_currentRotation});
 
-        m_currentChassisSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
+        m_robotRelativeSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
 
         SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
             fieldRelative
