@@ -204,9 +204,9 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
         drive(
-            chassisSpeeds.vxMetersPerSecond,
-            chassisSpeeds.vyMetersPerSecond,
-            chassisSpeeds.omegaRadiansPerSecond,
+            chassisSpeeds.vxMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond,
+            chassisSpeeds.vyMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond,
+            chassisSpeeds.omegaRadiansPerSecond / DriveConstants.kMaxAngularSpeed,
             false,
             false);
     }

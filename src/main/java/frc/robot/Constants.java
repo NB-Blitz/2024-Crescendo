@@ -165,20 +165,21 @@ public final class Constants {
         public static final double kTurningEncoderPositionFactor = TWO_PI / kTurningMotorReduction; // radians
         public static final double kTurningEncoderVelocityFactor = kTurningEncoderPositionFactor / 60.0; // radians per second
 
-        public static final double kDrivingP = 0.2;
+        public static final double kDrivingP = 0.24;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
-        public static final double kDrivingFF = 0;
+        public static final double kDrivingFF = 0.16;
 
-        public static final double kTurningP = 0.4;
+        public static final double kTurningP = 0.3;
         public static final double kTurningI = 0;
         public static final double kTurningD = 0;
         public static final double kTurningFF = 0;
 
         public static final boolean kDrivingInverted = true;
+        public static final boolean kTurningInverted = false;
 
         public static final int kDrivingMotorCurrentLimit = 35; // amps
-        public static final int kTurningMotorCurrentLimit = 35; // amps
+        public static final int kTurningMotorCurrentLimit = 50; // amps
     }
 
     public static final class OIConstants {
