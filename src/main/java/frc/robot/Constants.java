@@ -83,13 +83,14 @@ public final class Constants {
     }
 
     public static final class MAXModuleConstants {
-        // TODO: Confirm all values
-
         // Chassis configuration
-        public static final double kTrackWidth = Units.inchesToMeters(24.5);
         // Distance between centers of right and left wheels on robot
-        public static final double kWheelBase = Units.inchesToMeters(24.5);
+        public static final double kTrackWidth = Units.inchesToMeters(24.5);
         // Distance between front and back wheels on robot
+        public static final double kWheelBase = Units.inchesToMeters(24.5);
+        // Distance from the center of the robot to the farthest module
+        public static final double kDriveBaseRadius = Units.inchesToMeters(17.5);
+
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -146,10 +147,13 @@ public final class Constants {
 
     public static final class SDSModuleConstants {
         // Chassis configuration
-        public static final double kTrackWidth = Units.inchesToMeters(18.5);
         // Distance between centers of right and left wheels on robot
-        public static final double kWheelBase = Units.inchesToMeters(19.5);
+        public static final double kTrackWidth = Units.inchesToMeters(18.5);
         // Distance between front and back wheels on robot
+        public static final double kWheelBase = Units.inchesToMeters(19.5);
+        // Distance from the center of the robot to the farthest module
+        public static final double kDriveBaseRadius = 0.34;
+
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -205,7 +209,7 @@ public final class Constants {
             new PIDConstants(SDSModuleConstants.kDrivingP, SDSModuleConstants.kDrivingI, SDSModuleConstants.kDrivingD), // Translation PID constants
             new PIDConstants(SDSModuleConstants.kTurningP, SDSModuleConstants.kTurningI, SDSModuleConstants.kTurningD), // Rotation PID constants
             DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
-            DriveConstants.kDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+            SDSModuleConstants.kDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
         );
     }
