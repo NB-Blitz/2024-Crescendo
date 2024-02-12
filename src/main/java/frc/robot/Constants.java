@@ -29,7 +29,7 @@ public final class Constants {
     public static final double TWO_PI = 2 * Math.PI;
 
     public static final class DriveConstants {
-        public static final boolean isMAXSwerveModules = false;
+        public static final boolean isMAXSwerveModules = true;
 
         // TODO: Confirm all values for both modules
 
@@ -41,19 +41,6 @@ public final class Constants {
         public static final double kDirectionSlewRate = 1.2; // radians per second
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
-
-        // Chassis configuration
-        // Drive base radius in meters. Distance from robot center to furthest module.
-        public static final double kDriveBaseRadius = 0.34; // TODO: Rough estimate, get more accurate
-        // Distance between centers of right and left wheels on robot
-        public static final double kTrackWidth = Units.inchesToMeters(18.5);
-        // Distance between front and back wheels on robot
-        public static final double kWheelBase = Units.inchesToMeters(19.5);
-        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
         // SPARK CAN IDs
         public static final int kFrontLeftDrivingCanId = 2;
@@ -98,6 +85,17 @@ public final class Constants {
     public static final class MAXModuleConstants {
         // TODO: Confirm all values
 
+        // Chassis configuration
+        public static final double kTrackWidth = Units.inchesToMeters(24.5);
+        // Distance between centers of right and left wheels on robot
+        public static final double kWheelBase = Units.inchesToMeters(24.5);
+        // Distance between front and back wheels on robot
+        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+
         // Angular offsets of the modules relative to the chassis in radians
         public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
         public static final double kFrontRightChassisAngularOffset = 0;
@@ -130,14 +128,14 @@ public final class Constants {
         public static final double kTurningEncoderVelocityFactor = TWO_PI / 60.0; // radians per second
 
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
-        public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
+        public static final double kTurningEncoderPositionPIDMaxInput = TWO_PI; // radians
 
         public static final double kDrivingP = 0.04;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
         public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
 
-        public static final double kTurningP = 1;
+        public static final double kTurningP = 0.3;
         public static final double kTurningI = 0;
         public static final double kTurningD = 0;
         public static final double kTurningFF = 0;
@@ -147,6 +145,17 @@ public final class Constants {
     }
 
     public static final class SDSModuleConstants {
+        // Chassis configuration
+        public static final double kTrackWidth = Units.inchesToMeters(18.5);
+        // Distance between centers of right and left wheels on robot
+        public static final double kWheelBase = Units.inchesToMeters(19.5);
+        // Distance between front and back wheels on robot
+        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+
         // Calculations required for driving motor conversion factors and feed forward
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
@@ -185,6 +194,7 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
         public static final double kDriveDeadband = 0.3;
+        public static final double kTwistDeadband = 0.5;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
     }

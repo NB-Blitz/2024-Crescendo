@@ -75,4 +75,11 @@ public abstract class SwerveModule {
     public void resetEncoders() {
         m_drivingEncoder.setPosition(0);
     }
+
+    /**
+     * Returns the current position of the module's absolute encoder.
+     * 
+     * @return Current position, from 0 to 360 degrees
+     */
+    public abstract double getAbsoluteEncoderPos();
 }
