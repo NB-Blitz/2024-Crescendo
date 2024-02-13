@@ -12,21 +12,22 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeModule {
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_deployMotor = new CANSparkMax(IntakeConstants.kDeployMotorCANID, MotorType.kBrushless);
-    private final DigitalInput m_intakeUpSwitch = new DigitalInput(IntakeConstants.kIntakeUpSwitchID);
+    //private final DigitalInput m_intakeUpSwitch = new DigitalInput(IntakeConstants.kIntakeUpSwitchID);
     private final RelativeEncoder m_deployEncoder = m_deployMotor.getEncoder();
-    private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
-    private final SparkPIDController m_intakePIDController = m_deployMotor.getPIDController();
+    //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
+    //private final SparkPIDController m_intakePIDController = m_deployMotor.getPIDController();
 
-    private double targetAngle = 0;
+    //private double targetAngle = 0;
     private double rollerSpeed = 0;
-    private boolean calibrated = false;
+    private double armSpeed = 0;
+    //private boolean calibrated = false;
 
     public IntakeModule() {
         m_deployMotor.restoreFactoryDefaults();
         m_intakeMotor.restoreFactoryDefaults();
         
         m_deployEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
-        m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
+        /*m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
         m_intakePIDController.setFeedbackDevice(m_deployEncoder);
         m_intakePIDController.setPositionPIDWrappingEnabled(false);
         m_intakePIDController.setP(IntakeConstants.kIntakeP);
@@ -35,7 +36,7 @@ public class IntakeModule {
         m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
         m_intakePIDController.setOutputRange(
             IntakeConstants.kShootingMinOutput,
-            IntakeConstants.kShootingMaxOutput);
+            IntakeConstants.kShootingMaxOutput);*/
         m_intakeMotor.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
         m_deployMotor.setIdleMode(IntakeConstants.kDeployMotorIdleMode);
         m_intakeMotor.setSmartCurrentLimit(IntakeConstants.kIntakeMotorCurrentLimit);
@@ -54,7 +55,7 @@ public class IntakeModule {
      * Setting the encoder position when the intake oart is up.
      * @return True when calibration is complete, false when calibration is in progress.
      */
-    public boolean calibrate() {
+    /*public boolean calibrate() {
         // TODO Afternoon use calibrate function in manipulator
         if (!calibrated) {
             if(m_intakeUpSwitch.get() == true){
@@ -68,18 +69,18 @@ public class IntakeModule {
             }
         }
         return calibrated;
-    }
+    }*/
 
     /**
      * This functions set the target position for the PID
      * to move the intake arm to.
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
-    public void setTargetPosition(double angle) {
+    /*public void setTargetPosition(double angle) {
         if( angle <= IntakeConstants.kFloorIntakePosition && angle >= IntakeConstants.kTopPosition) {
             targetAngle = angle;
         }
-    }
+    }*/
 
     /**
      * This function returns the current angle of the
@@ -95,11 +96,16 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        if(m_noteSwitch.get() == true && speed > 0){
+        /*if(m_noteSwitch.get() == true && speed > 0){
             rollerSpeed = 0;
         }else{
             rollerSpeed = speed;
-        }
+        }*/
+        rollerSpeed = speed;
+    }
+
+    public void setArmSpeed(double speed){
+        armSpeed = speed;
     }
 
     /**
@@ -107,16 +113,16 @@ public class IntakeModule {
      * the intake.
      * @return True if we have a Note, else False
      */
-    public boolean getNoteLimitSwitch() {
+    /*public boolean getNoteLimitSwitch() {
         return m_noteSwitch.get();
-    }
+    }*/
 
     /**
      * This function should run in the periodic loop to 
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        if(!calibrated) {
+        /*if(!calibrated) {
             calibrate();
         }
         // if we have a note and roller speed is positive, set roller speed to 0
@@ -130,6 +136,8 @@ public class IntakeModule {
         m_intakeMotor.set(rollerSpeed);
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
-        }
+        }*/
+        m_deployMotor.set(0.05 * armSpeed);
+        m_intakeMotor.set(0.05 * rollerSpeed);
     }
 }

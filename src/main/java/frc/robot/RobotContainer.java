@@ -29,7 +29,7 @@ public class RobotContainer {
     private final ManipulatorSubsystem m_robotManipulator = new ManipulatorSubsystem();
     // The driver's controller
     Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
-    CommandXboxController m_manipController = new CommandXboxController(OIConstants.kManipControllerPort);
+    Joystick m_manipController = new Joystick(OIConstants.kManipControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,10 +51,10 @@ public class RobotContainer {
                 m_robotDrive));
 
         m_robotManipulator.setDefaultCommand(
-            
             new RunCommand(
                 () -> m_robotManipulator.run(
-                    MathUtil.applyDeadband(m_manipController.getRightY(), OIConstants.kDriveDeadband)),
+                    MathUtil.applyDeadband(m_manipController.getY(), OIConstants.kDriveDeadband),
+                    MathUtil.applyDeadband(m_manipController.getRawAxis(3), OIConstants.kDriveDeadband)),
                 m_robotManipulator));
 
         // Add default command for the Manipulator
@@ -77,7 +77,22 @@ public class RobotContainer {
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
 
-        m_manipController.a()
+        new JoystickButton(m_manipController, 2)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.stopButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 3)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.intakeButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 4)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.outputButtonHandler(),
+                m_robotManipulator));
+
+        /*m_manipController.a()
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.ampShootPositionButtonHandler(),
                 m_robotManipulator));
@@ -100,7 +115,7 @@ public class RobotContainer {
         m_manipController.rightTrigger(0.5)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.shootButtonHandler(),
-                m_robotManipulator));
+                m_robotManipulator));*/
     }
 
     /**
