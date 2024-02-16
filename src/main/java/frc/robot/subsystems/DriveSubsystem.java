@@ -119,7 +119,14 @@ public class DriveSubsystem extends SubsystemBase {
                 m_frontRight.getPosition(),
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
-        });
+            });
+
+        SmartDashboard.putNumber("driving_p", 1.0);
+        SmartDashboard.putNumber("driving_i", 0.0);
+        SmartDashboard.putNumber("driving_d", 0.0);
+        SmartDashboard.putNumber("turning_p", 1.0);
+        SmartDashboard.putNumber("turning_i", 0.0);
+        SmartDashboard.putNumber("turning_d", 0.0);
 
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
@@ -155,18 +162,18 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             });
 
-        SmartDashboard.putNumber("Position (x)", getPose().getX());
-        SmartDashboard.putNumber("Position (y)", getPose().getY());
-        SmartDashboard.putNumber("Position (rot)", getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber("position_x", getPose().getX());
+        SmartDashboard.putNumber("position_y", getPose().getY());
+        SmartDashboard.putNumber("position_rot", getPose().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("FL Rel Encoder", m_frontLeft.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FL Abs Encoder", m_frontLeft.getAbsoluteEncoderPos());
-        SmartDashboard.putNumber("FR Rel Encoder", m_frontRight.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FR Abs Encoder", m_frontRight.getAbsoluteEncoderPos());
-        SmartDashboard.putNumber("BL Rel Encoder", m_backLeft.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BL Abs Encoder", m_backLeft.getAbsoluteEncoderPos());
-        SmartDashboard.putNumber("BR Rel Encoder", m_backRight.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BR Abs Encoder", m_backRight.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("fl_relative", m_frontLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("fl_absolute", m_frontLeft.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("fr_relative", m_frontRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("fr_absolute", m_frontRight.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("bl_relative", m_backLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("bl_absolute", m_backLeft.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("br_relative", m_backRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("br_absolute", m_backRight.getAbsoluteEncoderPos());
     }
 
     /**
@@ -279,8 +286,6 @@ public class DriveSubsystem extends SubsystemBase {
         double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
         double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
         double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
-
-        SmartDashboard.putNumberArray("Dir Inputs", new double[]{xSpeedCommanded, ySpeedCommanded, m_currentRotation});
 
         m_robotRelativeSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
 

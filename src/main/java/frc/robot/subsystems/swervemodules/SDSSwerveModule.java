@@ -3,6 +3,7 @@ package frc.robot.subsystems.swervemodules;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -135,6 +136,19 @@ public class SDSSwerveModule extends SwerveModule {
         // Command driving and turning SPARKS towards their respective setpoints.
         super.m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         super.m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
+
+        double kDrivingP = SmartDashboard.getNumber("driving_p", SDSModuleConstants.kDrivingP);
+        double kDrivingI = SmartDashboard.getNumber("driving_i", SDSModuleConstants.kDrivingI);
+        double kDrivingD = SmartDashboard.getNumber("driving_d", SDSModuleConstants.kDrivingD);
+        double kTurningP = SmartDashboard.getNumber("turning_p", SDSModuleConstants.kTurningP);
+        double kTurningI = SmartDashboard.getNumber("turning_i", SDSModuleConstants.kTurningI);
+        double kTurningD = SmartDashboard.getNumber("turning_d", SDSModuleConstants.kTurningD);
+        m_drivingPIDController.setP(kDrivingP);
+        m_drivingPIDController.setI(kDrivingI);
+        m_drivingPIDController.setD(kDrivingD);
+        m_turningPIDController.setP(kTurningP);
+        m_turningPIDController.setI(kTurningI);
+        m_turningPIDController.setD(kTurningD);
     }
     
     /**

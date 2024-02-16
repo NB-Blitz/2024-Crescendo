@@ -1,0 +1,272 @@
+{
+  "tabPane": [
+    {
+      "title": "SmartDashboard",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "15,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/auto_chooser",
+              "_title": "Auto Chooser",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "12,0": {
+            "size": [
+              3,
+              6
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Odometry",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/position_x",
+                  "_title": "x",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/position_y",
+                  "_title": "y",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Gyro",
+                  "_source0": "network_table:///SmartDashboard/position_rot",
+                  "_title": "Rot",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Visuals/Major tick spacing": 45.0,
+                  "Visuals/Starting angle": 180.0,
+                  "Visuals/Show tick mark ring": true,
+                  "Visuals/Counter clockwise": true
+                }
+              ]
+            }
+          },
+          "4,0": {
+            "size": [
+              4,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Driving PID",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///SmartDashboard/driving_p",
+                  "_title": "P",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Slider Settings/Min": 0.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///SmartDashboard/driving_i",
+                  "_title": "I",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Slider Settings/Min": 0.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///SmartDashboard/driving_d",
+                  "_title": "D",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Slider Settings/Min": 0.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                }
+              ]
+            }
+          },
+          "8,0": {
+            "size": [
+              4,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Turning PID",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///SmartDashboard/turning_p",
+                  "_title": "P",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Slider Settings/Min": 0.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///SmartDashboard/turning_i",
+                  "_title": "I",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Slider Settings/Min": 0.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///SmartDashboard/turning_d",
+                  "_title": "D",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Slider Settings/Min": 0.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                }
+              ]
+            }
+          },
+          "0,0": {
+            "size": [
+              2,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Absolute Encoders",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/fl_absolute",
+                  "_title": "Front Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/fr_absolute",
+                  "_title": "Front Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/bl_absolute",
+                  "_title": "Back Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/br_absolute",
+                  "_title": "Back Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "2,0": {
+            "size": [
+              2,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Relative Encoders",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/fl_relative",
+                  "_title": "Front Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/fr_relative",
+                  "_title": "Front Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/bl_relative",
+                  "_title": "Back Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/br_relative",
+                  "_title": "Back Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "LiveWindow",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": -7.199999809265137,
+    "y": -7.199999809265137,
+    "width": 1550.4000244140625,
+    "height": 830.4000244140625
+  }
+}

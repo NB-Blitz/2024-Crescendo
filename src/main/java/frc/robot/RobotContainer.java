@@ -45,9 +45,9 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> m_robotDrive.drive(
-                    -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kTwistDeadband),
+                    0.5 * -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
+                    0.5 * -MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
+                    0.5 * -MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kTwistDeadband),
                     true, false),
                 m_robotDrive));
 
@@ -57,7 +57,7 @@ public class RobotContainer {
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("auto_chooser", autoChooser);
     }
 
     /**
