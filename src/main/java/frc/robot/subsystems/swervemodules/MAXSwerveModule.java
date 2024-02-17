@@ -139,18 +139,18 @@ public class MAXSwerveModule extends SwerveModule {
         super.m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         super.m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
-        double kDrivingP = SmartDashboard.getNumber("driving_p", MAXModuleConstants.kDrivingP);
-        double kDrivingI = SmartDashboard.getNumber("driving_i", MAXModuleConstants.kDrivingI);
-        double kDrivingD = SmartDashboard.getNumber("driving_d", MAXModuleConstants.kDrivingD);
-        double kTurningP = SmartDashboard.getNumber("turning_p", MAXModuleConstants.kTurningP);
-        double kTurningI = SmartDashboard.getNumber("turning_i", MAXModuleConstants.kTurningI);
-        double kTurningD = SmartDashboard.getNumber("turning_d", MAXModuleConstants.kTurningD);
-        m_drivingPIDController.setP(kDrivingP);
-        m_drivingPIDController.setI(kDrivingI);
-        m_drivingPIDController.setD(kDrivingD);
-        m_turningPIDController.setP(kTurningP);
-        m_turningPIDController.setI(kTurningI);
-        m_turningPIDController.setD(kTurningD);
+        // double kDrivingP = SmartDashboard.getNumber("driving_p", MAXModuleConstants.kDrivingP);
+        // double kDrivingI = SmartDashboard.getNumber("driving_i", MAXModuleConstants.kDrivingI);
+        // double kDrivingD = SmartDashboard.getNumber("driving_d", MAXModuleConstants.kDrivingD);
+        // double kTurningP = SmartDashboard.getNumber("turning_p", MAXModuleConstants.kTurningP);
+        // double kTurningI = SmartDashboard.getNumber("turning_i", MAXModuleConstants.kTurningI);
+        // double kTurningD = SmartDashboard.getNumber("turning_d", MAXModuleConstants.kTurningD);
+        // m_drivingPIDController.setP(kDrivingP);
+        // m_drivingPIDController.setI(kDrivingI);
+        // m_drivingPIDController.setD(kDrivingD);
+        // m_turningPIDController.setP(kTurningP);
+        // m_turningPIDController.setI(kTurningI);
+        // m_turningPIDController.setD(kTurningD);
     }
 
     /**

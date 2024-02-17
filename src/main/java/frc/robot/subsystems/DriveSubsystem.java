@@ -121,12 +121,12 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             });
 
-        SmartDashboard.putNumber("driving_p", 1.0);
-        SmartDashboard.putNumber("driving_i", 0.0);
-        SmartDashboard.putNumber("driving_d", 0.0);
-        SmartDashboard.putNumber("turning_p", 1.0);
-        SmartDashboard.putNumber("turning_i", 0.0);
-        SmartDashboard.putNumber("turning_d", 0.0);
+        //SmartDashboard.putNumber("driving_p", 1.0);
+        //SmartDashboard.putNumber("driving_i", 0.0);
+        //SmartDashboard.putNumber("driving_d", 0.0);
+        //SmartDashboard.putNumber("turning_p", 1.0);
+        //SmartDashboard.putNumber("turning_i", 0.0);
+        //SmartDashboard.putNumber("turning_d", 0.0);
 
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
