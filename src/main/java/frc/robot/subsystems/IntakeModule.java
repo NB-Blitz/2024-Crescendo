@@ -2,11 +2,11 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+//import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeModule {
@@ -27,8 +27,9 @@ public class IntakeModule {
         m_intakeMotor.restoreFactoryDefaults();
         
         m_deployEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
-        /*m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
-        m_intakePIDController.setFeedbackDevice(m_deployEncoder);
+        m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
+        m_deployEncoder.setPosition(0);
+        /*m_intakePIDController.setFeedbackDevice(m_deployEncoder);
         m_intakePIDController.setPositionPIDWrappingEnabled(false);
         m_intakePIDController.setP(IntakeConstants.kIntakeP);
         m_intakePIDController.setI(IntakeConstants.kIntakeI);

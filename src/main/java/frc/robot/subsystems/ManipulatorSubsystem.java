@@ -1,22 +1,23 @@
 package frc.robot.subsystems;
 
-import javax.management.relation.RoleResult;
+//import javax.management.relation.RoleResult;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.ShooterConstants;
+//import frc.robot.Constants.IntakeConstants;
+//import frc.robot.Constants.ShooterConstants;
 
 public class ManipulatorSubsystem extends SubsystemBase {
 
     private final IntakeModule m_IntakeModule = new IntakeModule();
-    private final ShooterModule m_ShooterModule = new ShooterModule();
+    //private final ShooterModule m_ShooterModule = new ShooterModule();
 
     private double rollerSpeed = 0;
     private int rollerDirection = 0;
 
     public ManipulatorSubsystem() {
         SmartDashboard.putNumber("Roller Speed", 0);
+        SmartDashboard.putNumber("Arm Angle", 0);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
          * we could start the shooting motors.
          */
         m_IntakeModule.updateIntake();
-        m_ShooterModule.runShooter();
+        //m_ShooterModule.runShooter();
     }
     /*public void shootButtonHandler() {
         if(m_IntakeModule.getNoteLimitSwitch()){
@@ -79,7 +80,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void run(double armJoystick, double shootMotorSpeed){
         m_IntakeModule.setArmSpeed(armJoystick);
-        m_ShooterModule.setShooterSpeed(shootMotorSpeed);
+        //m_ShooterModule.setShooterSpeed(shootMotorSpeed);
         rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0);
         if (rollerSpeed > 1){
             rollerSpeed = 1;
@@ -88,6 +89,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
             rollerSpeed = 0;
         }
         SmartDashboard.putNumber("Roller Speed", rollerSpeed);
+        SmartDashboard.putNumber("Arm Angle", m_IntakeModule.getCurrentPosition());
         m_IntakeModule.setIntakeSpeed(rollerSpeed * rollerDirection);
     }
 }
