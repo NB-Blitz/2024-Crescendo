@@ -33,6 +33,9 @@ public abstract class SwerveModule {
         m_drivingPIDController = m_drivingSpark.getPIDController();
         m_turningPIDController = m_turningSpark.getPIDController();
         m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
+
+        //m_drivingSpark.setOpenLoopRampRate(SwerveModuleConstants.kOpenLoopRamp);
+        //m_drivingSpark.setClosedLoopRampRate(SwerveModuleConstants.kClosedLoopRamp);
     }
 
     /**
