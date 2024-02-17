@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,8 +19,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MAXModuleConstants;
 import frc.robot.Constants.SDSModuleConstants;
@@ -46,6 +53,8 @@ public class DriveSubsystem extends SubsystemBase {
     private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
     private SwerveDriveKinematics m_kinematics;
+
+    private ChassisSpeeds m_robotRelativeSpeeds = new ChassisSpeeds();
 
     // Odometry class for tracking robot pose
     public SwerveDriveOdometry m_odometry;
@@ -111,6 +120,34 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
             });
+
+        //SmartDashboard.putNumber("driving_p", 1.0);
+        //SmartDashboard.putNumber("driving_i", 0.0);
+        //SmartDashboard.putNumber("driving_d", 0.0);
+        //SmartDashboard.putNumber("turning_p", 1.0);
+        //SmartDashboard.putNumber("turning_i", 0.0);
+        //SmartDashboard.putNumber("turning_d", 0.0);
+
+        // Configure AutoBuilder last
+        AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            AutoConstants.kPathFollowerConfig, // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                Optional<Alliance> alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this // Reference to this subsystem to set requirements
+        );
     }
 
     @Override
@@ -125,18 +162,18 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             });
 
-        SmartDashboard.putNumber("Position (x)", getPose().getX());
-        SmartDashboard.putNumber("Position (y)", getPose().getY());
-        SmartDashboard.putNumber("Position (rot)", getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber("position_x", getPose().getX());
+        SmartDashboard.putNumber("position_y", getPose().getY());
+        SmartDashboard.putNumber("position_rot", getPose().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("FL Rel Encoder", m_frontLeft.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FL Abs Encoder", m_frontLeft.getAbsoluteEncoderPos());
-        SmartDashboard.putNumber("FR Rel Encoder", m_frontRight.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FR Abs Encoder", m_frontRight.getAbsoluteEncoderPos());
-        SmartDashboard.putNumber("BL Rel Encoder", m_backLeft.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BL Abs Encoder", m_backLeft.getAbsoluteEncoderPos());
-        SmartDashboard.putNumber("BR Rel Encoder", m_backRight.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BR Abs Encoder", m_backRight.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("fl_relative", m_frontLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("fl_absolute", m_frontLeft.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("fr_relative", m_frontRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("fr_absolute", m_frontRight.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("bl_relative", m_backLeft.getState().angle.getDegrees());
+        SmartDashboard.putNumber("bl_absolute", m_backLeft.getAbsoluteEncoderPos());
+        SmartDashboard.putNumber("br_relative", m_backRight.getState().angle.getDegrees());
+        SmartDashboard.putNumber("br_absolute", m_backRight.getAbsoluteEncoderPos());
     }
 
     /**
@@ -163,6 +200,30 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             },
             pose);
+    }
+
+    /**
+     * Returns the current non-field relative chassis speeds.
+     * 
+     * @return Robot relative chassis speeds
+     */
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return m_robotRelativeSpeeds;
+    }
+
+    /**
+     * Drive the robot with non-field relative chassis speeds.
+     * Used for PathPlanner/autonomous.
+     * 
+     * @param chassisSpeeds Robot relative chassis speeds
+     */
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+        drive(
+            chassisSpeeds.vxMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond,
+            chassisSpeeds.vyMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond,
+            chassisSpeeds.omegaRadiansPerSecond / DriveConstants.kMaxAngularSpeed,
+            false,
+            false);
     }
 
     /**
@@ -195,10 +256,10 @@ public class DriveSubsystem extends SubsystemBase {
             double currentTime = WPIUtilJNI.now() * 1e-6;
             double elapsedTime = currentTime - m_prevTime;
             double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
-            if (angleDif < 0.45*Math.PI) {
+            if (angleDif < 0.45 * Math.PI) {
                 m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
                 m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
-            } else if (angleDif > 0.85*Math.PI) {
+            } else if (angleDif > 0.85 * Math.PI) {
                 if (m_currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
                     // keep currentTranslationDir unchanged
                     m_currentTranslationMag = m_magLimiter.calculate(0.0);
@@ -226,7 +287,7 @@ public class DriveSubsystem extends SubsystemBase {
         double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
         double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
-        SmartDashboard.putNumberArray("Dir Inputs", new double[]{xSpeedCommanded, ySpeedCommanded, m_currentRotation});
+        m_robotRelativeSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
 
         SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
             fieldRelative
@@ -271,6 +332,7 @@ public class DriveSubsystem extends SubsystemBase {
     /** Zeroes the heading of the robot. */
     public void zeroHeading() {
         m_gyro.reset();
+        resetOdometry(getPose());
     }
 
     /**
