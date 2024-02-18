@@ -61,6 +61,14 @@ public class IntakeModule {
         Timer.delay(1);
     }
 
+    public double getArmCurrent() {
+        return m_armMotor.getOutputCurrent();
+    }
+
+    public double getRollerCurrent() {
+        return m_intakeMotor.getOutputCurrent();
+    }
+
     /**
      * Setting the encoder position when the intake oart is up.
      * @return True when calibration is complete, false when calibration is in progress.
@@ -147,11 +155,7 @@ public class IntakeModule {
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
-        m_armMotor.set(0.3 * armSpeed);
-        if (rollerSpeed < 0) {
-            m_intakeMotor.set(0.8 * rollerSpeed);
-        } else {
-            m_intakeMotor.set(0.3 * rollerSpeed);
-        }
+        m_armMotor.set(armSpeed);
+        m_intakeMotor.set(rollerSpeed);
     }
 }

@@ -59,8 +59,8 @@ public class RobotContainer {
         m_robotManipulator.setDefaultCommand(
             new RunCommand(
                 () -> m_robotManipulator.run(
-                    MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
-                    MathUtil.applyDeadband(m_manipController.getRawAxis(3), IOConstants.kDriveDeadband)),
+                    0.3 * -MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
+                    0.5 * (1 + MathUtil.applyDeadband(m_manipController.getRawAxis(3), IOConstants.kDriveDeadband))),
                 m_robotManipulator));
 
         // Add default command for the Manipulator

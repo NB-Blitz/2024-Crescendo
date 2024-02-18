@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.ejml.dense.row.mult.MatrixMatrixMult_CDRM;
+
 //import javax.management.relation.RoleResult;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +16,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     private double rollerSpeed = 0;
     private int rollerDirection = 0;
+    private double maxCurrentReachedArm = 0.0;
+    private double maxCurrentReachedRoller = 0.0;
 
     public ManipulatorSubsystem() {
         SmartDashboard.putNumber("Roller Speed", 0.0);
@@ -68,6 +72,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void intakeButtonHandler(){
         rollerDirection = 1;
+        rollerSpeed = 0.2;
     }
 
     public void outputButtonHandler(){
@@ -76,20 +81,34 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void stopButtonHandler(){
         rollerDirection = 0;
+        rollerSpeed = 0;
     }
 
     public void run(double armJoystick, double shootMotorSpeed){
         m_IntakeModule.setArmSpeed(armJoystick);
         // m_ShooterModule.setShooterSpeed(shootMotorSpeed);
-        rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0.0);
+        // rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0.0);
         // if (rollerSpeed > 1){
         //     rollerSpeed = 1;
         // }
         // else if (rollerSpeed < 0){
         //     rollerSpeed = 0;
         // }
-        // SmartDashboard.putNumber("Roller Speed", rollerSpeed);
+        if (rollerDirection < 0)  {
+            rollerSpeed = shootMotorSpeed;
+        }
+        if (m_IntakeModule.getRollerCurrent() > maxCurrentReachedRoller) {
+            maxCurrentReachedRoller = m_IntakeModule.getRollerCurrent();
+        }
+        if (m_IntakeModule.getRollerCurrent() > maxCurrentReachedRoller) {
+            maxCurrentReachedArm = m_IntakeModule.getArmCurrent();
+        }
+        SmartDashboard.putNumber("Max Arm Current", maxCurrentReachedArm);
+        SmartDashboard.putNumber("Max Roller Current", maxCurrentReachedRoller);
+        SmartDashboard.putNumber("Roller Current", m_IntakeModule.getRollerCurrent());
+        SmartDashboard.putNumber("Arm Current", m_IntakeModule.getArmCurrent());
+        SmartDashboard.putNumber("Roller Speed", shootMotorSpeed);
         SmartDashboard.putNumber("Arm Angle", m_IntakeModule.getCurrentPosition());
-        m_IntakeModule.setIntakeSpeed(/*rollerSpeed **/ rollerDirection);
+        m_IntakeModule.setIntakeSpeed(rollerSpeed * rollerDirection);
     }
 }
