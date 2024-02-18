@@ -2,7 +2,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -17,18 +18,20 @@ public class IntakeModule {
     //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
 
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-    //private final SparkPIDController m_intakePIDController = m_armMotor.getPIDController();
+    private final SparkPIDController m_intakePIDController = m_armMotor.getPIDController();
 
     //private double targetAngle = 0;
+    private double targetVelocity = 0;
     private double rollerSpeed = 0;
     private double armSpeed = 0;
     private boolean calibrated = false;
+    private boolean overrideBounds = false;
 
     public IntakeModule() {
         m_armMotor.restoreFactoryDefaults();
         m_intakeMotor.restoreFactoryDefaults();
 
-        // m_intakePIDController.setFeedbackDevice(m_armEncoder);
+        m_intakePIDController.setFeedbackDevice(m_armEncoder);
         
         m_armMotor.setInverted(IntakeConstants.kArmInverted);
         m_intakeMotor.setInverted(IntakeConstants.kIntakeInverted);
@@ -37,15 +40,15 @@ public class IntakeModule {
         m_armEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
         m_armEncoder.setPosition(0);
 
-        // m_intakePIDController.setPositionPIDWrappingEnabled(false);
+         m_intakePIDController.setPositionPIDWrappingEnabled(false);
 
-        // m_intakePIDController.setP(IntakeConstants.kIntakeP);
-        // m_intakePIDController.setI(IntakeConstants.kIntakeI);
-        // m_intakePIDController.setD(IntakeConstants.kIntakeD);
-        // m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
-        // m_intakePIDController.setOutputRange(
-        //     IntakeConstants.kShootingMinOutput,
-        //     IntakeConstants.kShootingMaxOutput);
+        m_intakePIDController.setP(IntakeConstants.kIntakeP);
+        m_intakePIDController.setI(IntakeConstants.kIntakeI);
+        m_intakePIDController.setD(IntakeConstants.kIntakeD);
+        m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
+        m_intakePIDController.setOutputRange(
+             IntakeConstants.kShootingMinOutput,
+             IntakeConstants.kShootingMaxOutput);
 
         m_armMotor.setIdleMode(IntakeConstants.kArmMotorIdleMode);
         m_intakeMotor.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
@@ -100,6 +103,10 @@ public class IntakeModule {
         }
     }*/
 
+    public void setTargetVelocity(double velocity){
+        targetVelocity = velocity * IntakeConstants.kIntakeEncoderVelocityFactor;
+    }
+
     /**
      * This function returns the current angle of the
      * intake arm based on the encoder value.
@@ -126,9 +133,9 @@ public class IntakeModule {
         rollerSpeed = speed;
     }
 
-    public void setArmSpeed(double speed){
-        armSpeed = speed;
-    }
+    //public void setArmSpeed(double speed){
+    //    armSpeed = speed;
+    //}
 
     /**
      * This function tells whether or not we have a Note in
@@ -141,6 +148,14 @@ public class IntakeModule {
 
     public boolean getArmSwitch(){
         return m_armUpSwitch.get();
+    }
+
+    public void enableBounds(){
+        overrideBounds = false;
+    }
+
+    public void disableBounds(){
+        overrideBounds = true;
     }
 
     /**
@@ -163,14 +178,26 @@ public class IntakeModule {
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
+        if (!overrideBounds){
+            if(m_armEncoder.getPosition() < 2 && targetVelocity < 0){
+                targetVelocity = 0;
+            }
+
+            if(m_armEncoder.getPosition() > 185 && targetVelocity > 0){
+                targetVelocity = 0;
+            }
+        }
+
         if (m_armUpSwitch.get()){
             m_armEncoder.setPosition(0);
             calibrated = true;
-            if(armSpeed < 0){
-                armSpeed = 0;
+            if(targetVelocity < 0){
+                targetVelocity = 0;
             }
         }
-        m_armMotor.set(armSpeed);
+        //m_armMotor.set(armSpeed);
+
+        m_intakePIDController.setReference(targetVelocity, ControlType.kVelocity);
         m_intakeMotor.set(rollerSpeed);
     }
 }

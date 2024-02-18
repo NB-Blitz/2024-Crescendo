@@ -90,6 +90,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_IntakeModule.resetEncoder();
     }
 
+    public void enableBounds(){
+        m_IntakeModule.enableBounds();
+    }
+
+    public void disableBounds(){
+        m_IntakeModule.disableBounds();
+    }
+
     public void run(double armJoystick, double shootMotorSpeed){
         // m_ShooterModule.setShooterSpeed(shootMotorSpeed);
         // rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0.0);
@@ -105,9 +113,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
         if (m_IntakeModule.getRollerCurrent() > maxCurrentReachedRoller) {
             maxCurrentReachedRoller = m_IntakeModule.getRollerCurrent();
+            SmartDashboard.putNumber("Max Roller Current", maxCurrentReachedRoller);
         }
         if (m_IntakeModule.getArmCurrent() > maxCurrentReachedArm) {
             maxCurrentReachedArm = m_IntakeModule.getArmCurrent();
+            SmartDashboard.putNumber("Max Arm Current", maxCurrentReachedArm);
         }
 
         /*if (rollerDirection != 0 && rollerDirection == rollerDirectionBanned) {
@@ -134,14 +144,12 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 armDirectionBanned = 1;
             }
         }
-        SmartDashboard.putNumber("Max Arm Current", maxCurrentReachedArm);
-        SmartDashboard.putNumber("Max Roller Current", maxCurrentReachedRoller);
-        SmartDashboard.putNumber("Roller Current", m_IntakeModule.getRollerCurrent());
-        SmartDashboard.putNumber("Arm Current", m_IntakeModule.getArmCurrent());
+        //SmartDashboard.putNumber("Roller Current", m_IntakeModule.getRollerCurrent());
+        //SmartDashboard.putNumber("Arm Current", m_IntakeModule.getArmCurrent());
         SmartDashboard.putNumber("Roller Speed", shootMotorSpeed);
         SmartDashboard.putNumber("Arm Angle", m_IntakeModule.getCurrentPosition());
         SmartDashboard.putBoolean("Arm Switch", m_IntakeModule.getArmSwitch());
-        m_IntakeModule.setArmSpeed(armJoystick);
+        m_IntakeModule.setTargetVelocity(armJoystick);
         m_IntakeModule.setIntakeSpeed(rollerSpeed * rollerDirection);
     }
 }

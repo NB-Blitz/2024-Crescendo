@@ -54,7 +54,7 @@ public final class Constants {
 
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 1.152; // 4.8rps * 0.24m wheel circumference
+        public static final double kMaxSpeedMetersPerSecond = 4.8; // 4.8rps * 0.24m wheel circumference
         public static final double kMaxAngularSpeed = TWO_PI; // radians per second
 
         public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -236,12 +236,12 @@ public final class Constants {
         public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
         public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
 
-        public static final double kIntakeP = 0.24; // TODO Change these PID values
+        public static final double kIntakeP = 0.05; // TODO Change these PID values
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
-        public static final double kIntakeFF = 0.16;
-        public static final double kShootingMaxOutput = 1.0;
-        public static final double kShootingMinOutput = -1.0;
+        public static final double kIntakeFF = 0;
+        public static final double kShootingMaxOutput = 0.3;
+        public static final double kShootingMinOutput = -0.3;
 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake;
         public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;

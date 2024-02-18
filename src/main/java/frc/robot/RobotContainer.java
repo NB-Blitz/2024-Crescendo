@@ -110,6 +110,16 @@ public class RobotContainer {
                 () -> m_robotManipulator.resetEncoder(),
                 m_robotManipulator));
 
+        new JoystickButton(m_manipController, 8)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.disableBounds(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 10)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.enableBounds(),
+                m_robotManipulator));
+
         /*m_manipController.a()
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.ampShootPositionButtonHandler(),
