@@ -54,7 +54,7 @@ public final class Constants {
 
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 4.8;
+        public static final double kMaxSpeedMetersPerSecond = 1.152; // 4.8rps * 0.24m wheel circumference
         public static final double kMaxAngularSpeed = TWO_PI; // radians per second
 
         public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -142,9 +142,9 @@ public final class Constants {
         public static final double kDriveWheelFreeSpeedRps = (SwerveModuleConstants.kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
             / kDrivingMotorReduction;
 
-        public static final double kDrivingEncoderPositionFactor = (kWheelDiameterMeters * Math.PI)
+        public static final double kDrivingEncoderPositionFactor = kWheelCircumferenceMeters
             / kDrivingMotorReduction; // meters
-        public static final double kDrivingEncoderVelocityFactor = ((kWheelDiameterMeters * Math.PI)
+        public static final double kDrivingEncoderVelocityFactor = (kWheelCircumferenceMeters
             / kDrivingMotorReduction) / 60.0; // meters per second
 
         public static final double kTurningEncoderPositionFactor = TWO_PI; // radians
