@@ -6,14 +6,14 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 
-//import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeModule {
     private final CANSparkMax m_armMotor = new CANSparkMax(IntakeConstants.kArmMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushed);
 
-    //private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
+    private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
     //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
 
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
@@ -22,7 +22,7 @@ public class IntakeModule {
     //private double targetAngle = 0;
     private double rollerSpeed = 0;
     private double armSpeed = 0;
-    //private boolean calibrated = false;
+    private boolean calibrated = false;
 
     public IntakeModule() {
         m_armMotor.restoreFactoryDefaults();
@@ -109,6 +109,10 @@ public class IntakeModule {
         return m_armEncoder.getPosition();
     }
 
+    public void resetEncoder() {
+        m_armEncoder.setPosition(0.0);
+    }
+
     /**
      * This function sets the speed of the intake roller.
      * @param speed Speed of the intake roller
@@ -135,6 +139,10 @@ public class IntakeModule {
         return m_noteSwitch.get();
     }*/
 
+    public boolean getArmSwitch(){
+        return m_armUpSwitch.get();
+    }
+
     /**
      * This function should run in the periodic loop to 
      * update the motor speeds of the intake.
@@ -155,6 +163,13 @@ public class IntakeModule {
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
+        if (m_armUpSwitch.get()){
+            m_armEncoder.setPosition(0);
+            calibrated = true;
+            if(armSpeed < 0){
+                armSpeed = 0;
+            }
+        }
         m_armMotor.set(armSpeed);
         m_intakeMotor.set(rollerSpeed);
     }

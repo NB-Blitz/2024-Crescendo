@@ -228,7 +228,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int kArmMotorCANID = 9;
         public static final int kIntakeMotorCANID = 10;
-        public static final int kArmUpSwitchID = -3; // TODO: Set these
+        public static final int kArmUpSwitchID = 9; // TODO: Set these
         public static final int kNoteSwitchID = -3;
 
         public static final boolean kIntakeInverted = true;
@@ -245,8 +245,8 @@ public final class Constants {
 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake;
         public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;
-        public static final int kArmMotorCurrentLimit = 30;
-        public static final int kIntakeMotorCurrentLimit = 30;
+        public static final int kArmMotorCurrentLimit = 39;
+        public static final int kIntakeMotorCurrentLimit = 39;
 
         public static final int kArmAngleBuffer = 5;
         public static final double kJoystickScaling = 0.5; // When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms

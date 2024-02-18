@@ -18,6 +18,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private int rollerDirection = 0;
     private double maxCurrentReachedArm = 0.0;
     private double maxCurrentReachedRoller = 0.0;
+    private int rollerDirectionBanned = 0;
+    private int armDirectionBanned = 0;
 
     public ManipulatorSubsystem() {
         SmartDashboard.putNumber("Roller Speed", 0.0);
@@ -84,8 +86,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
         rollerSpeed = 0;
     }
 
+    public void resetEncoder() {
+        m_IntakeModule.resetEncoder();
+    }
+
     public void run(double armJoystick, double shootMotorSpeed){
-        m_IntakeModule.setArmSpeed(armJoystick);
         // m_ShooterModule.setShooterSpeed(shootMotorSpeed);
         // rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0.0);
         // if (rollerSpeed > 1){
@@ -97,11 +102,37 @@ public class ManipulatorSubsystem extends SubsystemBase {
         if (rollerDirection < 0)  {
             rollerSpeed = shootMotorSpeed;
         }
+
         if (m_IntakeModule.getRollerCurrent() > maxCurrentReachedRoller) {
             maxCurrentReachedRoller = m_IntakeModule.getRollerCurrent();
         }
-        if (m_IntakeModule.getRollerCurrent() > maxCurrentReachedRoller) {
+        if (m_IntakeModule.getArmCurrent() > maxCurrentReachedArm) {
             maxCurrentReachedArm = m_IntakeModule.getArmCurrent();
+        }
+
+        /*if (rollerDirection != 0 && rollerDirection == rollerDirectionBanned) {
+            rollerDirection = 0;
+        }
+        else {
+            rollerDirectionBanned = 0;
+        }*/
+        if ((armJoystick <= 0 && armDirectionBanned == -1) || (armJoystick >= 0 && armDirectionBanned == 1)) {
+            armJoystick = 0;
+        }
+        else {
+            armDirectionBanned = 0;
+        }
+
+        /*if (m_IntakeModule.getRollerCurrent() > 37) {
+            rollerDirectionBanned = rollerDirection;
+        }*/
+        if (m_IntakeModule.getArmCurrent() > 37) {
+            if (armJoystick < 0) {
+                armDirectionBanned = -1;
+            }
+            else {
+                armDirectionBanned = 1;
+            }
         }
         SmartDashboard.putNumber("Max Arm Current", maxCurrentReachedArm);
         SmartDashboard.putNumber("Max Roller Current", maxCurrentReachedRoller);
@@ -109,6 +140,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Current", m_IntakeModule.getArmCurrent());
         SmartDashboard.putNumber("Roller Speed", shootMotorSpeed);
         SmartDashboard.putNumber("Arm Angle", m_IntakeModule.getCurrentPosition());
+        SmartDashboard.putBoolean("Arm Switch", m_IntakeModule.getArmSwitch());
+        m_IntakeModule.setArmSpeed(armJoystick);
         m_IntakeModule.setIntakeSpeed(rollerSpeed * rollerDirection);
     }
 }

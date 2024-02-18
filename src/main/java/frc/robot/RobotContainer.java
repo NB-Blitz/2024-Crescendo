@@ -50,9 +50,9 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> m_robotDrive.drive(
-                    0.8 * -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
-                    0.8 * -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
-                    0.8 * -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
                     true, true),
                 m_robotDrive));
 
@@ -60,7 +60,7 @@ public class RobotContainer {
             new RunCommand(
                 () -> m_robotManipulator.run(
                     0.3 * -MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
-                    0.5 * (1 + MathUtil.applyDeadband(m_manipController.getRawAxis(3), IOConstants.kDriveDeadband))),
+                    0.5 * (1 + -MathUtil.applyDeadband(m_manipController.getRawAxis(3), IOConstants.kDriveDeadband))),
                 m_robotManipulator));
 
         // Add default command for the Manipulator
@@ -103,6 +103,11 @@ public class RobotContainer {
         new JoystickButton(m_manipController, 4)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.outputButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 7)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.resetEncoder(),
                 m_robotManipulator));
 
         /*m_manipController.a()
