@@ -1,12 +1,11 @@
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ShooterConstants;
 
-
 public class ShooterModule {
-    
     private final CANSparkMax shooterMotorRight;
     private final CANSparkMax shooterMotorLeft;
 
@@ -24,8 +23,7 @@ public class ShooterModule {
     }
 
     //returns the wheelSpeed variable, double
-    public double getSpeed()
-    {
+    public double getSpeed() {
         return wheelSpeed;
     }
 

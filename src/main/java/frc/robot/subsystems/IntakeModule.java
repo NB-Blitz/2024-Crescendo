@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeModule {
-    private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushless);
-    private final CANSparkMax m_deployMotor = new CANSparkMax(IntakeConstants.kDeployMotorCANID, MotorType.kBrushless);
-    //private final DigitalInput m_intakeUpSwitch = new DigitalInput(IntakeConstants.kIntakeUpSwitchID);
-    private final RelativeEncoder m_deployEncoder = m_deployMotor.getEncoder();
+    private final CANSparkMax m_armMotor = new CANSparkMax(IntakeConstants.kArmMotorCANID, MotorType.kBrushless);
+    private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushed);
+
+    //private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
     //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
-    //private final SparkPIDController m_intakePIDController = m_deployMotor.getPIDController();
+
+    private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
+    //private final SparkPIDController m_intakePIDController = m_armMotor.getPIDController();
 
     //private double targetAngle = 0;
     private double rollerSpeed = 0;
@@ -23,30 +25,37 @@ public class IntakeModule {
     //private boolean calibrated = false;
 
     public IntakeModule() {
-        m_deployMotor.restoreFactoryDefaults();
+        m_armMotor.restoreFactoryDefaults();
         m_intakeMotor.restoreFactoryDefaults();
+
+        // m_intakePIDController.setFeedbackDevice(m_armEncoder);
         
-        m_deployEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
-        m_deployEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
-        m_deployEncoder.setPosition(0);
-        /*m_intakePIDController.setFeedbackDevice(m_deployEncoder);
-        m_intakePIDController.setPositionPIDWrappingEnabled(false);
-        m_intakePIDController.setP(IntakeConstants.kIntakeP);
-        m_intakePIDController.setI(IntakeConstants.kIntakeI);
-        m_intakePIDController.setD(IntakeConstants.kIntakeD);
-        m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
-        m_intakePIDController.setOutputRange(
-            IntakeConstants.kShootingMinOutput,
-            IntakeConstants.kShootingMaxOutput);*/
+        m_armMotor.setInverted(IntakeConstants.kArmInverted);
+        m_intakeMotor.setInverted(IntakeConstants.kIntakeInverted);
+
+        m_armEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
+        m_armEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
+        m_armEncoder.setPosition(0);
+
+        // m_intakePIDController.setPositionPIDWrappingEnabled(false);
+
+        // m_intakePIDController.setP(IntakeConstants.kIntakeP);
+        // m_intakePIDController.setI(IntakeConstants.kIntakeI);
+        // m_intakePIDController.setD(IntakeConstants.kIntakeD);
+        // m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
+        // m_intakePIDController.setOutputRange(
+        //     IntakeConstants.kShootingMinOutput,
+        //     IntakeConstants.kShootingMaxOutput);
+
+        m_armMotor.setIdleMode(IntakeConstants.kArmMotorIdleMode);
         m_intakeMotor.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
-        m_deployMotor.setIdleMode(IntakeConstants.kDeployMotorIdleMode);
+        m_armMotor.setSmartCurrentLimit(IntakeConstants.kArmMotorCurrentLimit);
         m_intakeMotor.setSmartCurrentLimit(IntakeConstants.kIntakeMotorCurrentLimit);
-        m_deployMotor.setSmartCurrentLimit(IntakeConstants.kDeployMotorCurrentLimit);
 
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
         m_intakeMotor.burnFlash();
-        m_deployMotor.burnFlash();
+        m_armMotor.burnFlash();
 
         // Give the SPARKS time to burn the configurations to their flash.
         Timer.delay(1);
@@ -57,15 +66,15 @@ public class IntakeModule {
      * @return True when calibration is complete, false when calibration is in progress.
      */
     /*public boolean calibrate() {
-        // TODO Afternoon use calibrate function in manipulator
+        // TODO Use calibrate function in manipulator
         if (!calibrated) {
-            if(m_intakeUpSwitch.get() == true){
-                m_deployMotor.set(0);
-                m_deployEncoder.setPosition(0);
+            if(m_armUpSwitch.get() == true){
+                m_armMotor.set(0);
+                m_armEncoder.setPosition(0);
                 calibrated = true;
             }
             else{
-                m_deployMotor.set(0.1); //TODO Afternoon replace with constant
+                m_armMotor.set(0.1); //TODO Replace with constant
                 calibrated = false;
             }
         }
@@ -89,7 +98,7 @@ public class IntakeModule {
      * @return The angle of the arm in degrees
      */
     public double getCurrentPosition() {
-        return m_deployEncoder.getPosition();
+        return m_armEncoder.getPosition();
     }
 
     /**
@@ -126,19 +135,23 @@ public class IntakeModule {
         /*if(!calibrated) {
             calibrate();
         }
-        // if we have a note and roller speed is positive, set roller speed to 0
+        // If we have a note and roller speed is positive, set roller speed to 0
         if(m_noteSwitch.get() && rollerSpeed > 0){
             rollerSpeed = 0;
         }
-        //if the top limit switch is pressed, set the relative encoder position to 0
-        if(m_intakeUpSwitch.get()){
-            m_deployEncoder.setPosition(0.0);
+        // If the top limit switch is pressed, set the relative encoder position to 0
+        if(m_armUpSwitch.get()){
+            m_armEncoder.setPosition(0.0);
         }
         m_intakeMotor.set(rollerSpeed);
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
-        m_deployMotor.set(0.05 * armSpeed);
-        m_intakeMotor.set(0.05 * rollerSpeed);
+        m_armMotor.set(0.3 * armSpeed);
+        if (rollerSpeed < 0) {
+            m_intakeMotor.set(0.8 * rollerSpeed);
+        } else {
+            m_intakeMotor.set(0.3 * rollerSpeed);
+        }
     }
 }

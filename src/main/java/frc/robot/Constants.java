@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -29,11 +28,29 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final double TWO_PI = 2 * Math.PI;
 
+    public static final class IOConstants {
+        public static final int kDriverControllerPort = 0;
+        public static final int kManipControllerPort = 1;
+        public static final double kDriveDeadband = 0.3;
+        public static final double kTwistDeadband = 0.5;
+        public static final int kDriveBrakeButton = 6;
+        public static final int kDriveGyroResetButton = 11;
+
+        public static final int kControllerButtonA = 1;
+        public static final int kControllerButtonB = 2;
+        public static final int kControllerButtonX = 3;
+        public static final int kControllerButtonY = 4;
+        public static final int kControllerButtonLB = 5;
+        public static final int kControllerButtonRB = 6;
+        public static final int kControllerButtonTwoSquares = 7;
+        public static final int kControllerButtonMenu = 8;
+        public static final int kControllerButtonLStick = 9;
+        public static final int kControllerButtonRStick = 10;
+    }
+
     public static final class DriveConstants {
 
         public static final boolean isMAXSwerveModules = true;
-
-        // TODO: Confirm all values for both modules
 
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
@@ -200,24 +217,50 @@ public final class Constants {
         public static final int kTurningMotorCurrentLimit = 50; // amps
     }
 
-    public static final class OIConstants {
-        public static final int kDriverControllerPort = 0;
-        public static final int kManipControllerPort = 1;
-        public static final double kDriveDeadband = 0.3;
-        public static final double kTwistDeadband = 0.5;
-        public static final int kDriveBrakeButton = 6;
-        public static final int kDriveGyroResetButton = 11;
+    public static final class ShooterConstants {
+        public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
+        public static final int kRightMotorCANID = -1; 
+        public static final double kIntakeSpeed = 0.05; //speed of the shooter when intaking frm the shooter station.
+        public static final double kShootingSpeakerSpeed = -0.05;
+        public static final double kAmpShooterSpeed = -0.05;
+    }
 
-        public static final int kControllerButtonA = 1;
-        public static final int kControllerButtonB = 2;
-        public static final int kControllerButtonX = 3;
-        public static final int kControllerButtonY = 4;
-        public static final int kControllerButtonLB = 5;
-        public static final int kControllerButtonRB = 6;
-        public static final int kControllerButtonTwoSquares = 7;
-        public static final int kControllerButtonMenu = 8;
-        public static final int kControllerButtonLStick = 9;
-        public static final int kControllerButtonRStick = 10;
+    public static final class IntakeConstants {
+        public static final int kArmMotorCANID = 9;
+        public static final int kIntakeMotorCANID = 10;
+        public static final int kArmUpSwitchID = -3; // TODO: Set these
+        public static final int kNoteSwitchID = -3;
+
+        public static final boolean kIntakeInverted = true;
+        public static final boolean kArmInverted = false;
+        public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
+        public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
+
+        public static final double kIntakeP = 0.24; // TODO Change these PID values
+        public static final double kIntakeI = 0;
+        public static final double kIntakeD = 0;
+        public static final double kIntakeFF = 0.16;
+        public static final double kShootingMaxOutput = 1.0;
+        public static final double kShootingMinOutput = -1.0;
+
+        public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;
+        public static final int kArmMotorCurrentLimit = 30;
+        public static final int kIntakeMotorCurrentLimit = 30;
+
+        public static final int kArmAngleBuffer = 5;
+        public static final double kJoystickScaling = 0.5; // When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms
+        
+        public static final double kTopPosition = 0.0; // Degrees
+        public static final double kAmpShootingPosition = 90.0; // Degrees
+        public static final double kFloorIntakePosition = 120.0; // Bottom angle limit in degrees, inclusive
+
+        public static final double kAmpShooterSpeed = -0.05;
+        public static final double kIntakePlayerSpeed = 0.05; // Speed of the intake motor when picking up from the player station.
+        public static final double kIntakeGroundSpeed = 0.05; // Sets the motor speed of the motor on the intake arm to pick up the note
+        public static final double kUnjammingSpeed = -0.05; // TODO Create a constant for relative encoder conversion factor
+        public static final double kFeedingSpeed = -0.05;
+        public static final double kCalibrationSpeed = 0.05;
     }
 
     public static final class AutoConstants {
@@ -240,44 +283,5 @@ public final class Constants {
 
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
-    }
-
-    public static final class ShooterConstants {
-        public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
-        public static final int kRightMotorCANID = -1; 
-        public static final double kIntakeSpeed = 0.05; //speed of the shooter when intaking frm the shooter station.
-        public static final double kShootingSpeakerSpeed = -0.05;
-        public static final double kAmpShooterSpeed = -0.05;
-    }
-
-    public static final class IntakeConstants {
-        public static final double kInatkeEncoderPositionFactor = 102.4*360;
-        public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor/60;
-        public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;
-        public static final IdleMode kDeployMotorIdleMode = IdleMode.kBrake; 
-        public static final int kIntakeMotorCurrentLimit = 30;
-        public static final int kDeployMotorCurrentLimit = 30;
-        public static final int kArmAngleBuffer = 5;
-        public static final int kIntakeMotorCANID = -1;//TODO Change these
-        public static final int kDeployMotorCANID = -2;
-        public static final int kIntakeUpSwitchID = -3;
-        public static final int kNoteSwitchID = -3;
-        public static final double kAmpShooterSpeed = -0.05;
-
-        public static final double kIntakeP = 0.24; // TODO Change these PID values
-        public static final double kIntakeI = 0;
-        public static final double kJoystickScaling = 0.5; //When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms
-        public static final double kIntakeD = 0;
-        public static final double kIntakeFF = 0.16;
-        public static final double kShootingMaxOutput = 1.0;
-        public static final double kShootingMinOutput = -1.0;
-        public static final double kTopPosition = 0.0; // Degrees
-        public static final double kAmpShootingPosition = 90.0; // Degrees
-        public static final double kFloorIntakePosition = 120.0; //Bottom angle limit in degrees, inclusive
-        public static final double kIntakePlayerSpeed = 0.05; //Speed of the intake motor when picking up from the player station.
-        public static final double kIntakeGroundSpeed = 0.05; //sets the motor speed of the motor on the intake arm to pick up the note
-        public static final double kUnjammingSpeed = -0.05; // TODO Afternoon create a constant for relative encoder conversion factor.
-        public static final double kFeedingSpeed = -0.05;
-        public static final double kCalibrationSpeed = 0.05;
     }
 }

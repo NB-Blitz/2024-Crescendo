@@ -16,13 +16,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private int rollerDirection = 0;
 
     public ManipulatorSubsystem() {
-        SmartDashboard.putNumber("Roller Speed", 0);
-        SmartDashboard.putNumber("Arm Angle", 0);
+        SmartDashboard.putNumber("Roller Speed", 0.0);
+        SmartDashboard.putNumber("Arm Angle", 0.0);
     }
 
     @Override
     public void periodic() {
-        /**TODO
+        /**
+         * TODO
          * Any automtic behavior we want
          * An example would be if we have a note and are in the top position
          * we could start the shooting motors.
@@ -30,26 +31,25 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_IntakeModule.updateIntake();
         //m_ShooterModule.runShooter();
     }
+
     /*public void shootButtonHandler() {
         if(m_IntakeModule.getNoteLimitSwitch()){
-            if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){//This means you are in loading position
-                m_ShooterModule.setShooterSpeed(ShooterConstants.kShootingSpeakerSpeed); 
-                m_IntakeModule.setIntakeSpeed(IntakeConstants.kFeedingSpeed); 
+            if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){ // This means you are in loading position
+                m_ShooterModule.setShooterSpeed(ShooterConstants.kShootingSpeakerSpeed);
+                m_IntakeModule.setIntakeSpeed(IntakeConstants.kFeedingSpeed);
             }
-            else if (m_IntakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer && m_IntakeModule.getCurrentPosition()< IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer){//This means you are aiming for the amp
-                m_IntakeModule.setIntakeSpeed(IntakeConstants.kAmpShooterSpeed); 
+            else if (m_IntakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer && m_IntakeModule.getCurrentPosition() < IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer){ // This means you are aiming for the amp
+                m_IntakeModule.setIntakeSpeed(IntakeConstants.kAmpShooterSpeed);
             }
         }
     }
 
     public void loadPositionButtonHandler() {
         m_IntakeModule.setTargetPosition(IntakeConstants.kTopPosition);
-
     }
 
     public void ampShootPositionButtonHandler() {
         m_IntakeModule.setTargetPosition(IntakeConstants.kAmpShootingPosition);
-
     }
 
     public void intakePositionButtonHandler() {
@@ -57,15 +57,15 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void intakeButtonHandler() {
-        if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){//This means you are in loading position
-            m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakePlayerSpeed); 
-            m_ShooterModule.setShooterSpeed(ShooterConstants.kIntakeSpeed); 
+        if(m_IntakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){ // This means you are in loading position
+            m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakePlayerSpeed);
+            m_ShooterModule.setShooterSpeed(ShooterConstants.kIntakeSpeed);
         }
-        else if (m_IntakeModule.getCurrentPosition() > IntakeConstants.kFloorIntakePosition-IntakeConstants.kArmAngleBuffer && m_IntakeModule.getCurrentPosition()< IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer){//This means you are in shooting position
-            m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakeGroundSpeed); 
-            
+        else if (m_IntakeModule.getCurrentPosition() > IntakeConstants.kFloorIntakePosition-IntakeConstants.kArmAngleBuffer && m_IntakeModule.getCurrentPosition() < IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer){ // This means you are in shooting position
+            m_IntakeModule.setIntakeSpeed(IntakeConstants.kIntakeGroundSpeed);
         }
     }*/
+
     public void intakeButtonHandler(){
         rollerDirection = 1;
     }
@@ -80,16 +80,16 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void run(double armJoystick, double shootMotorSpeed){
         m_IntakeModule.setArmSpeed(armJoystick);
-        //m_ShooterModule.setShooterSpeed(shootMotorSpeed);
-        rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0);
-        if (rollerSpeed > 1){
-            rollerSpeed = 1;
-        }
-        else if (rollerSpeed < 0){
-            rollerSpeed = 0;
-        }
-        SmartDashboard.putNumber("Roller Speed", rollerSpeed);
+        // m_ShooterModule.setShooterSpeed(shootMotorSpeed);
+        rollerSpeed = SmartDashboard.getNumber("Roller Speed", 0.0);
+        // if (rollerSpeed > 1){
+        //     rollerSpeed = 1;
+        // }
+        // else if (rollerSpeed < 0){
+        //     rollerSpeed = 0;
+        // }
+        // SmartDashboard.putNumber("Roller Speed", rollerSpeed);
         SmartDashboard.putNumber("Arm Angle", m_IntakeModule.getCurrentPosition());
-        m_IntakeModule.setIntakeSpeed(rollerSpeed * rollerDirection);
+        m_IntakeModule.setIntakeSpeed(/*rollerSpeed **/ rollerDirection);
     }
 }

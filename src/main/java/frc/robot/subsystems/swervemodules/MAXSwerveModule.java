@@ -33,6 +33,10 @@ public class MAXSwerveModule extends SwerveModule {
         m_turningEncoder = super.m_turningSpark.getAbsoluteEncoder(Type.kDutyCycle);
         super.m_turningPIDController.setFeedbackDevice(m_turningEncoder);
 
+        // Invert the turning encoder, since the output shaft rotates in the opposite direction of
+        // the steering motor in the MAXSwerve Module.
+        m_turningEncoder.setInverted(MAXModuleConstants.kTurningEncoderInverted);
+
         // Apply position and velocity conversion factors for the driving encoder. The
         // native units for position and velocity are rotations and RPM, respectively,
         // but we want meters and meters per second to use with WPILib's swerve APIs.
@@ -44,10 +48,6 @@ public class MAXSwerveModule extends SwerveModule {
         // APIs.
         m_turningEncoder.setPositionConversionFactor(MAXModuleConstants.kTurningEncoderPositionFactor);
         m_turningEncoder.setVelocityConversionFactor(MAXModuleConstants.kTurningEncoderVelocityFactor);
-
-        // Invert the turning encoder, since the output shaft rotates in the opposite direction of
-        // the steering motor in the MAXSwerve Module.
-        m_turningEncoder.setInverted(MAXModuleConstants.kTurningEncoderInverted);
 
         // Enable PID wrap around for the turning motor. This will allow the PID
         // controller to go through 0 to get to the setpoint i.e. going from 350 degrees

@@ -44,6 +44,9 @@ public class SDSSwerveModule extends SwerveModule {
         m_turningEncoder = super.m_turningSpark.getEncoder();
         super.m_turningPIDController.setFeedbackDevice(m_turningEncoder);
 
+        super.m_drivingSpark.setInverted(SDSModuleConstants.kDrivingInverted);
+        super.m_turningSpark.setInverted(SDSModuleConstants.kTurningInverted);
+
         // Apply position and velocity conversion factors for the driving encoder. The
         // native units for position and velocity are rotations and RPM, respectively,
         // but we want meters and meters per second to use with WPILib's swerve APIs.
@@ -76,9 +79,6 @@ public class SDSSwerveModule extends SwerveModule {
         super.m_turningPIDController.setOutputRange(
             SwerveModuleConstants.kTurningMinOutput,
             SwerveModuleConstants.kTurningMaxOutput);
-
-        super.m_drivingSpark.setInverted(SDSModuleConstants.kDrivingInverted);
-        super.m_turningSpark.setInverted(SDSModuleConstants.kTurningInverted);
 
         super.m_drivingSpark.setIdleMode(SwerveModuleConstants.kDrivingMotorIdleMode);
         super.m_turningSpark.setIdleMode(SwerveModuleConstants.kTurningMotorIdleMode);

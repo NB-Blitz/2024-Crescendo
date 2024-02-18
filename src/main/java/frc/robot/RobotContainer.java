@@ -11,11 +11,10 @@ import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 //import frc.robot.Constants.AutoConstants;
 //import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.IOConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,9 +32,10 @@ public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final ManipulatorSubsystem m_robotManipulator = new ManipulatorSubsystem();
-    // The driver's controller
-    Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
-    Joystick m_manipController = new Joystick(OIConstants.kManipControllerPort);
+
+    // The drivers' controllers
+    Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
+    Joystick m_manipController = new Joystick(IOConstants.kManipControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -50,17 +50,17 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> m_robotDrive.drive(
-                    0.3 * -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
-                    0.3 * -MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
-                    0.5 * -MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kTwistDeadband),
+                    0.8 * -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
+                    0.8 * -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
+                    0.8 * -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
                     true, true),
                 m_robotDrive));
 
         m_robotManipulator.setDefaultCommand(
             new RunCommand(
                 () -> m_robotManipulator.run(
-                    MathUtil.applyDeadband(m_manipController.getY(), OIConstants.kDriveDeadband),
-                    MathUtil.applyDeadband(m_manipController.getRawAxis(3), OIConstants.kDriveDeadband)),
+                    MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
+                    MathUtil.applyDeadband(m_manipController.getRawAxis(3), IOConstants.kDriveDeadband)),
                 m_robotManipulator));
 
         // Add default command for the Manipulator
@@ -80,12 +80,12 @@ public class RobotContainer {
      * then passing it to a {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(m_driverController, OIConstants.kDriveBrakeButton)
+        new JoystickButton(m_driverController, IOConstants.kDriveBrakeButton)
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.setX(),
                 m_robotDrive));
 
-        new JoystickButton(m_driverController, OIConstants.kDriveGyroResetButton)
+        new JoystickButton(m_driverController, IOConstants.kDriveGyroResetButton)
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
