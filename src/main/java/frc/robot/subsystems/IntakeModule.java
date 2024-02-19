@@ -5,9 +5,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.wpilibj.Timer;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
+
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeModule {
@@ -99,14 +100,14 @@ public class IntakeModule {
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        if( angle <= 188 && angle >= 2) {
+        if (angle <= 188 && angle >= 2) {
             targetAngle = angle;
             positionMode = true;
         }
     }
 
     public void setTargetVelocity(double velocity){
-        targetVelocity = velocity;// * IntakeConstants.kIntakeEncoderVelocityFactor;
+        targetVelocity = velocity;
     }
 
     /**
@@ -201,7 +202,7 @@ public class IntakeModule {
                 targetVelocity = 0;
             }
         }
-        //m_armMotor.set(armSpeed);
+        
         if (targetVelocity == 0 && positionMode){
             m_intakePIDController.setReference(targetAngle, ControlType.kPosition);
         }

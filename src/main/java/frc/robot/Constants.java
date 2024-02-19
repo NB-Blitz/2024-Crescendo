@@ -33,6 +33,7 @@ public final class Constants {
         public static final int kManipControllerPort = 1;
         public static final double kDriveDeadband = 0.3;
         public static final double kTwistDeadband = 0.5;
+        public static final int kDriveSpeedScalerAxis = 3;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
 
@@ -54,7 +55,7 @@ public final class Constants {
 
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 4.8; // 4.8rps * 0.24m wheel circumference
+        public static final double kMaxSpeedMetersPerSecond = 4.8;
         public static final double kMaxAngularSpeed = TWO_PI; // radians per second
 
         public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -153,7 +154,7 @@ public final class Constants {
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = TWO_PI; // radians
 
-        public static final double kDrivingP = 0.04;
+        public static final double kDrivingP = 0.04; // TODO: Tune PID values
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
         public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
@@ -236,7 +237,7 @@ public final class Constants {
         public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
         public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
 
-        public static final double kIntakeP = 0.05; // TODO Change these PID values
+        public static final double kIntakeP = 0.05; // TODO: Change these PID values
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0;
@@ -252,13 +253,13 @@ public final class Constants {
         public static final double kJoystickScaling = 0.5; // When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms
         
         public static final double kTopPosition = 0.0; // Degrees
-        public static final double kAmpShootingPosition = 90.0; // Degrees
-        public static final double kFloorIntakePosition = 120.0; // Bottom angle limit in degrees, inclusive
+        public static final double kAmpShootingPosition = 85.0; // Degrees
+        public static final double kFloorIntakePosition = 190.0; // Bottom angle limit in degrees, inclusive
 
         public static final double kAmpShooterSpeed = -0.05;
         public static final double kIntakePlayerSpeed = 0.05; // Speed of the intake motor when picking up from the player station.
-        public static final double kIntakeGroundSpeed = 0.05; // Sets the motor speed of the motor on the intake arm to pick up the note
-        public static final double kUnjammingSpeed = -0.05; // TODO Create a constant for relative encoder conversion factor
+        public static final double kIntakeGroundSpeed = 0.3; // Sets the motor speed of the motor on the intake arm to pick up the note
+        public static final double kUnjammingSpeed = -0.05;
         public static final double kFeedingSpeed = -0.05;
         public static final double kCalibrationSpeed = 0.05;
     }

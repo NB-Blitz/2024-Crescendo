@@ -233,11 +233,12 @@ public class DriveSubsystem extends SubsystemBase {
      * @param xSpeed        Speed of the robot in the x direction (forward).
      * @param ySpeed        Speed of the robot in the y direction (sideways).
      * @param rot           Angular rate of the robot.
+     * @param speedScale    Multiplier to scale the speeds by
      * @param fieldRelative Whether the provided x and y speeds are relative to the
      *                      field.
      * @param rateLimit     Whether to enable rate limiting for smoother control.
      */
-    public void drive(double xSpeed, double ySpeed, double rot, double speedMult, boolean fieldRelative, boolean rateLimit) {
+    public void drive(double xSpeed, double ySpeed, double rot, double speedScale, boolean fieldRelative, boolean rateLimit) {
         double xSpeedCommanded;
         double ySpeedCommanded;
 
@@ -284,9 +285,9 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         // Convert the commanded speeds into the correct units for the drivetrain
-        double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond * speedMult;
-        double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond * speedMult;
-        double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed * speedMult;
+        double xSpeedDelivered = xSpeedCommanded * speedScale * DriveConstants.kMaxSpeedMetersPerSecond;
+        double ySpeedDelivered = ySpeedCommanded * speedScale * DriveConstants.kMaxSpeedMetersPerSecond;
+        double rotDelivered = m_currentRotation * speedScale * DriveConstants.kMaxAngularSpeed;
 
         m_robotRelativeSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
 
