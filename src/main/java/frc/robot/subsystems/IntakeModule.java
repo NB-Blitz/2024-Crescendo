@@ -20,12 +20,13 @@ public class IntakeModule {
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     private final SparkPIDController m_intakePIDController = m_armMotor.getPIDController();
 
-    //private double targetAngle = 0;
+    private double targetAngle = 2;
     private double targetVelocity = 0;
     private double rollerSpeed = 0;
     private double armSpeed = 0;
     private boolean calibrated = false;
     private boolean overrideBounds = false;
+    private boolean positionMode = false;
 
     public IntakeModule() {
         m_armMotor.restoreFactoryDefaults();
@@ -97,14 +98,15 @@ public class IntakeModule {
      * to move the intake arm to.
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
-    /*public void setTargetPosition(double angle) {
-        if( angle <= IntakeConstants.kFloorIntakePosition && angle >= IntakeConstants.kTopPosition) {
+    public void setTargetPosition(double angle) {
+        if( angle <= 188 && angle >= 2) {
             targetAngle = angle;
+            positionMode = true;
         }
-    }*/
+    }
 
     public void setTargetVelocity(double velocity){
-        targetVelocity = velocity * IntakeConstants.kIntakeEncoderVelocityFactor;
+        targetVelocity = velocity;// * IntakeConstants.kIntakeEncoderVelocityFactor;
     }
 
     /**
@@ -158,6 +160,10 @@ public class IntakeModule {
         overrideBounds = true;
     }
 
+    public boolean getOverrideBounds(){
+        return overrideBounds;
+    }
+
     /**
      * This function should run in the periodic loop to 
      * update the motor speeds of the intake.
@@ -183,7 +189,7 @@ public class IntakeModule {
                 targetVelocity = 0;
             }
 
-            if(m_armEncoder.getPosition() > 185 && targetVelocity > 0){
+            if(m_armEncoder.getPosition() > 188 && targetVelocity > 0){
                 targetVelocity = 0;
             }
         }
@@ -196,8 +202,13 @@ public class IntakeModule {
             }
         }
         //m_armMotor.set(armSpeed);
-
-        m_intakePIDController.setReference(targetVelocity, ControlType.kVelocity);
+        if (targetVelocity == 0 && positionMode){
+            m_intakePIDController.setReference(targetAngle, ControlType.kPosition);
+        }
+        else {
+            positionMode = false;
+            m_intakePIDController.setReference(targetVelocity, ControlType.kDutyCycle);
+        }
         m_intakeMotor.set(rollerSpeed);
     }
 }

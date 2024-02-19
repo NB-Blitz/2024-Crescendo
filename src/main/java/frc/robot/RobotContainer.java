@@ -53,6 +53,7 @@ public class RobotContainer {
                     -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
+                    0.5 * (1+ -m_driverController.getRawAxis(3)),
                     true, true),
                 m_robotDrive));
 
@@ -60,7 +61,7 @@ public class RobotContainer {
             new RunCommand(
                 () -> m_robotManipulator.run(
                     0.3 * -MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
-                    0.5 * (1 + -MathUtil.applyDeadband(m_manipController.getRawAxis(3), IOConstants.kDriveDeadband))),
+                    0.5 * (1 + -m_manipController.getRawAxis(3))),
                 m_robotManipulator));
 
         // Add default command for the Manipulator
@@ -118,6 +119,11 @@ public class RobotContainer {
         new JoystickButton(m_manipController, 10)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.enableBounds(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 6)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.ampShootPositionButtonHandler(),
                 m_robotManipulator));
 
         /*m_manipController.a()

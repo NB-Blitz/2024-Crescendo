@@ -222,6 +222,7 @@ public class DriveSubsystem extends SubsystemBase {
             chassisSpeeds.vxMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond,
             chassisSpeeds.vyMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond,
             chassisSpeeds.omegaRadiansPerSecond / DriveConstants.kMaxAngularSpeed,
+            1,
             false,
             false);
     }
@@ -236,7 +237,7 @@ public class DriveSubsystem extends SubsystemBase {
      *                      field.
      * @param rateLimit     Whether to enable rate limiting for smoother control.
      */
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+    public void drive(double xSpeed, double ySpeed, double rot, double speedMult, boolean fieldRelative, boolean rateLimit) {
         double xSpeedCommanded;
         double ySpeedCommanded;
 
@@ -283,9 +284,9 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         // Convert the commanded speeds into the correct units for the drivetrain
-        double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-        double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-        double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+        double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond * speedMult;
+        double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond * speedMult;
+        double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed * speedMult;
 
         m_robotRelativeSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
 

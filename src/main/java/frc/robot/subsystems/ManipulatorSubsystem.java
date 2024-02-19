@@ -52,13 +52,13 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void loadPositionButtonHandler() {
         m_IntakeModule.setTargetPosition(IntakeConstants.kTopPosition);
-    }
+    }*/
 
     public void ampShootPositionButtonHandler() {
-        m_IntakeModule.setTargetPosition(IntakeConstants.kAmpShootingPosition);
+        m_IntakeModule.setTargetPosition(85);
     }
 
-    public void intakePositionButtonHandler() {
+    /*public void intakePositionButtonHandler() {
         m_IntakeModule.setTargetPosition(IntakeConstants.kFloorIntakePosition);
     }
 
@@ -149,6 +149,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Roller Speed", shootMotorSpeed);
         SmartDashboard.putNumber("Arm Angle", m_IntakeModule.getCurrentPosition());
         SmartDashboard.putBoolean("Arm Switch", m_IntakeModule.getArmSwitch());
+        SmartDashboard.putBoolean("Override Bounds", m_IntakeModule.getOverrideBounds());
         m_IntakeModule.setTargetVelocity(armJoystick);
         m_IntakeModule.setIntakeSpeed(rollerSpeed * rollerDirection);
     }
