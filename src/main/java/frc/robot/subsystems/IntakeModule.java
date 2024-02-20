@@ -15,7 +15,7 @@ public class IntakeModule {
     private final CANSparkMax m_armMotor = new CANSparkMax(IntakeConstants.kArmMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushed);
 
-    private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
+    //private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
     //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
 
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
@@ -150,7 +150,8 @@ public class IntakeModule {
     }*/
 
     public boolean getArmSwitch(){
-        return m_armUpSwitch.get();
+        //return m_armUpSwitch.get();
+        return false;
     }
 
     public void enableBounds(){
@@ -195,13 +196,13 @@ public class IntakeModule {
             }
         }
 
-        if (m_armUpSwitch.get()){
+        /*if (m_armUpSwitch.get()){
             m_armEncoder.setPosition(0);
             calibrated = true;
             if(targetVelocity < 0){
                 targetVelocity = 0;
             }
-        }
+        }*/
         
         if (targetVelocity == 0 && positionMode){
             m_intakePIDController.setReference(targetAngle, ControlType.kPosition);
