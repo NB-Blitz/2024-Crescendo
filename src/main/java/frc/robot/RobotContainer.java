@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,8 +32,9 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final ManipulatorSubsystem m_robotManipulator = new ManipulatorSubsystem();
     // The driver's controller
-    Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
-    CommandXboxController m_manipController = new CommandXboxController(OIConstants.kManipControllerPort);
+    private Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
+    private CommandXboxController m_manipController = new CommandXboxController(OIConstants.kManipControllerPort);
+    private final SendableChooser<Command> autoChooser;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,6 +63,14 @@ public class RobotContainer {
                 m_robotManipulator));
 
         // Add default command for the Manipulator
+
+        // Build an auto chooser. This will use Commands.none() as the default option.
+        autoChooser = AutoBuilder.buildAutoChooser();
+
+        // Another option that allows you to specify the default auto by its name
+        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+        SmartDashboard.putData("auto_chooser", autoChooser);
     }
 
     /**
@@ -109,6 +122,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new InstantCommand();
+        return autoChooser.getSelected();
     }
 }
