@@ -187,11 +187,11 @@ public class IntakeModule {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
         if (!overrideBounds){
-            if(m_armEncoder.getPosition() < 2 && targetVelocity < 0){
+            if(m_armEncoder.getPosition() < IntakeConstants.kTopPosition && targetVelocity < 0){
                 targetVelocity = 0;
             }
 
-            if(m_armEncoder.getPosition() > 188 && targetVelocity > 0){
+            if(m_armEncoder.getPosition() > IntakeConstants.kFloorIntakePosition && targetVelocity > 0){
                 targetVelocity = 0;
             }
         }

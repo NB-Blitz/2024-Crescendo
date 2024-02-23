@@ -219,8 +219,8 @@ public final class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final int kLeftMotorCANID = -1; //TODO Change these CAN IDs to actual values
-        public static final int kRightMotorCANID = -1; 
+        public static final int kLeftMotorCANID = 11; //TODO Change these CAN IDs to actual values
+        public static final int kRightMotorCANID = 12; 
         public static final double kIntakeSpeed = 0.05; //speed of the shooter when intaking frm the shooter station.
         public static final double kShootingSpeakerSpeed = -0.05;
         public static final double kAmpShooterSpeed = -0.05;
@@ -252,15 +252,15 @@ public final class Constants {
         public static final int kArmAngleBuffer = 5;
         public static final double kJoystickScaling = 0.5; // When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms
         
-        public static final double kTopPosition = 0.0; // Degrees
+        public static final double kTopPosition = 2.0; // Degrees
         public static final double kAmpShootingPosition = 85.0; // Degrees
-        public static final double kFloorIntakePosition = 190.0; // Bottom angle limit in degrees, inclusive
+        public static final double kFloorIntakePosition = 188.0; // Bottom angle limit in degrees, inclusive
 
-        public static final double kAmpShooterSpeed = -0.05;
-        public static final double kIntakePlayerSpeed = 0.05; // Speed of the intake motor when picking up from the player station.
+        public static final double kAmpShooterSpeed = -1;
+        public static final double kIntakePlayerSpeed = 0.15; // Speed of the intake motor when picking up from the player station.
         public static final double kIntakeGroundSpeed = 0.3; // Sets the motor speed of the motor on the intake arm to pick up the note
         public static final double kUnjammingSpeed = -0.05;
-        public static final double kFeedingSpeed = -0.05;
+        public static final double kFeedingSpeed = -0.15;
         public static final double kCalibrationSpeed = 0.05;
     }
 

@@ -100,12 +100,12 @@ public class RobotContainer {
 
         new JoystickButton(m_manipController, 3)
             .whileTrue(new RunCommand(
-                () -> m_robotManipulator.intakeButtonHandler(),
+                () -> m_robotManipulator.speedHandler(),
                 m_robotManipulator));
 
         new JoystickButton(m_manipController, 4)
             .whileTrue(new RunCommand(
-                () -> m_robotManipulator.outputButtonHandler(),
+                () -> m_robotManipulator.shootButtonHandler(),
                 m_robotManipulator));
 
         new JoystickButton(m_manipController, 7)
@@ -126,6 +126,16 @@ public class RobotContainer {
         new JoystickButton(m_manipController, 6)
             .whileTrue(new RunCommand(
                 () -> m_robotManipulator.ampShootPositionButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 5)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.intakePositionButtonHandler(),
+                m_robotManipulator));
+
+        new JoystickButton(m_manipController, 11)
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.loadPositionButtonHandler(),
                 m_robotManipulator));
 
         /*m_manipController.a()
