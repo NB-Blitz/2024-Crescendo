@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
+import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.AutoConstants;
 //import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants;
@@ -33,16 +32,20 @@ public class RobotContainer {
 
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private final ManipulatorSubsystem m_robotManipulator = new ManipulatorSubsystem();
+    private ManipulatorSubsystem m_robotManipulator;// = new ManipulatorSubsystem();
 
     // The drivers' controllers
     Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
-    Joystick m_manipController = new Joystick(IOConstants.kManipControllerPort);
+    Joystick m_manipController;// = new Joystick(IOConstants.kManipControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        if (DriveConstants.isMAXSwerveModules){
+           m_robotManipulator = new ManipulatorSubsystem();
+           m_manipController = new Joystick(IOConstants.kManipControllerPort);
+        }
         // Configure the button bindings
         configureButtonBindings();
 
@@ -59,12 +62,14 @@ public class RobotContainer {
                     true, true),
                 m_robotDrive));
 
-        m_robotManipulator.setDefaultCommand(
-            new RunCommand(
-                () -> m_robotManipulator.run(
-                    0.3 * -MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
-                    0.5 * (1 + -m_manipController.getRawAxis(IOConstants.kDriveSpeedScalerAxis))),
-                m_robotManipulator));
+        if (DriveConstants.isMAXSwerveModules) {
+            m_robotManipulator.setDefaultCommand(
+                new RunCommand(
+                    () -> m_robotManipulator.run(
+                        0.3 * -MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
+                        0.5 * (1 + -m_manipController.getRawAxis(IOConstants.kDriveSpeedScalerAxis))),
+                    m_robotManipulator));
+        }
 
         // Add default command for the Manipulator
         // Build an auto chooser. This will use Commands.none() as the default option.
@@ -92,56 +97,57 @@ public class RobotContainer {
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
+        if (DriveConstants.isMAXSwerveModules){
+            new JoystickButton(m_manipController, 2)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.stopButtonHandler(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 2)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.stopButtonHandler(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 3)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.speedHandler(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 3)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.speedHandler(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 4)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.shootButtonHandler(true),
+                    m_robotManipulator));
+            
+            new JoystickButton(m_manipController, 1) //TODO get a button number
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.shootButtonHandler(false),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 4)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.shootButtonHandler(true),
-                m_robotManipulator));
-        
-        new JoystickButton(m_manipController, 1) //TODO get a button number
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.shootButtonHandler(false),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 7)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.resetEncoder(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 7)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.resetEncoder(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 8)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.disableBounds(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 8)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.disableBounds(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 10)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.enableBounds(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 10)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.enableBounds(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 6)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.ampShootPositionButtonHandler(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 6)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.ampShootPositionButtonHandler(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 5)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.intakePositionButtonHandler(),
+                    m_robotManipulator));
 
-        new JoystickButton(m_manipController, 5)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.intakePositionButtonHandler(),
-                m_robotManipulator));
-
-        new JoystickButton(m_manipController, 11)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.loadPositionButtonHandler(),
-                m_robotManipulator));
+            new JoystickButton(m_manipController, 11)
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.loadPositionButtonHandler(),
+                    m_robotManipulator));
+        }
 
         /*m_manipController.a()
             .whileTrue(new RunCommand(
