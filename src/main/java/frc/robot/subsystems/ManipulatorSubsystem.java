@@ -35,19 +35,20 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_shooterModule.runShooter();
     }
 
-    public void shootButtonHandler() {
+    public void shootButtonHandler(boolean runIntake) {
         //(m_intakeModule.getNoteLimitSwitch()){
         if(m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){ // This means you are in loading position
             //m_shooterModule.setShooterSpeed(ShooterConstants.kShootingSpeakerSpeed);
             shooterDirection = -1;
-            rollerSpeed = IntakeConstants.kFeedingSpeed;
+            if(runIntake) {
+                rollerSpeed = IntakeConstants.kFeedingSpeed;
+            }
         }
         else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer && m_intakeModule.getCurrentPosition() < IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer){ // This means you are aiming for the amp
             rollerSpeed = IntakeConstants.kAmpShooterSpeed;
         }
     }
     //}
-
     public void loadPositionButtonHandler() {
         m_intakeModule.setTargetPosition(IntakeConstants.kTopPosition);
     }
@@ -84,6 +85,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public void stopButtonHandler(){
         rollerDirection = 0;
         rollerSpeed = 0;
+        shooterDirection = 0;
     }
 
     public void resetEncoder() {

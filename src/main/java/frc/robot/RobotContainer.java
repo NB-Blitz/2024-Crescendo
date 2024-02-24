@@ -105,7 +105,12 @@ public class RobotContainer {
 
         new JoystickButton(m_manipController, 4)
             .whileTrue(new RunCommand(
-                () -> m_robotManipulator.shootButtonHandler(),
+                () -> m_robotManipulator.shootButtonHandler(true),
+                m_robotManipulator));
+        
+        new JoystickButton(m_manipController, 1) //TODO get a button number
+            .whileTrue(new RunCommand(
+                () -> m_robotManipulator.shootButtonHandler(false),
                 m_robotManipulator));
 
         new JoystickButton(m_manipController, 7)
