@@ -203,11 +203,15 @@ public class IntakeModule {
                 targetVelocity = 0;
             }
         }*/
-        
+  
         if (targetVelocity == 0 && positionMode){
             m_intakePIDController.setReference(targetAngle, ControlType.kPosition);
         }
-        else {
+        else if (targetVelocity == 0 && !positionMode){
+            positionMode = true;
+            targetAngle = m_armEncoder.getPosition();
+        }
+        else{
             positionMode = false;
             m_intakePIDController.setReference(targetVelocity, ControlType.kDutyCycle);
         }
