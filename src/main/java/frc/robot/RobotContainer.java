@@ -59,7 +59,7 @@ public class RobotContainer {
                     -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
                     0.5 * (1 + -m_driverController.getRawAxis(IOConstants.kDriveSpeedScalerAxis)),
-                    true, true),
+                    true, false),
                 m_robotDrive));
 
         if (DriveConstants.isMAXSwerveModules) {

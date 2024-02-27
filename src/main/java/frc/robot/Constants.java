@@ -237,7 +237,7 @@ public final class Constants {
         public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
         public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
 
-        public static final double kIntakeP = 0.05; // TODO: Change these PID values
+        public static final double kIntakeP = 0.075; // TODO: Change these PID values
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0;
@@ -249,14 +249,14 @@ public final class Constants {
         public static final int kArmMotorCurrentLimit = 39;
         public static final int kIntakeMotorCurrentLimit = 39;
 
-        public static final int kArmAngleBuffer = 5;
+        public static final int kArmAngleBuffer = 10;
         public static final double kJoystickScaling = 0.5; // When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms
         
-        public static final double kTopPosition = 2.0; // Degrees
-        public static final double kAmpShootingPosition = 85.0; // Degrees
-        public static final double kFloorIntakePosition = 188.0; // Bottom angle limit in degrees, inclusive
+        public static final double kTopPosition = 0.1; // Degrees
+        public static final double kAmpShootingPosition = 82.0; // Degrees
+        public static final double kFloorIntakePosition = 197.0; // Bottom angle limit in degrees, inclusive
 
-        public static final double kAmpShooterSpeed = -1;
+        public static final double kAmpShooterSpeed = -0.6;
         public static final double kIntakePlayerSpeed = 0.15; // Speed of the intake motor when picking up from the player station.
         public static final double kIntakeGroundSpeed = 0.3; // Sets the motor speed of the motor on the intake arm to pick up the note
         public static final double kUnjammingSpeed = -0.05;

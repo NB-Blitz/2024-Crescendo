@@ -89,7 +89,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        m_intakeModule.resetEncoder();
+        m_intakeModule.resetEncoder(IntakeConstants.kTopPosition);
+        m_intakeModule.setTargetPosition(IntakeConstants.kTopPosition);
     }
 
     public void enableBounds(){

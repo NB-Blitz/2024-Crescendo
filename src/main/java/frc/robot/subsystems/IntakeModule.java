@@ -100,7 +100,7 @@ public class IntakeModule {
      * @param angle This is the target angle in degrees can't be greater than IntakeConstants.bottomLimit's value and cant be smaller than 0
      */
     public void setTargetPosition(double angle) {
-        if (angle <= 188 && angle >= 2) {
+        if (angle <= IntakeConstants.kFloorIntakePosition && angle >= IntakeConstants.kTopPosition) {
             targetAngle = angle;
             positionMode = true;
         }
@@ -119,8 +119,8 @@ public class IntakeModule {
         return m_armEncoder.getPosition();
     }
 
-    public void resetEncoder() {
-        m_armEncoder.setPosition(0.0);
+    public void resetEncoder(double angle) {
+        m_armEncoder.setPosition(angle);
     }
 
     /**
