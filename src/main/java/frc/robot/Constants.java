@@ -227,4 +227,13 @@ public final class Constants {
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
     }
+     
+    public static final class ClimberConstants { 
+        public static final int kRightMotorCANID = -1;/*TODO:  Change these CANIDs*/ 
+        public static final int kLeftMotorCANID = -1; 
+        public static final int kDownPosition = 0; 
+        public static final int kUpPosition = 1; 
+        public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake; 
+        public static final int kArmMotorCurrentLimit = 39; 
+    } 
 }
