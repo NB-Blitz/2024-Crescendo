@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,7 +38,7 @@ public class RobotContainer {
 
     // The drivers' controllers
     Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
-    Joystick m_manipController;// = new Joystick(IOConstants.kManipControllerPort);
+    CommandXboxController m_manipController;// = new Joystick(IOConstants.kManipControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -44,7 +46,7 @@ public class RobotContainer {
     public RobotContainer() {
         if (DriveConstants.isMAXSwerveModules){
            m_robotManipulator = new ManipulatorSubsystem();
-           m_manipController = new Joystick(IOConstants.kManipControllerPort);
+           m_manipController = new CommandXboxController(IOConstants.kManipControllerPort);
         }
         // Configure the button bindings
         configureButtonBindings();
@@ -98,54 +100,54 @@ public class RobotContainer {
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
         if (DriveConstants.isMAXSwerveModules){
-            new JoystickButton(m_manipController, 2)
-                .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.stopButtonHandler(),
-                    m_robotManipulator));
-
-            new JoystickButton(m_manipController, 3)
-                .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.speedHandler(),
-                    m_robotManipulator));
-
-            new JoystickButton(m_manipController, 4)
+            m_manipController.a()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.shootButtonHandler(true),
                     m_robotManipulator));
             
-            new JoystickButton(m_manipController, 1) //TODO get a button number
+            m_manipController.b()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.shootButtonHandler(false),
                     m_robotManipulator));
 
-            new JoystickButton(m_manipController, 7)
+            m_manipController.x()
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.speedHandler(),
+                    m_robotManipulator));
+
+            m_manipController.y()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.resetEncoder(),
                     m_robotManipulator));
 
-            new JoystickButton(m_manipController, 8)
+            m_manipController.rightBumper()
                 .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.disableBounds(),
+                    () -> m_robotManipulator.stopButtonHandler(),
                     m_robotManipulator));
 
-            new JoystickButton(m_manipController, 10)
-                .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.enableBounds(),
-                    m_robotManipulator));
-
-            new JoystickButton(m_manipController, 6)
+            m_manipController.rightTrigger()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.ampShootPositionButtonHandler(),
                     m_robotManipulator));
 
-            new JoystickButton(m_manipController, 5)
+            m_manipController.leftBumper()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.intakePositionButtonHandler(),
                     m_robotManipulator));
 
-            new JoystickButton(m_manipController, 11)
+            m_manipController.leftTrigger()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.loadPositionButtonHandler(),
+                    m_robotManipulator));
+            
+            m_manipController.povDown()
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.disableBounds(),
+                    m_robotManipulator));
+
+            m_manipController.povUp()
+                .whileTrue(new RunCommand(
+                    () -> m_robotManipulator.enableBounds(),
                     m_robotManipulator));
         }
 
