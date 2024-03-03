@@ -86,4 +86,9 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
+    // Might use this later for autonomousPeriodic in Robot.java
+    // public void updateOdometry() {
+    //     m_robotDrive.updateOdometry();
+    // }
 }
