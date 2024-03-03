@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -181,6 +183,7 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @return The pose.
      */
+    @AutoLogOutput(key = "DriveSubsystem/actual_odometry")
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
@@ -319,6 +322,16 @@ public class DriveSubsystem extends SubsystemBase {
         m_frontRight.setDesiredState(desiredStates[1]);
         m_backLeft.setDesiredState(desiredStates[2]);
         m_backRight.setDesiredState(desiredStates[3]);
+    }
+
+    @AutoLogOutput(key = "DriveSubsystem/actual_states")
+    public SwerveModuleState[] getModuleStates() {
+        return new SwerveModuleState[] {
+            m_frontLeft.getState(),
+            m_frontRight.getState(),
+            m_backLeft.getState(),
+            m_backRight.getState()
+        };
     }
 
     /** Resets the drive encoders to currently read a position of 0. */
