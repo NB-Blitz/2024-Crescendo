@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 import javax.management.relation.RelationService;
@@ -14,8 +15,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class ClimberSubsystem extends SubsystemBase{
     private final CANSparkMax m_climberArmRight = new CANSparkMax(ClimberConstants.kRightMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_climberArmLeft = new CANSparkMax(ClimberConstants.kLeftMotorCANID, MotorType.kBrushless);/*TODO: Find out if the motor type is right*/
+    private boolean direction = false;
 
-    private final RelativeEncoder m_climberArmEncoder = m_climberArmLeft.getEncoder();
+    private final RelativeEncoder m_climberLeftArmEncoder = m_climberArmLeft.getEncoder();
+    private final RelativeEncoder m_climberRightArmEncoder = m_climberArmRight.getEncoder();
     public ClimberSubsystem(){
         m_climberArmLeft.restoreFactoryDefaults();
         m_climberArmRight.restoreFactoryDefaults();
@@ -25,7 +28,10 @@ public class ClimberSubsystem extends SubsystemBase{
         m_climberArmLeft.setSmartCurrentLimit(ClimberConstants.kArmMotorCurrentLimit);
         m_climberArmRight.setIdleMode(ClimberConstants.kArmMotorIdleMode);
         m_climberArmRight.setSmartCurrentLimit(ClimberConstants.kArmMotorCurrentLimit);
-        
+
+        m_climberLeftArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio/ClimberConstants.kClimberScaleFactor);
+        m_climberRightArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio/ClimberConstants.kClimberScaleFactor);
+
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
         m_climberArmRight.burnFlash();
@@ -35,15 +41,49 @@ public class ClimberSubsystem extends SubsystemBase{
         Timer.delay(1);
     }
     
-    public boolean isClimbArmDown(){
-       if(m_climberArmEncoder.getPosition() == ClimberConstants.kDownPosition){
+    private boolean isDown(){
+       if(m_climberArmEncoder.getPosition() <= ClimberConstants.kDownPosition){
             return true;
-       }else if(m_climberArmEncoder.getPosition() == ClimberConstants.kUpPosition){
-            return false;
-       }else{
+       } else{
             System.out.println("Climber arm about to self destruct ;D");
             return false;
        }
+    }
+
+    private boolean isUp(){
+       if(m_climberArmEncoder.getPosition() >= ClimberConstants.kUpPosition){
+            return true;
+       } else{
+            System.out.println("Climber arm about to self destruct ;D");
+            return false;
+       }
+    }
+
+    private void buttonPressed() {
+          direction = !direction;
+    }
+
+    private void move() {
+          if (direction == true) {
+               if (isUp()) {
+                    m_climberArmLeft.set(0);
+                    m_climberArmRight.set(0);
+               }
+               else {
+                    m_climberArmLeft.set(ClimberConstants.kClimberArmSpeed);
+                    m_climberArmRight.set(ClimberConstants.kClimberArmSpeed);
+               }
+          }
+          else {
+               if (isDown()) {
+                    m_climberArmLeft.set(0);
+                    m_climberArmRight.set(0);
+               }
+               else {
+                    m_climberArmLeft.set(-ClimberConstants.kClimberArmSpeed);
+                    m_climberArmRight.set(-ClimberConstants.kClimberArmSpeed);
+               }
+          }
     }
     
 }
