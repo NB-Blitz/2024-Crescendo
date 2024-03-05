@@ -225,6 +225,14 @@ public final class Constants {
         public static final double kShootingSpeakerSpeed = -1.00;
         public static final IdleMode kShootMotorIdleMode = IdleMode.kBrake;
         public static final int kShootMotorCurrentLimit = 39;
+        public static final double kShooterP = 0.1;
+        public static final double kShooterI = 0;
+        public static final double kShooterD = 0;
+        public static final double kShooterFF = 0;
+        public static final boolean kInvertMotorLeft = true;
+        public static final boolean kInvertMotorRight = false;
+        public static final double kShooterMaxOutput = 1;
+        public static final double kShooterMinOutput = 0;
     }
 
     public static final class IntakeConstants {

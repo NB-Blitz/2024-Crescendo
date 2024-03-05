@@ -4,19 +4,53 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.Timer;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import frc.robot.Constants.NeoMotorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterModule {
     private final CANSparkMax shooterMotorRight = new CANSparkMax(ShooterConstants.kRightMotorCANID, MotorType.kBrushless);
     private final CANSparkMax shooterMotorLeft = new CANSparkMax(ShooterConstants.kLeftMotorCANID, MotorType.kBrushless);
+    private final SparkPIDController leftPID = shooterMotorLeft.getPIDController();
+    private final SparkPIDController rightPID = shooterMotorRight.getPIDController();
+    private final RelativeEncoder leftEncoder = shooterMotorLeft.getEncoder();
+    private final RelativeEncoder rightEncoder = shooterMotorRight.getEncoder();
 
     private double wheelSpeed;
 
     // TODO Afternoon Configure Motor Controllers
     public ShooterModule() {
+
         shooterMotorLeft.restoreFactoryDefaults();
         shooterMotorRight.restoreFactoryDefaults();
+
+        leftPID.setFeedbackDevice(leftEncoder);
+        rightPID.setFeedbackDevice(rightEncoder);
+
+        shooterMotorLeft.setInverted(ShooterConstants.kInvertMotorLeft);
+        shooterMotorRight.setInverted(ShooterConstants.kInvertMotorRight);
+
+        leftPID.setP(ShooterConstants.kShooterP);
+        leftPID.setI(ShooterConstants.kShooterI);
+        leftPID.setD(ShooterConstants.kShooterD);
+        leftPID.setFF(ShooterConstants.kShooterFF);
+        leftPID.setOutputRange(
+             ShooterConstants.kShooterMinOutput,
+             ShooterConstants.kShooterMaxOutput);
+
+        rightPID.setP(ShooterConstants.kShooterP);
+        rightPID.setI(ShooterConstants.kShooterI);
+        rightPID.setD(ShooterConstants.kShooterD);
+        rightPID.setFF(ShooterConstants.kShooterFF);
+        rightPID.setOutputRange(
+             ShooterConstants.kShooterMinOutput,
+             ShooterConstants.kShooterMaxOutput);
 
         shooterMotorLeft.setIdleMode(ShooterConstants.kShootMotorIdleMode);
         shooterMotorRight.setIdleMode(ShooterConstants.kShootMotorIdleMode);
@@ -44,7 +78,8 @@ public class ShooterModule {
 
     //sets shooter motors using wheelSpeed variable 
     public void runShooter() {
-        shooterMotorLeft.set(-wheelSpeed);
-        shooterMotorRight.set(wheelSpeed);
+
+        leftPID.setReference(wheelSpeed * NeoMotorConstants.kFreeSpeedRpm, ControlType.kVelocity);
+        rightPID.setReference(wheelSpeed * NeoMotorConstants.kFreeSpeedRpm, ControlType.kVelocity);
     }
 }
