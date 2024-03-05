@@ -12,14 +12,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-//import frc.robot.Constants.AutoConstants;
-//import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 
@@ -34,11 +31,11 @@ public class RobotContainer {
 
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private ManipulatorSubsystem m_robotManipulator;// = new ManipulatorSubsystem();
+    private ManipulatorSubsystem m_robotManipulator;
 
     // The drivers' controllers
     Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
-    CommandXboxController m_manipController;// = new Joystick(IOConstants.kManipControllerPort);
+    CommandXboxController m_manipController;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,8 +65,9 @@ public class RobotContainer {
             m_robotManipulator.setDefaultCommand(
                 new RunCommand(
                     () -> m_robotManipulator.run(
-                        0.3 * -MathUtil.applyDeadband(m_manipController.getY(), IOConstants.kDriveDeadband),
-                        0.5 * (1 + -m_manipController.getRawAxis(IOConstants.kDriveSpeedScalerAxis))),
+                        IntakeConstants.kArmMaxOutput * -MathUtil.applyDeadband(m_manipController.getLeftY(), IOConstants.kDriveDeadband)//,
+                        //0.5 * (1 + -m_manipController.getRawAxis(IOConstants.kDriveSpeedScalerAxis))
+                        ),
                     m_robotManipulator));
         }
 
@@ -99,33 +97,34 @@ public class RobotContainer {
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
+
         if (DriveConstants.isMAXSwerveModules){
-            m_manipController.a()
+            m_manipController.rightTrigger(0.5)
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.shootButtonHandler(true),
                     m_robotManipulator));
             
-            m_manipController.b()
+            m_manipController.x()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.shootButtonHandler(false),
                     m_robotManipulator));
 
-            m_manipController.x()
+            m_manipController.leftTrigger(0.5)
                 .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.speedHandler(),
+                    () -> m_robotManipulator.intakeButtonHandler(),
                     m_robotManipulator));
 
-            m_manipController.y()
+            m_manipController.povLeft()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.resetEncoder(),
                     m_robotManipulator));
 
-            m_manipController.rightBumper()
+            m_manipController.b()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.stopButtonHandler(),
                     m_robotManipulator));
 
-            m_manipController.rightTrigger()
+            m_manipController.a()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.ampShootPositionButtonHandler(),
                     m_robotManipulator));
@@ -135,7 +134,7 @@ public class RobotContainer {
                     () -> m_robotManipulator.intakePositionButtonHandler(),
                     m_robotManipulator));
 
-            m_manipController.leftTrigger()
+            m_manipController.rightBumper()
                 .whileTrue(new RunCommand(
                     () -> m_robotManipulator.loadPositionButtonHandler(),
                     m_robotManipulator));
@@ -150,31 +149,6 @@ public class RobotContainer {
                     () -> m_robotManipulator.enableBounds(),
                     m_robotManipulator));
         }
-
-        /*m_manipController.a()
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.ampShootPositionButtonHandler(),
-                m_robotManipulator));
-
-        m_manipController.b()
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.intakePositionButtonHandler(),
-                m_robotManipulator));
-
-        m_manipController.leftTrigger(0.5)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.intakeButtonHandler(),
-                m_robotManipulator));
-
-        m_manipController.rightBumper()
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.loadPositionButtonHandler(),
-                m_robotManipulator));
-
-        m_manipController.rightTrigger(0.5)
-            .whileTrue(new RunCommand(
-                () -> m_robotManipulator.shootButtonHandler(),
-                m_robotManipulator));*/
     }
 
     /**

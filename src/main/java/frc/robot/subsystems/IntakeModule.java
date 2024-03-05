@@ -15,7 +15,7 @@ public class IntakeModule {
     private final CANSparkMax m_armMotor = new CANSparkMax(IntakeConstants.kArmMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushed);
 
-    //private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
+    private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
     //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
 
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
@@ -24,7 +24,6 @@ public class IntakeModule {
     private double targetAngle = 2;
     private double targetVelocity = 0;
     private double rollerSpeed = 0;
-    private double armSpeed = 0;
     private boolean calibrated = false;
     private boolean overrideBounds = false;
     private boolean positionMode = false;
@@ -49,8 +48,8 @@ public class IntakeModule {
         m_intakePIDController.setD(IntakeConstants.kIntakeD);
         m_intakePIDController.setFF(IntakeConstants.kIntakeFF);
         m_intakePIDController.setOutputRange(
-             IntakeConstants.kShootingMinOutput,
-             IntakeConstants.kShootingMaxOutput);
+             IntakeConstants.kArmMinOutput,
+             IntakeConstants.kArmMaxOutput);
 
         m_armMotor.setIdleMode(IntakeConstants.kArmMotorIdleMode);
         m_intakeMotor.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
@@ -150,8 +149,7 @@ public class IntakeModule {
     }*/
 
     public boolean getArmSwitch(){
-        //return m_armUpSwitch.get();
-        return false;
+        return m_armUpSwitch.get();
     }
 
     public void enableBounds(){
@@ -171,22 +169,20 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        /*if(!calibrated) {
-            calibrate();
-        }
-        // If we have a note and roller speed is positive, set roller speed to 0
+        /*// If we have a note and roller speed is positive, set roller speed to 0
         if(m_noteSwitch.get() && rollerSpeed > 0){
             rollerSpeed = 0;
         }
-        // If the top limit switch is pressed, set the relative encoder position to 0
-        if(m_armUpSwitch.get()){
-            m_armEncoder.setPosition(0.0);
-        }
+
         m_intakeMotor.set(rollerSpeed);
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
-        if (!overrideBounds){
+        if (!calibrated && !m_armUpSwitch.get()){
+            targetVelocity = IntakeConstants.kCalibrationSpeed;
+        }
+        // Check to see if we are allowed to exceed our bounds
+        if (!overrideBounds && calibrated){
             if(m_armEncoder.getPosition() < IntakeConstants.kTopPosition && targetVelocity < 0){
                 targetVelocity = 0;
             }
@@ -196,18 +192,18 @@ public class IntakeModule {
             }
         }
 
-        /*if (m_armUpSwitch.get()){
+        if (m_armUpSwitch.get()){
             m_armEncoder.setPosition(0);
             calibrated = true;
             if(targetVelocity < 0){
                 targetVelocity = 0;
             }
-        }*/
+        }
   
-        if (targetVelocity == 0 && positionMode){
+        if (targetVelocity == 0 && positionMode && calibrated){
             m_intakePIDController.setReference(targetAngle, ControlType.kPosition);
         }
-        else if (targetVelocity == 0 && !positionMode){
+        else if (targetVelocity == 0 && !positionMode && calibrated){
             positionMode = true;
             targetAngle = m_armEncoder.getPosition();
         }

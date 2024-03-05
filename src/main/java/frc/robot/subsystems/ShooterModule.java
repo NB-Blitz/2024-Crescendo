@@ -5,28 +5,23 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterModule {
-    private final CANSparkMax shooterMotorRight;
-    private final CANSparkMax shooterMotorLeft;
+    private final CANSparkMax shooterMotorRight = new CANSparkMax(ShooterConstants.kRightMotorCANID, MotorType.kBrushless);
+    private final CANSparkMax shooterMotorLeft = new CANSparkMax(ShooterConstants.kLeftMotorCANID, MotorType.kBrushless);
 
     private double wheelSpeed;
 
     // TODO Afternoon Configure Motor Controllers
     public ShooterModule() {
-        shooterMotorLeft = new CANSparkMax(ShooterConstants.kLeftMotorCANID, MotorType.kBrushless);
-        shooterMotorRight = new CANSparkMax(ShooterConstants.kRightMotorCANID, MotorType.kBrushless);
         shooterMotorLeft.restoreFactoryDefaults();
         shooterMotorRight.restoreFactoryDefaults();
 
-
-        shooterMotorLeft.setIdleMode(IntakeConstants.kArmMotorIdleMode);
-        shooterMotorRight.setIdleMode(IntakeConstants.kIntakeMotorIdleMode);
-        shooterMotorLeft.setSmartCurrentLimit(IntakeConstants.kArmMotorCurrentLimit);
-        shooterMotorRight.setSmartCurrentLimit(IntakeConstants.kIntakeMotorCurrentLimit);
+        shooterMotorLeft.setIdleMode(ShooterConstants.kShootMotorIdleMode);
+        shooterMotorRight.setIdleMode(ShooterConstants.kShootMotorIdleMode);
+        shooterMotorLeft.setSmartCurrentLimit(ShooterConstants.kShootMotorCurrentLimit);
+        shooterMotorRight.setSmartCurrentLimit(ShooterConstants.kShootMotorCurrentLimit);
 
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
