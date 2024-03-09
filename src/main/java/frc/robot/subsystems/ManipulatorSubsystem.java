@@ -104,6 +104,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Roller Speed", m_shooterSpeed);
         SmartDashboard.putNumber("Arm Angle", m_intakeModule.getCurrentPosition());
         SmartDashboard.putBoolean("Arm Switch", m_intakeModule.getArmSwitch());
+        SmartDashboard.putBoolean("Note Switch", m_intakeModule.getNoteLimitSwitch());
         SmartDashboard.putBoolean("Override Bounds", m_intakeModule.getOverrideBounds());
         m_intakeModule.setTargetVelocity(armJoystick);
         m_intakeModule.setIntakeSpeed(m_rollerSpeed);

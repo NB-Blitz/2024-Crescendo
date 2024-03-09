@@ -238,8 +238,8 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int kArmMotorCANID = 9;
         public static final int kIntakeMotorCANID = 10;
-        public static final int kArmUpSwitchID = 9; // TODO: Set these
-        public static final int kNoteSwitchID = 8;
+        public static final int kArmUpSwitchID = 1; // TODO: Set these
+        public static final int kNoteSwitchID = 0;
 
         public static final boolean kIntakeInverted = true;
         public static final boolean kArmInverted = false;
