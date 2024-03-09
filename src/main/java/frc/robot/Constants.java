@@ -225,7 +225,7 @@ public final class Constants {
         public static final double kShootingSpeakerSpeed = -1.00;
         public static final IdleMode kShootMotorIdleMode = IdleMode.kBrake;
         public static final int kShootMotorCurrentLimit = 39;
-        public static final double kShooterP = 0.1;
+        public static final double kShooterP = 0.5;
         public static final double kShooterI = 0;
         public static final double kShooterD = 0;
         public static final double kShooterFF = 0;
@@ -239,14 +239,14 @@ public final class Constants {
         public static final int kArmMotorCANID = 9;
         public static final int kIntakeMotorCANID = 10;
         public static final int kArmUpSwitchID = 9; // TODO: Set these
-        public static final int kNoteSwitchID = -3;
+        public static final int kNoteSwitchID = 8;
 
         public static final boolean kIntakeInverted = true;
         public static final boolean kArmInverted = false;
         public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
         public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
 
-        public static final double kIntakeP = 0.075; // TODO: Change these PID values
+        public static final double kIntakeP = 0.075;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0;

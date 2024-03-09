@@ -16,7 +16,7 @@ public class IntakeModule {
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorCANID, MotorType.kBrushed);
 
     private final DigitalInput m_armUpSwitch = new DigitalInput(IntakeConstants.kArmUpSwitchID);
-    //private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
+    private final DigitalInput m_noteSwitch = new DigitalInput(IntakeConstants.kNoteSwitchID);
 
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     private final SparkPIDController m_intakePIDController = m_armMotor.getPIDController();
@@ -127,12 +127,11 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        /*if(m_noteSwitch.get() == true && speed > 0){
+        if(m_noteSwitch.get() == true && speed > 0){
             rollerSpeed = 0;
         }else{
             rollerSpeed = speed;
-        }*/
-        rollerSpeed = speed;
+        }
     }
 
     //public void setArmSpeed(double speed){
@@ -144,9 +143,9 @@ public class IntakeModule {
      * the intake.
      * @return True if we have a Note, else False
      */
-    /*public boolean getNoteLimitSwitch() {
+    public boolean getNoteLimitSwitch() {
         return m_noteSwitch.get();
-    }*/
+    }
 
     public boolean getArmSwitch(){
         return m_armUpSwitch.get();
@@ -179,7 +178,7 @@ public class IntakeModule {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
         if (!calibrated && !m_armUpSwitch.get()){
-            targetVelocity = IntakeConstants.kCalibrationSpeed;
+            //targetVelocity = IntakeConstants.kCalibrationSpeed;
         }
         // Check to see if we are allowed to exceed our bounds
         if (!overrideBounds && calibrated){
@@ -211,6 +210,11 @@ public class IntakeModule {
             positionMode = false;
             m_intakePIDController.setReference(targetVelocity, ControlType.kDutyCycle);
         }
+
+        if (m_noteSwitch.get() && rollerSpeed > 0){
+            rollerSpeed = 0;
+        }
+
         m_intakeMotor.set(rollerSpeed);
     }
 }

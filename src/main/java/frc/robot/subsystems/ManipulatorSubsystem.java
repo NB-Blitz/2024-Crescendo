@@ -58,12 +58,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void intakeButtonHandler() {
-        if(m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){ // This means you are in loading position
-            m_rollerSpeed = IntakeConstants.kIntakePlayerSpeed;
-            m_shooterSpeed = ShooterConstants.kIntakeSpeed;
-        }
-        else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kFloorIntakePosition-IntakeConstants.kArmAngleBuffer && m_intakeModule.getCurrentPosition() < IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer){ // This means you are in shooting position
-            m_rollerSpeed = IntakeConstants.kIntakeGroundSpeed;
+        if (!m_intakeModule.getNoteLimitSwitch()){
+            if(m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer){ // This means you are in loading position
+                m_rollerSpeed = IntakeConstants.kIntakePlayerSpeed;
+                m_shooterSpeed = ShooterConstants.kIntakeSpeed;
+            }
+            else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kFloorIntakePosition-IntakeConstants.kArmAngleBuffer && m_intakeModule.getCurrentPosition() < IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer){ // This means you are in shooting position
+                m_rollerSpeed = IntakeConstants.kIntakeGroundSpeed;
+            }
         }
     }
 
