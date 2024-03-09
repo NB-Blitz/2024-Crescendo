@@ -221,18 +221,18 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int kLeftMotorCANID = 11;
         public static final int kRightMotorCANID = 12; 
-        public static final double kIntakeSpeed = 0.75; //speed of the shooter when intaking frm the shooter station.
+        public static final double kIntakeSpeed = 0.5; //speed of the shooter when intaking frm the shooter station.
         public static final double kShootingSpeakerSpeed = -1.00;
         public static final IdleMode kShootMotorIdleMode = IdleMode.kBrake;
         public static final int kShootMotorCurrentLimit = 39;
-        public static final double kShooterP = 0.5;
+        public static final double kShooterP = 0.00025;
         public static final double kShooterI = 0;
         public static final double kShooterD = 0;
         public static final double kShooterFF = 0;
         public static final boolean kInvertMotorLeft = true;
         public static final boolean kInvertMotorRight = false;
         public static final double kShooterMaxOutput = 1;
-        public static final double kShooterMinOutput = 0;
+        public static final double kShooterMinOutput = -1;
     }
 
     public static final class IntakeConstants {
@@ -261,11 +261,11 @@ public final class Constants {
         public static final int kArmAngleBuffer = 10;
         public static final double kJoystickScaling = 0.5; // When the joystick is fully pressed forward, that's the number of degrees moved every 20 ms
         
-        public static final double kTopPosition = 0.1; // Degrees
-        public static final double kAmpShootingPosition = 82.0; // Degrees
-        public static final double kFloorIntakePosition = 197.0; // Bottom angle limit in degrees, inclusive
+        public static final double kTopPosition = 0.0; // Degrees
+        public static final double kAmpShootingPosition = 69; // Degrees
+        public static final double kFloorIntakePosition = 195.0; // Bottom angle limit in degrees, inclusive
 
-        public static final double kAmpShooterSpeed = -0.6;
+        public static final double kAmpShooterSpeed = -0.65;
         public static final double kIntakePlayerSpeed = 0.15; // Speed of the intake motor when picking up from the player station.
         public static final double kIntakeGroundSpeed = 0.3; // Sets the motor speed of the motor on the intake arm to pick up the note
         public static final double kUnjammingSpeed = -0.05;

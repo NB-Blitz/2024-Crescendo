@@ -180,6 +180,18 @@ public class IntakeModule {
         if (!calibrated && !m_armUpSwitch.get()){
             //targetVelocity = IntakeConstants.kCalibrationSpeed;
         }
+
+        if (m_armUpSwitch.get()){
+            m_armEncoder.setPosition(0);
+            if(!calibrated){
+                targetAngle = 0;
+            }
+            calibrated = true;
+            if(targetVelocity < 0){
+                targetVelocity = 0;
+            }
+        }
+
         // Check to see if we are allowed to exceed our bounds
         if (!overrideBounds && calibrated){
             if(m_armEncoder.getPosition() < IntakeConstants.kTopPosition && targetVelocity < 0){
@@ -189,13 +201,12 @@ public class IntakeModule {
             if(m_armEncoder.getPosition() > IntakeConstants.kFloorIntakePosition && targetVelocity > 0){
                 targetVelocity = 0;
             }
-        }
 
-        if (m_armUpSwitch.get()){
-            m_armEncoder.setPosition(0);
-            calibrated = true;
-            if(targetVelocity < 0){
-                targetVelocity = 0;
+            if(targetAngle > IntakeConstants.kFloorIntakePosition){
+                targetAngle = IntakeConstants.kFloorIntakePosition;
+            }
+            else if (targetAngle < IntakeConstants.kTopPosition){
+                targetAngle = IntakeConstants.kTopPosition;
             }
         }
   
