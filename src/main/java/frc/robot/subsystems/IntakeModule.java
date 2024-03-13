@@ -21,12 +21,13 @@ public class IntakeModule {
     private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     private final SparkPIDController m_intakePIDController = m_armMotor.getPIDController();
 
-    private double targetAngle = 2;
+    private double targetAngle = IntakeConstants.kTopPosition;
     private double targetVelocity = 0;
     private double rollerSpeed = 0;
     private boolean calibrated = false;
     private boolean overrideBounds = false;
     private boolean positionMode = false;
+    private boolean armUpSwitchUpdated = false;
 
     public IntakeModule() {
         m_armMotor.restoreFactoryDefaults();
@@ -157,10 +158,15 @@ public class IntakeModule {
 
     public void disableBounds(){
         overrideBounds = true;
+        calibrated = false;
     }
 
     public boolean getOverrideBounds(){
         return overrideBounds;
+    }
+
+    public boolean isIntakeArmCalibrated(){
+        return calibrated;
     }
 
     /**
@@ -177,14 +183,15 @@ public class IntakeModule {
         if(calibrated) {
             m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
         }*/
-        if (!calibrated && !m_armUpSwitch.get()){
-            //targetVelocity = IntakeConstants.kCalibrationSpeed;
+        if(!armUpSwitchUpdated && !m_armUpSwitch.get()){
+            armUpSwitchUpdated = true;
         }
 
         if (m_armUpSwitch.get()){
-            m_armEncoder.setPosition(0);
-            if(!calibrated){
-                targetAngle = 0;
+            m_armEncoder.setPosition(IntakeConstants.kTopPosition);
+            if(armUpSwitchUpdated){
+                targetAngle = IntakeConstants.kTopPosition;
+                armUpSwitchUpdated = false;
             }
             calibrated = true;
             if(targetVelocity < 0){
