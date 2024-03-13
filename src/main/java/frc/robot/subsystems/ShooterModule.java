@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.ShooterConstants;
 
 public class ShooterModule {
     private final CANSparkMax shooterMotorRight = new CANSparkMax(ShooterConstants.kRightMotorCANID, MotorType.kBrushless);
@@ -24,7 +23,6 @@ public class ShooterModule {
 
     private double wheelSpeed;
 
-    // TODO Afternoon Configure Motor Controllers
     public ShooterModule() {
 
         shooterMotorLeft.restoreFactoryDefaults();

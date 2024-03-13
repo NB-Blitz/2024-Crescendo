@@ -296,15 +296,15 @@ public final class Constants {
     }
      
     public static final class ClimberConstants { 
-        public static final int kRightMotorCANID = -1;/*TODO:  Change these CANIDs*/ 
-        public static final int kLeftMotorCANID = -1; 
+        public static final int kRightMotorCANID = 13;
+        public static final int kLeftMotorCANID = 14;
         public static final int kDownPosition = 0; 
         public static final int kUpPosition = 1; 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake; 
         public static final int kArmMotorCurrentLimit = 39; 
-        public static final double kClimbArmSpeed = 0.2; //TODO: fix this
+        public static final double kClimbArmSpeed = 0.1; //TODO: fix this
         public static final double kClimbGearRatio = 1/12;
-        public static final double kClimberScaleFactor = 0.0; //TODO: fix this
+        public static final double kClimbScaleFactor = 0.0; //TODO: fix this
         public static final boolean kLeftInverted = false; //TODO: fix me
         public static final boolean kRightInverted = true; //TODO: fix me
     } 

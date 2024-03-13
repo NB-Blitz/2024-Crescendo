@@ -11,11 +11,12 @@ import javax.management.relation.RelationService;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimberSubsystem extends SubsystemBase{
     private final CANSparkMax m_climberArmRight = new CANSparkMax(ClimberConstants.kRightMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_climberArmLeft = new CANSparkMax(ClimberConstants.kLeftMotorCANID, MotorType.kBrushless);/*TODO: Find out if the motor type is right*/
-    private boolean direction = false;
+    //private boolean direction = false;
 
     private final RelativeEncoder m_climberLeftArmEncoder = m_climberArmLeft.getEncoder();
     private final RelativeEncoder m_climberRightArmEncoder = m_climberArmRight.getEncoder();
@@ -29,8 +30,8 @@ public class ClimberSubsystem extends SubsystemBase{
         m_climberArmRight.setIdleMode(ClimberConstants.kArmMotorIdleMode);
         m_climberArmRight.setSmartCurrentLimit(ClimberConstants.kArmMotorCurrentLimit);
 
-        m_climberLeftArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio/ClimberConstants.kClimberScaleFactor);
-        m_climberRightArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio/ClimberConstants.kClimberScaleFactor);
+        m_climberLeftArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio);//ClimberConstants.kClimbScaleFactor);
+        m_climberRightArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio);//ClimberConstants.kClimbScaleFactor);
 
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
@@ -41,7 +42,7 @@ public class ClimberSubsystem extends SubsystemBase{
         Timer.delay(1);
     }
     
-    private boolean isDown(){
+    /*private boolean isDown(){
        if(m_climberArmEncoder.getPosition() <= ClimberConstants.kDownPosition){
             return true;
        } else{
@@ -51,27 +52,32 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     private boolean isUp(){
-       if(m_climberArmEncoder.getPosition() >= ClimberConstants.kUpPosition){
+       if(m_climbArmEncoder.getPosition() >= ClimberConstants.kUpPosition){
             return true;
        } else{
             System.out.println("Climber arm about to self destruct ;D");
             return false;
        }
-    }
+    }*/
 
-    private void buttonPressed() {
+    /*private void buttonPressed() {
           direction = !direction;
+    }*/
+
+    @Override
+    public void periodic() {
+
     }
 
-    private void move() {
-          if (direction == true) {
+    public void move(double joystick) {
+          /*if (direction == true) {
                if (isUp()) {
                     m_climberArmLeft.set(0);
                     m_climberArmRight.set(0);
                }
                else {
-                    m_climberArmLeft.set(ClimberConstants.kClimberArmSpeed);
-                    m_climberArmRight.set(ClimberConstants.kClimberArmSpeed);
+                    m_climberArmLeft.set(ClimberConstants.kClimbArmSpeed);
+                    m_climberArmRight.set(ClimberConstants.kClimbArmSpeed);
                }
           }
           else {
@@ -80,10 +86,14 @@ public class ClimberSubsystem extends SubsystemBase{
                     m_climberArmRight.set(0);
                }
                else {
-                    m_climberArmLeft.set(-ClimberConstants.kClimberArmSpeed);
-                    m_climberArmRight.set(-ClimberConstants.kClimberArmSpeed);
+                    m_climberArmLeft.set(-ClimberConstants.kClimbArmSpeed);
+                    m_climberArmRight.set(-ClimberConstants.kClimbArmSpeed);
                }
-          }
+          }*/
+          m_climberArmLeft.set(joystick);
+          m_climberArmRight.set(joystick);
+
+          SmartDashboard.putNumber("Left Climber Position", m_climberLeftArmEncoder.getPosition());
+          SmartDashboard.putNumber("Right Climber Position", m_climberRightArmEncoder.getPosition());
     }
-    
 }

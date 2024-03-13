@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 
@@ -32,6 +34,7 @@ public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private ManipulatorSubsystem m_robotManipulator;
+    private ClimberSubsystem m_robotClimber;
 
     // The drivers' controllers
     Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
@@ -43,6 +46,7 @@ public class RobotContainer {
     public RobotContainer() {
         if (DriveConstants.isMAXSwerveModules){
            m_robotManipulator = new ManipulatorSubsystem();
+           m_robotClimber = new ClimberSubsystem();
            m_manipController = new CommandXboxController(IOConstants.kManipControllerPort);
         }
         // Configure the button bindings
@@ -69,6 +73,13 @@ public class RobotContainer {
                         //0.5 * (1 + -m_manipController.getRawAxis(IOConstants.kDriveSpeedScalerAxis))
                         ),
                     m_robotManipulator));
+
+            m_robotClimber.setDefaultCommand(
+                new RunCommand(
+                    () -> m_robotClimber.move(
+                        ClimberConstants.kClimbArmSpeed * -MathUtil.applyDeadband(m_manipController.getRightY(), IOConstants.kDriveDeadband)//,
+                        ),
+                    m_robotClimber));
         }
 
         // Add default command for the Manipulator
