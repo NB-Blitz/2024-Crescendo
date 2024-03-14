@@ -11,10 +11,10 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "15,0": {
+          "11,0": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "ComboBox Chooser",
@@ -24,7 +24,7 @@
               "_showGlyph": false
             }
           },
-          "12,0": {
+          "4,0": {
             "size": [
               3,
               6
@@ -60,102 +60,6 @@
                   "Visuals/Starting angle": 180.0,
                   "Visuals/Show tick mark ring": true,
                   "Visuals/Counter clockwise": true
-                }
-              ]
-            }
-          },
-          "4,0": {
-            "size": [
-              4,
-              5
-            ],
-            "content": {
-              "_type": "List Layout",
-              "_title": "Driving PID",
-              "_glyph": 149,
-              "_showGlyph": false,
-              "Layout/Label position": "TOP",
-              "_children": [
-                {
-                  "_type": "Number Slider",
-                  "_source0": "network_table:///SmartDashboard/driving_p",
-                  "_title": "P",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Slider Settings/Min": 0.0,
-                  "Slider Settings/Max": 1.0,
-                  "Slider Settings/Block increment": 0.0625,
-                  "Visuals/Display value": true
-                },
-                {
-                  "_type": "Number Slider",
-                  "_source0": "network_table:///SmartDashboard/driving_i",
-                  "_title": "I",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Slider Settings/Min": 0.0,
-                  "Slider Settings/Max": 1.0,
-                  "Slider Settings/Block increment": 0.0625,
-                  "Visuals/Display value": true
-                },
-                {
-                  "_type": "Number Slider",
-                  "_source0": "network_table:///SmartDashboard/driving_d",
-                  "_title": "D",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Slider Settings/Min": 0.0,
-                  "Slider Settings/Max": 1.0,
-                  "Slider Settings/Block increment": 0.0625,
-                  "Visuals/Display value": true
-                }
-              ]
-            }
-          },
-          "8,0": {
-            "size": [
-              4,
-              5
-            ],
-            "content": {
-              "_type": "List Layout",
-              "_title": "Turning PID",
-              "_glyph": 149,
-              "_showGlyph": false,
-              "Layout/Label position": "TOP",
-              "_children": [
-                {
-                  "_type": "Number Slider",
-                  "_source0": "network_table:///SmartDashboard/turning_p",
-                  "_title": "P",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Slider Settings/Min": 0.0,
-                  "Slider Settings/Max": 1.0,
-                  "Slider Settings/Block increment": 0.0625,
-                  "Visuals/Display value": true
-                },
-                {
-                  "_type": "Number Slider",
-                  "_source0": "network_table:///SmartDashboard/turning_i",
-                  "_title": "I",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Slider Settings/Min": 0.0,
-                  "Slider Settings/Max": 1.0,
-                  "Slider Settings/Block increment": 0.0625,
-                  "Visuals/Display value": true
-                },
-                {
-                  "_type": "Number Slider",
-                  "_source0": "network_table:///SmartDashboard/turning_d",
-                  "_title": "D",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Slider Settings/Min": 0.0,
-                  "Slider Settings/Max": 1.0,
-                  "Slider Settings/Block increment": 0.0625,
-                  "Visuals/Display value": true
                 }
               ]
             }
@@ -244,6 +148,120 @@
                   "_showGlyph": false
                 }
               ]
+            }
+          },
+          "7,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm Angle",
+              "_title": "Arm Angle",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm Switch",
+              "_title": "Arm Switch",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Note Switch",
+              "_title": "Note Switch",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Override Bounds",
+              "_title": "Override Bounds",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm Calibrated",
+              "_title": "Arm Calibrated",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Max Arm Current",
+              "_title": "Max Arm Current",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Max Roller Current",
+              "_title": "Max Roller Current",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Debug Mode",
+              "_title": "Debug Mode",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }

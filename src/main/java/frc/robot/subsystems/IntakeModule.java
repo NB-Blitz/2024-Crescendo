@@ -57,6 +57,8 @@ public class IntakeModule {
         m_armMotor.setSmartCurrentLimit(IntakeConstants.kArmMotorCurrentLimit);
         m_intakeMotor.setSmartCurrentLimit(IntakeConstants.kIntakeMotorCurrentLimit);
 
+        m_armMotor.setClosedLoopRampRate(0.5);
+
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
         m_intakeMotor.burnFlash();
@@ -106,7 +108,7 @@ public class IntakeModule {
         }
     }
 
-    public void setTargetVelocity(double velocity){
+    public void setTargetVelocity(double velocity) {
         targetVelocity = velocity;
     }
 
@@ -119,54 +121,53 @@ public class IntakeModule {
         return m_armEncoder.getPosition();
     }
 
-    public void resetEncoder(double angle) {
-        m_armEncoder.setPosition(angle);
-    }
-
     /**
      * This function sets the speed of the intake roller.
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        if(m_noteSwitch.get() == true && speed > 0){
+        if (m_noteSwitch.get() == true && speed > 0) {
             rollerSpeed = 0;
-        }else{
+        } else {
             rollerSpeed = speed;
         }
     }
 
-    //public void setArmSpeed(double speed){
-    //    armSpeed = speed;
-    //}
-
     /**
-     * This function tells whether or not we have a Note in
-     * the intake.
+     * Tells whether or not we have a Note in the intake.
      * @return True if we have a Note, else False
      */
     public boolean getNoteLimitSwitch() {
         return m_noteSwitch.get();
     }
 
-    public boolean getArmSwitch(){
+    /**
+     * Tells whether or not the intake arm is at the home position.
+     * @return True if at home, else False
+     */
+    public boolean getArmSwitch() {
         return m_armUpSwitch.get();
     }
 
-    public void enableBounds(){
+    public boolean isIntakeArmCalibrated() {
+        return calibrated;
+    }
+
+    public void resetEncoder(double angle) {
+        m_armEncoder.setPosition(angle);
+    }
+
+    public void enableBounds() {
         overrideBounds = false;
     }
 
-    public void disableBounds(){
+    public void disableBounds() {
         overrideBounds = true;
         calibrated = false;
     }
 
-    public boolean getOverrideBounds(){
+    public boolean getOverrideBounds() {
         return overrideBounds;
-    }
-
-    public boolean isIntakeArmCalibrated(){
-        return calibrated;
     }
 
     /**
@@ -174,62 +175,56 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        /*// If we have a note and roller speed is positive, set roller speed to 0
-        if(m_noteSwitch.get() && rollerSpeed > 0){
-            rollerSpeed = 0;
-        }
-
-        m_intakeMotor.set(rollerSpeed);
-        if(calibrated) {
-            m_intakePIDController.setReference(Math.toRadians(targetAngle), CANSparkMax.ControlType.kPosition);
-        }*/
-        if(!armUpSwitchUpdated && !m_armUpSwitch.get()){
+        if (!armUpSwitchUpdated && !m_armUpSwitch.get()) {
             armUpSwitchUpdated = true;
         }
 
-        if (m_armUpSwitch.get()){
+        if (m_armUpSwitch.get()) {
             m_armEncoder.setPosition(IntakeConstants.kTopPosition);
-            if(armUpSwitchUpdated){
+            if (armUpSwitchUpdated) {
                 targetAngle = IntakeConstants.kTopPosition;
                 armUpSwitchUpdated = false;
             }
             calibrated = true;
-            if(targetVelocity < 0){
+            if (targetVelocity < 0) {
                 targetVelocity = 0;
+                positionMode = true;
             }
         }
 
         // Check to see if we are allowed to exceed our bounds
-        if (!overrideBounds && calibrated){
-            if(m_armEncoder.getPosition() < IntakeConstants.kTopPosition && targetVelocity < 0){
+        if (!overrideBounds && calibrated) {
+            if (m_armEncoder.getPosition() < IntakeConstants.kTopPosition && targetVelocity < 0) {
+                targetVelocity = 0;
+            }
+            if (m_armEncoder.getPosition() > IntakeConstants.kFloorIntakePosition && targetVelocity > 0) {
                 targetVelocity = 0;
             }
 
-            if(m_armEncoder.getPosition() > IntakeConstants.kFloorIntakePosition && targetVelocity > 0){
-                targetVelocity = 0;
-            }
-
-            if(targetAngle > IntakeConstants.kFloorIntakePosition){
+            if (targetAngle > IntakeConstants.kFloorIntakePosition) {
                 targetAngle = IntakeConstants.kFloorIntakePosition;
-            }
-            else if (targetAngle < IntakeConstants.kTopPosition){
+            } else if (targetAngle < IntakeConstants.kTopPosition) {
                 targetAngle = IntakeConstants.kTopPosition;
             }
         }
+
+        if (overrideBounds && m_armUpSwitch.get() && targetVelocity < 0) {
+            targetVelocity = 0;
+        }
   
-        if (targetVelocity == 0 && positionMode && calibrated){
+        if (calibrated && targetVelocity == 0) {
+            if (!positionMode) {
+                positionMode = true;
+                targetAngle = m_armEncoder.getPosition();
+            }
             m_intakePIDController.setReference(targetAngle, ControlType.kPosition);
-        }
-        else if (targetVelocity == 0 && !positionMode && calibrated){
-            positionMode = true;
-            targetAngle = m_armEncoder.getPosition();
-        }
-        else{
+        } else {
             positionMode = false;
             m_intakePIDController.setReference(targetVelocity, ControlType.kDutyCycle);
         }
 
-        if (m_noteSwitch.get() && rollerSpeed > 0){
+        // Set roller speed
+        if (m_noteSwitch.get() && rollerSpeed > 0) {
             rollerSpeed = 0;
         }
 

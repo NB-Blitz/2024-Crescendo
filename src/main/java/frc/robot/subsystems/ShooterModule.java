@@ -1,17 +1,14 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Timer;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
-
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.NeoMotorConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterModule {
@@ -22,11 +19,9 @@ public class ShooterModule {
     private final RelativeEncoder leftEncoder = shooterMotorLeft.getEncoder();
     private final RelativeEncoder rightEncoder = shooterMotorRight.getEncoder();
 
-    private double wheelSpeed;
+    private double m_wheelSpeed;
 
-    // TODO Afternoon Configure Motor Controllers
     public ShooterModule() {
-
         shooterMotorLeft.restoreFactoryDefaults();
         shooterMotorRight.restoreFactoryDefaults();
 
@@ -66,20 +61,19 @@ public class ShooterModule {
         Timer.delay(1);
     }
 
-    // Sets wheelSpeed variable, double input
-    public void setShooterSpeed(double wheelSpeed) {
-        this.wheelSpeed = wheelSpeed;
+    // Sets m_wheelSpeed variable, double input
+    public void setShooterSpeed(double m_wheelSpeed) {
+        this.m_wheelSpeed = m_wheelSpeed;
     }
 
-    //returns the wheelSpeed variable, double
+    // Returns the m_wheelSpeed variable, double
     public double getSpeed() {
-        return wheelSpeed;
+        return m_wheelSpeed;
     }
 
-    //sets shooter motors using wheelSpeed variable 
+    // Sets shooter motors using m_wheelSpeed variable 
     public void runShooter() {
-
-        leftPID.setReference(wheelSpeed * NeoMotorConstants.kFreeSpeedRpm, ControlType.kVelocity);
-        rightPID.setReference(wheelSpeed * NeoMotorConstants.kFreeSpeedRpm, ControlType.kVelocity);
+        leftPID.setReference(m_wheelSpeed * NeoMotorConstants.kFreeSpeedRpm, ControlType.kVelocity);
+        rightPID.setReference(m_wheelSpeed * NeoMotorConstants.kFreeSpeedRpm, ControlType.kVelocity);
     }
 }
