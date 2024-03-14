@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.IOConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 /*
@@ -30,7 +30,7 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
     // The driver's controller
-    Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
+    Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -45,9 +45,9 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> m_robotDrive.drive(
-                    -MathUtil.applyDeadband(m_driverController.getY(), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getX(), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getTwist(), OIConstants.kTwistDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
                     true, false),
                 m_robotDrive));
 
@@ -67,14 +67,19 @@ public class RobotContainer {
      * then passing it to a {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(m_driverController, OIConstants.kDriveBrakeButton)
+        new JoystickButton(m_driverController, IOConstants.kDriveBrakeButton)
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.setX(),
                 m_robotDrive));
 
-        new JoystickButton(m_driverController, OIConstants.kDriveGyroResetButton)
+        new JoystickButton(m_driverController, IOConstants.kDriveGyroResetButton)
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
+                m_robotDrive));
+        
+        new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.aimSpeaker(),
                 m_robotDrive));
     }
 

@@ -198,12 +198,13 @@ public final class Constants {
         public static final int kTurningMotorCurrentLimit = 50; // amps
     }
 
-    public static final class OIConstants {
+    public static final class IOConstants {
         public static final int kDriverControllerPort = 0;
         public static final double kDriveDeadband = 0.3;
         public static final double kTwistDeadband = 0.5;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
+        public static final int kAimSpeakerButton = 3;
     }
 
     public static final class AutoConstants {
