@@ -9,6 +9,8 @@ import java.util.Optional;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,6 +34,7 @@ import frc.robot.Constants.SDSModuleConstants;
 import frc.robot.subsystems.swervemodules.MAXSwerveModule;
 import frc.robot.subsystems.swervemodules.SDSSwerveModule;
 import frc.robot.subsystems.swervemodules.SwerveModule;
+import frc.utils.LimelightHelpers;
 import frc.utils.SwerveUtils;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -56,8 +60,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     private ChassisSpeeds m_robotRelativeSpeeds = new ChassisSpeeds();
 
-    // Odometry class for tracking robot pose
+    // Odometry classes for tracking and estimating robot pose
     public SwerveDriveOdometry m_odometry;
+    public SwerveDrivePoseEstimator m_poseEstimator;
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -120,13 +125,21 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
             });
-
-        //SmartDashboard.putNumber("driving_p", 1.0);
-        //SmartDashboard.putNumber("driving_i", 0.0);
-        //SmartDashboard.putNumber("driving_d", 0.0);
-        //SmartDashboard.putNumber("turning_p", 1.0);
-        //SmartDashboard.putNumber("turning_i", 0.0);
-        //SmartDashboard.putNumber("turning_d", 0.0);
+        
+        /* Here we use SwerveDrivePoseEstimator so that we can fuse odometry readings. The numbers used
+        below are robot specific, and should be tuned. */
+        m_poseEstimator = new SwerveDrivePoseEstimator(
+            m_kinematics,
+            getHeading(),
+            new SwerveModulePosition[] {
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_backLeft.getPosition(),
+                m_backRight.getPosition()
+            },
+            new Pose2d(),
+            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
@@ -162,9 +175,15 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             });
 
+        updateOdometry();
+
         SmartDashboard.putNumber("position_x", getPose().getX());
         SmartDashboard.putNumber("position_y", getPose().getY());
         SmartDashboard.putNumber("position_rot", getPose().getRotation().getDegrees());
+
+        SmartDashboard.putNumber("vision_odometry_x", getEstimatedPose().getX());
+        SmartDashboard.putNumber("vision_odometry_y", getEstimatedPose().getY());
+        SmartDashboard.putNumber("vision_odometry_rot", getEstimatedPose().getRotation().getDegrees());
 
         SmartDashboard.putNumber("fl_relative", m_frontLeft.getState().angle.getDegrees());
         SmartDashboard.putNumber("fl_absolute", m_frontLeft.getAbsoluteEncoderPos());
@@ -185,6 +204,10 @@ public class DriveSubsystem extends SubsystemBase {
         return m_odometry.getPoseMeters();
     }
 
+    public Pose2d getEstimatedPose() {
+        return m_poseEstimator.getEstimatedPosition();
+    }
+
     /**
      * Resets the odometry to the specified pose.
      *
@@ -200,6 +223,26 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backRight.getPosition()
             },
             pose);
+    }
+
+    /** Updates the field relative position of the robot. */
+    public void updateOdometry() {
+        m_poseEstimator.update(
+            getHeading(),
+            new SwerveModulePosition[] {
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_backLeft.getPosition(),
+                m_backRight.getPosition()
+            });
+
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        if (limelightMeasurement.tagCount >= 2) {
+            m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            m_poseEstimator.addVisionMeasurement(
+                limelightMeasurement.pose,
+                limelightMeasurement.timestampSeconds);
+        }
     }
 
     /**
@@ -354,5 +397,55 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public double getTurnRate() {
         return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    }
+
+    public void aimSpeaker() {
+        final double rotLimelight = limelightAimProportional();
+
+        final double forwardLimelight = limelightRangeProportional();
+
+        driveRobotRelative(new ChassisSpeeds(forwardLimelight, 0, rotLimelight));
+    }
+
+    /**
+     * Simple proportional turning control with Limelight.
+     * "Proportional control" is a control algorithm in which the output is proportional to the error.
+     * 
+     * @return Angular velocity proportional to the "tx" value from the Limelight
+     */
+    public double limelightAimProportional() {    
+        // kP (constant of proportionality)
+        // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
+        // if it is too high, the robot will oscillate.
+        // if it is too low, the robot will never reach its target
+        // if the robot never turns in the correct direction, kP should be inverted.
+        double kP = .035;
+
+        // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
+        // your limelight 3 feed, tx should return roughly 31 degrees.
+        double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+
+        // convert to radians per second for our drive method
+        targetingAngularVelocity *= DriveConstants.kMaxAngularSpeed;
+
+        //invert since tx is positive when the target is to the right of the crosshair
+        targetingAngularVelocity *= -1.0;
+
+        return targetingAngularVelocity;
+    }
+
+    /**
+     * Simple proportional ranging control with Limelight's "ty" value.
+     * This works best if your Limelight's mount height and target mount height are different.
+     * If your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty".
+     * 
+     * @return Forward velocity proportional to the "ty" value from the Limelight
+     */
+    public double limelightRangeProportional() {    
+        double kP = .1;
+        double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+        targetingForwardSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+        targetingForwardSpeed *= -1.0;
+        return targetingForwardSpeed;
     }
 }

@@ -98,6 +98,11 @@ public class RobotContainer {
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
+        
+        new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.aimSpeaker(),
+                m_robotDrive));
 
         if (DriveConstants.isMAXSwerveModules){
             m_manipController.a()
@@ -168,4 +173,9 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
+    // Might use this later for autonomousPeriodic in Robot.java
+    // public void updateOdometry() {
+    //     m_robotDrive.updateOdometry();
+    // }
 }
