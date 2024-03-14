@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -100,9 +101,9 @@ public class RobotContainer {
                 m_robotDrive));
         
         new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
-            .whileTrue(new RunCommand(
+            .whileTrue(new RepeatCommand(new InstantCommand(
                 () -> m_robotDrive.aimSpeaker(),
-                m_robotDrive));
+                m_robotDrive)));
 
         if (DriveConstants.isMAXSwerveModules){
             m_manipController.a()
