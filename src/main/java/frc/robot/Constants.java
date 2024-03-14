@@ -34,6 +34,7 @@ public final class Constants {
         public static final double kDriveDeadband = 0.3;
         public static final double kTwistDeadband = 0.5;
         public static final int kDriveSpeedScalerAxis = 3;
+        public static final int kAimSpeakerButton = 3;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
 
