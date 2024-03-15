@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,13 +18,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -52,6 +53,8 @@ public class RobotContainer {
            m_robotClimber = new ClimberSubsystem();
            m_manipController = new CommandXboxController(IOConstants.kManipControllerPort);
         }
+
+        NamedCommands.registerCommand("shootSpeaker", m_robotManipulator.shootSpeakerCommand());
         
         // Configure the button bindings
         configureButtonBindings();
@@ -79,8 +82,7 @@ public class RobotContainer {
             m_robotClimber.setDefaultCommand(
                 new RunCommand(
                     () -> m_robotClimber.move(
-                        ClimberConstants.kClimbArmSpeed * -MathUtil.applyDeadband(m_manipController.getRightY(), IOConstants.kDriveDeadband)//,
-                        ),
+                        ClimberConstants.kClimbArmSpeed * -MathUtil.applyDeadband(m_manipController.getRightY(), IOConstants.kDriveDeadband)),
                     m_robotClimber));
         }
 
