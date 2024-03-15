@@ -103,6 +103,15 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void run(double armJoystick) {
+        if (m_intakeModule.getNoteLimitSwitch()) {
+            if (m_rollerSpeed > 0) {
+                m_rollerSpeed = 0;
+            }
+            if (m_shooterSpeed > 0) {
+                m_shooterSpeed = 0;
+            }
+        }
+
         m_shooterModule.setShooterSpeed(m_shooterSpeed);
         m_intakeModule.setTargetVelocity(armJoystick);
         m_intakeModule.setIntakeSpeed(m_rollerSpeed);

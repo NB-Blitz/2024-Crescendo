@@ -126,11 +126,7 @@ public class IntakeModule {
      * @param speed Speed of the intake roller
      */
     public void setIntakeSpeed(double speed) {
-        if (m_noteSwitch.get() == true && speed > 0) {
-            rollerSpeed = 0;
-        } else {
-            rollerSpeed = speed;
-        }
+        rollerSpeed = speed;
     }
 
     /**
