@@ -83,7 +83,7 @@ public class IntakeModule {
     /*public boolean calibrate() {
         // TODO Use calibrate function in manipulator
         if (!calibrated) {
-            if(m_armUpSwitch.get() == true){
+            if(getArmSwitch() == true){
                 m_armMotor.set(0);
                 m_armEncoder.setPosition(0);
                 calibrated = true;
@@ -134,7 +134,7 @@ public class IntakeModule {
      * @return True if we have a Note, else False
      */
     public boolean getNoteLimitSwitch() {
-        return m_noteSwitch.get();
+        return !m_noteSwitch.get();
     }
 
     /**
@@ -142,7 +142,7 @@ public class IntakeModule {
      * @return True if at home, else False
      */
     public boolean getArmSwitch() {
-        return m_armUpSwitch.get();
+        return !m_armUpSwitch.get();
     }
 
     public boolean isIntakeArmCalibrated() {
@@ -171,11 +171,11 @@ public class IntakeModule {
      * update the motor speeds of the intake.
      */
     public void updateIntake() {
-        if (!armUpSwitchUpdated && !m_armUpSwitch.get()) {
+        if (!armUpSwitchUpdated && !getArmSwitch()) {
             armUpSwitchUpdated = true;
         }
 
-        if (m_armUpSwitch.get()) {
+        if (getArmSwitch()) {
             m_armEncoder.setPosition(IntakeConstants.kTopPosition);
             if (armUpSwitchUpdated) {
                 targetAngle = IntakeConstants.kTopPosition;
@@ -204,7 +204,7 @@ public class IntakeModule {
             }
         }
 
-        if (overrideBounds && m_armUpSwitch.get() && targetVelocity < 0) {
+        if (overrideBounds && getArmSwitch() && targetVelocity < 0) {
             targetVelocity = 0;
         }
   
@@ -220,7 +220,7 @@ public class IntakeModule {
         }
 
         // Set roller speed
-        if (m_noteSwitch.get() && rollerSpeed > 0) {
+        if (getNoteLimitSwitch() && rollerSpeed > 0) {
             rollerSpeed = 0;
         }
 

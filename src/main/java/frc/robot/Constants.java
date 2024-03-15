@@ -130,7 +130,7 @@ public final class Constants {
         // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
         // This changes the drive speed of the module (a pinion gear with more teeth will result in a
         // robot that drives faster).
-        public static final int kDrivingMotorPinionTeeth = 14;
+        public static final int kDrivingMotorPinionTeeth = 12;
 
         // Invert the turning encoder, since the output shaft rotates in the opposite direction of
         // the steering motor in the MAXSwerve Module.
@@ -247,7 +247,7 @@ public final class Constants {
         public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
         public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
 
-        public static final double kIntakeP = 0.075;
+        public static final double kIntakeP = 0.06;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0;
@@ -303,7 +303,7 @@ public final class Constants {
         public static final int kUpPosition = 1; 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake; 
         public static final int kArmMotorCurrentLimit = 39; 
-        public static final double kClimbArmSpeed = 0.1; //TODO: fix this
+        public static final double kClimbArmSpeed = 0.25; //TODO: fix this
         public static final double kClimbGearRatio = 1/12;
         public static final double kClimbScaleFactor = 0.0; //TODO: fix this
         public static final boolean kLeftInverted = false; //TODO: fix me
