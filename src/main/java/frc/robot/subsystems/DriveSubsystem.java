@@ -381,9 +381,9 @@ public class DriveSubsystem extends SubsystemBase {
         resetOdometry(getPose());
     }
 
-    public void setGyroToOdometry() {
-        m_gyro.setAngleAdjustment(m_odometry.getPoseMeters().getRotation().getDegrees());
+    public void resetGyroToBackwards() {
         m_gyro.reset();
+        m_gyro.setAngleAdjustment(180);
     }
 
     /**

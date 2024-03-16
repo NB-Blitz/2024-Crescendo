@@ -54,7 +54,8 @@ public class RobotContainer {
            m_manipController = new CommandXboxController(IOConstants.kManipControllerPort);
         }
 
-        NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.setGyroToOdometry(), m_robotDrive));
+        NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+        NamedCommands.registerCommand("resetGyroToBackwards", new InstantCommand(() -> m_robotDrive.resetGyroToBackwards(), m_robotDrive));
         NamedCommands.registerCommand("shootSpeaker", m_robotManipulator.shootSpeakerCommand());
         
         // Configure the button bindings

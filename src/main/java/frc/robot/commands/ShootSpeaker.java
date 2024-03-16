@@ -16,6 +16,7 @@ public class ShootSpeaker extends Command {
 
     @Override
     public void initialize() {
+        timer.reset();
         timer.start();
     }
     

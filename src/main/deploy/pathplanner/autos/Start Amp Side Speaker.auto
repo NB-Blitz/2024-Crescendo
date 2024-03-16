@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.35,
-      "y": 7.45
+      "x": 0.65,
+      "y": 6.58
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Side -- Sub"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -27,6 +21,18 @@
           "type": "path",
           "data": {
             "pathName": "Amp Side Sub -- Leave"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "resetGyro"
           }
         }
       ]
