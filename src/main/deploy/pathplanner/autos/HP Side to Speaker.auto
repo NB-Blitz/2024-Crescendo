@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP Side to Speaker"
+            "pathName": "HP Side -- Speaker"
           }
         },
         {
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP Speaker to Leave"
+            "pathName": "HP Sub -- Leave"
           }
         }
       ]
