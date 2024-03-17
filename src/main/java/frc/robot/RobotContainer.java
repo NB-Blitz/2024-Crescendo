@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -117,8 +118,13 @@ public class RobotContainer {
         
         new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
             .whileTrue(new RepeatCommand(new InstantCommand(
-                () -> m_robotDrive.aimSpeaker(),
+                () -> m_robotDrive.driveRobotRelative(new ChassisSpeeds(0.25 * DriveConstants.kMaxSpeedMetersPerSecond, 0, 0)),
                 m_robotDrive)));
+        
+        // new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+        //     .whileTrue(new RepeatCommand(new InstantCommand(
+        //         () -> m_robotDrive.aimSpeaker(),
+        //         m_robotDrive)));
 
         if (DriveConstants.isMAXSwerveModules){
             m_manipController.a()
