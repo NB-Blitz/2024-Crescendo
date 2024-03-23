@@ -308,5 +308,7 @@ public final class Constants {
         public static final double kClimbScaleFactor = 0.0; //TODO: fix this
         public static final boolean kLeftInverted = false; //TODO: fix me
         public static final boolean kRightInverted = true; //TODO: fix me
+        public static final int kLeftClimberUpSwitchID = 0; // TODO: Set this ID
+        public static final int kRightClimberUpSwitchID = 1; // TODO: Set this ID
     } 
 }

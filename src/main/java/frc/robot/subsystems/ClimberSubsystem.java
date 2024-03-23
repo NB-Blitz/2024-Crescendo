@@ -9,12 +9,15 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ClimberConstants;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ClimberSubsystem extends SubsystemBase{
     private final CANSparkMax m_climberArmRight = new CANSparkMax(ClimberConstants.kRightMotorCANID, MotorType.kBrushless);
     private final CANSparkMax m_climberArmLeft = new CANSparkMax(ClimberConstants.kLeftMotorCANID, MotorType.kBrushless);/*TODO: Find out if the motor type is right*/
     //private boolean direction = false;
 
+    private final DigitalInput m_leftClimberUpSwitch = new DigitalInput(ClimberConstants.kLeftClimberUpSwitchID);
+    private final DigitalInput m_rightClimberUpSwitch = new DigitalInput(ClimberConstants.kRightClimberUpSwitchID);
     private final RelativeEncoder m_climberLeftArmEncoder = m_climberArmLeft.getEncoder();
     private final RelativeEncoder m_climberRightArmEncoder = m_climberArmRight.getEncoder();
     public ClimberSubsystem(){
@@ -87,10 +90,21 @@ public class ClimberSubsystem extends SubsystemBase{
                     m_climberArmRight.set(-ClimberConstants.kClimbArmSpeed);
                }
           }*/
-          m_climberArmLeft.set(joystick);
-          m_climberArmRight.set(joystick);
+          double leftMotorSpeed = joystick;
+          double rightMotorSpeed = joystick;
+          if(m_leftClimberUpSwitch.get() == true && joystick<0){
+               leftMotorSpeed = 0;
+
+          }
+          if(m_rightClimberUpSwitch.get() == true && joystick<0){
+               rightMotorSpeed = 0;
+          }
+          m_climberArmLeft.set(leftMotorSpeed);
+          m_climberArmRight.set(rightMotorSpeed);
+          
 
           SmartDashboard.putNumber("Left Climber Position", m_climberLeftArmEncoder.getPosition());
           SmartDashboard.putNumber("Right Climber Position", m_climberRightArmEncoder.getPosition());
+
     }
 }
