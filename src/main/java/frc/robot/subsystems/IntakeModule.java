@@ -38,7 +38,7 @@ public class IntakeModule {
         m_armMotor.setInverted(IntakeConstants.kArmInverted);
         m_intakeMotor.setInverted(IntakeConstants.kIntakeInverted);
 
-        m_armEncoder.setPositionConversionFactor(IntakeConstants.kInatkeEncoderPositionFactor);    
+        m_armEncoder.setPositionConversionFactor(IntakeConstants.kIntakeEncoderPositionFactor);    
         m_armEncoder.setVelocityConversionFactor(IntakeConstants.kIntakeEncoderVelocityFactor);
         m_armEncoder.setPosition(0);
 
