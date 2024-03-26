@@ -67,14 +67,20 @@ public class RobotContainer {
             // The left stick controls translation of the robot.
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
-                () -> m_robotDrive.drive(
-                    -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
+                () ->{
+                    if(m_driverController.getY()<0){
+                        double y = m_driverController.getY();
+                        Math.pow(-MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband), 2);
+                         
+                    }
+                    m_robotDrive.drive(
+                    Math.pow(-MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband), 2),
+                    Math.pow(-MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband), 2),
+                    Math.pow(-MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),2),
                     0.5 * (1 + -m_driverController.getRawAxis(IOConstants.kDriveSpeedScalerAxis)),
-                    true, false),
+                    true, false);},
                 m_robotDrive));
-
+                
         if (DriveConstants.isMAXSwerveModules) {
             m_robotManipulator.setDefaultCommand(
                 new RunCommand(

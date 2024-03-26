@@ -6,8 +6,11 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import javax.xml.namespace.QName;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -340,6 +343,25 @@ public class DriveSubsystem extends SubsystemBase {
                 : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
         
         setModuleStates(swerveModuleStates);
+    }
+/*
+ * scaledDrive scales the inputs quadratically 
+ */
+    public void scaledDrive(double xSpeed, double ySpeed, double rot, double speedScale){
+      double xScaled = Math.pow(xSpeed, 2);
+      double yScaled = Math.pow(ySpeed, 2);
+      double rotScaled = Math.pow(rot, 2);
+      if(xSpeed<0){
+        xScaled = -xScaled;
+      }
+      if(ySpeed<0){
+        yScaled = -yScaled;
+      }
+      if(rot<0){
+        rotScaled = -rotScaled;
+      }
+
+      drive(xScaled, yScaled, rotScaled, speedScale, true, false);
     }
 
     /**
