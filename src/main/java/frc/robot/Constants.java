@@ -31,8 +31,8 @@ public final class Constants {
     public static final class IOConstants {
         public static final int kDriverControllerPort = 0;
         public static final int kManipControllerPort = 1;
-        public static final double kDriveDeadband = 0.3;
-        public static final double kTwistDeadband = 0.5;
+        public static final double kDriveDeadband = 0.15;
+        public static final double kTwistDeadband = 0.3;
         public static final int kDriveSpeedScalerAxis = 3;
         public static final int kAimSpeakerButton = 3;
         public static final int kDriveBrakeButton = 6;
@@ -226,7 +226,7 @@ public final class Constants {
         public static final double kShootingSpeakerSpeed = -1.00;
         public static final IdleMode kShootMotorIdleMode = IdleMode.kBrake;
         public static final int kShootMotorCurrentLimit = 39;
-        public static final double kShooterP = 0.00025;
+        public static final double kShooterP = 0.00026;
         public static final double kShooterI = 0;
         public static final double kShooterD = 0;
         public static final double kShooterFF = 0;
@@ -249,14 +249,14 @@ public final class Constants {
         //public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
         public static final double kIntakeEncoderVelocityFactor = kIntakeEncoderPositionFactor / 60;
 
-        public static final double kIntakeP = 0.06;
+        public static final double kIntakeP = 0.0215;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0;
-        public static final double kArmMaxOutput = 0.2;
-        public static final double kArmMinOutput = -0.2;
+        public static final double kArmMaxOutput = 0.8;
+        public static final double kArmMinOutput = -0.8;
 
-        public static final double kArmSpeed = 0.2;
+        public static final double kArmSpeed = 0.5;
 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake;
         public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;
@@ -271,8 +271,8 @@ public final class Constants {
         public static final double kFloorIntakePosition = 195.0; // Bottom angle limit in degrees, inclusive
 
         public static final double kAmpShooterSpeed = -0.58;
-        public static final double kIntakePlayerSpeed = 0.15; // Speed of the intake motor when picking up from the player station.
-        public static final double kIntakeGroundSpeed = 0.3; // Sets the motor speed of the motor on the intake arm to pick up the note
+        public static final double kIntakePlayerSpeed = 0.5; // Speed of the intake motor when picking up from the player station.
+        public static final double kIntakeGroundSpeed = 0.5; // Sets the motor speed of the motor on the intake arm to pick up the note
         public static final double kUnjammingSpeed = -0.05;
         public static final double kFeedingSpeed = -1.0;
         public static final double kCalibrationSpeed = 0.05;
