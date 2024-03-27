@@ -239,13 +239,15 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int kArmMotorCANID = 9;
         public static final int kIntakeMotorCANID = 10;
-        public static final int kArmUpSwitchID = 1; // TODO: Set these
+        public static final int kArmUpSwitchID = 1;
         public static final int kNoteSwitchID = 0;
 
         public static final boolean kIntakeInverted = true;
         public static final boolean kArmInverted = false;
-        public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
-        public static final double kIntakeEncoderVelocityFactor = kInatkeEncoderPositionFactor / 60;
+        public static final double kArmGearRatio = 157.1;
+        public static final double kIntakeEncoderPositionFactor = 360 / kArmGearRatio;
+        //public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
+        public static final double kIntakeEncoderVelocityFactor = kIntakeEncoderPositionFactor / 60;
 
         public static final double kIntakeP = 0.06;
         public static final double kIntakeI = 0;
