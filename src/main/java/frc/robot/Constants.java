@@ -243,7 +243,7 @@ public final class Constants {
         public static final int kNoteSwitchID = 0;
 
         public static final boolean kIntakeInverted = true;
-        public static final boolean kArmInverted = false;
+        public static final boolean kArmInverted = true;
         public static final double kArmGearRatio = 157.1;
         public static final double kIntakeEncoderPositionFactor = 360 / kArmGearRatio;
         //public static final double kInatkeEncoderPositionFactor = 360 / 102.4;
@@ -253,8 +253,10 @@ public final class Constants {
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
         public static final double kIntakeFF = 0;
-        public static final double kArmMaxOutput = 0.3;
-        public static final double kArmMinOutput = -0.3;
+        public static final double kArmMaxOutput = 0.2;
+        public static final double kArmMinOutput = -0.2;
+
+        public static final double kArmSpeed = 0.2;
 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake;
         public static final IdleMode kIntakeMotorIdleMode = IdleMode.kBrake;

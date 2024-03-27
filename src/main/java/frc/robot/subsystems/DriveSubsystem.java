@@ -348,9 +348,11 @@ public class DriveSubsystem extends SubsystemBase {
  * scaledDrive scales the inputs quadratically 
  */
     public void scaledDrive(double xSpeed, double ySpeed, double rot, double speedScale){
-      double xScaled = Math.pow(xSpeed, 2);
-      double yScaled = Math.pow(ySpeed, 2);
-      double rotScaled = Math.pow(rot, 2);
+      double curve = 2.5; // 3 is almost quadratic and 2 almost is linear
+      double adjustment = 2- curve;
+      double xScaled = Math.pow(2.5, xSpeed) - 1 + adjustment;
+      double yScaled = Math.pow(2.5, ySpeed) - 1 + adjustment;
+      double rotScaled = Math.pow(2.5, rot) - 1 + adjustment;
       if(xSpeed<0){
         xScaled = -xScaled;
       }
