@@ -29,6 +29,8 @@ public final class Constants {
     public static final double TWO_PI = 2 * Math.PI;
 
     public static final class IOConstants {
+        public static final boolean kJoystickDrive = true;
+
         public static final int kDriverControllerPort = 0;
         public static final int kManipControllerPort = 1;
         public static final double kDriveDeadband = 0.15;
