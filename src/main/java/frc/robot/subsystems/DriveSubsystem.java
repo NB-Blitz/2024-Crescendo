@@ -489,10 +489,9 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double limelightStrafeProportional() {
-        double kP = .1;
+        double kP = .02;
         double targetingStrafeSpeed = LimelightHelpers.getTX("limelight") * kP;
         targetingStrafeSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
-        targetingStrafeSpeed *= -1.0;
         return targetingStrafeSpeed;
     }
 
@@ -507,7 +506,6 @@ public class DriveSubsystem extends SubsystemBase {
         double kP = .1;
         double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
         targetingForwardSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
-        targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;
     }
 }
