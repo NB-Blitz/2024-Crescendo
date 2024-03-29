@@ -303,8 +303,8 @@ public final class Constants {
     }
      
     public static final class ClimberConstants { 
-        public static final int kRightMotorCANID = 13;
-        public static final int kLeftMotorCANID = 14;
+        public static final int kRightMotorCANID = 14;
+        public static final int kLeftMotorCANID = 13;
         public static final int kDownPosition = 0; 
         public static final int kUpPosition = 1; 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake; 
@@ -312,9 +312,9 @@ public final class Constants {
         public static final double kClimbArmSpeed = 0.25; //TODO: fix this
         public static final double kClimbGearRatio = 1/12;
         public static final double kClimbScaleFactor = 0.0; //TODO: fix this
-        public static final boolean kLeftInverted = false; //TODO: fix me
-        public static final boolean kRightInverted = true; //TODO: fix me
-        public static final int kLeftClimberUpSwitchID = 0; // TODO: Set this ID
-        public static final int kRightClimberUpSwitchID = 1; // TODO: Set this ID
+        public static final boolean kLeftInverted = true; //TODO: fix me
+        public static final boolean kRightInverted = false; //TODO: fix me
+        public static final int kLeftClimberUpSwitchID = 3; // TODO: Set this ID
+        public static final int kRightClimberUpSwitchID = 4; // TODO: Set this ID
     } 
 }

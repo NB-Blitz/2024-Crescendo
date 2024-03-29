@@ -20,10 +20,13 @@ public class ClimberSubsystem extends SubsystemBase{
     private final DigitalInput m_rightClimberUpSwitch = new DigitalInput(ClimberConstants.kRightClimberUpSwitchID);
     private final RelativeEncoder m_climberLeftArmEncoder = m_climberArmLeft.getEncoder();
     private final RelativeEncoder m_climberRightArmEncoder = m_climberArmRight.getEncoder();
+    private double previousDirection = -1;
     public ClimberSubsystem(){
         m_climberArmLeft.restoreFactoryDefaults();
         m_climberArmRight.restoreFactoryDefaults();
 
+        m_climberArmLeft.setInverted(ClimberConstants.kLeftInverted);
+        m_climberArmRight.setInverted(ClimberConstants.kRightInverted);
 
         m_climberArmLeft.setIdleMode(ClimberConstants.kArmMotorIdleMode);
         m_climberArmLeft.setSmartCurrentLimit(ClimberConstants.kArmMotorCurrentLimit);
@@ -69,6 +72,14 @@ public class ClimberSubsystem extends SubsystemBase{
 
     }
 
+    public boolean getRightLimit(){
+          return !m_rightClimberUpSwitch.get();
+    }
+
+    public boolean getLeftLimit(){
+          return !m_leftClimberUpSwitch.get();
+    }
+
     public void move(double joystick) {
           /*if (direction == true) {
                if (isUp()) {
@@ -92,19 +103,34 @@ public class ClimberSubsystem extends SubsystemBase{
           }*/
           double leftMotorSpeed = joystick;
           double rightMotorSpeed = joystick;
-          if(m_leftClimberUpSwitch.get() == true && joystick<0){
-               leftMotorSpeed = 0;
+          if(getLeftLimit() == true){
+               if ((previousDirection < 0 && joystick < 0) || (previousDirection > 0 && joystick > 0)){
+                 leftMotorSpeed = 0;
+               }
+          }
+          if(getRightLimit() == true){
+               if ((previousDirection < 0 && joystick < 0) || (previousDirection > 0 && joystick > 0)){
+                 rightMotorSpeed = 0;
+               }
+          }
 
+          if (joystick != 0){
+               if (previousDirection > 0 && joystick < 0){
+                    previousDirection = -1;
+               }
+               else if (previousDirection < 0 && joystick > 0){
+                    previousDirection = 1;
+               }
           }
-          if(m_rightClimberUpSwitch.get() == true && joystick<0){
-               rightMotorSpeed = 0;
-          }
+
           m_climberArmLeft.set(leftMotorSpeed);
           m_climberArmRight.set(rightMotorSpeed);
           
 
           SmartDashboard.putNumber("Left Climber Position", m_climberLeftArmEncoder.getPosition());
           SmartDashboard.putNumber("Right Climber Position", m_climberRightArmEncoder.getPosition());
+          SmartDashboard.putBoolean("Left Climber Switch", getLeftLimit());
+          SmartDashboard.putBoolean("Right Climber Switch", getRightLimit());
 
     }
 }
