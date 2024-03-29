@@ -5,16 +5,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.Intake;
+import frc.robot.commands.IntakeFloor;
+import frc.robot.commands.IntakeHome;
 import frc.robot.commands.ShootSpeaker;
 
 public class ManipulatorSubsystem extends SubsystemBase {
     private final IntakeModule m_intakeModule = new IntakeModule();
     private final ShooterModule m_shooterModule = new ShooterModule();
 
+    public enum ARM_POS {
+        HOME,
+        AMP,
+        FLOOR,
+        FREE
+    }
+    public ARM_POS currentPos = ARM_POS.HOME;
+
     private double m_rollerSpeed = 0;
     private double m_shooterSpeed = 0;
-    private double maxCurrentReachedArm = 0.0;
-    private double maxCurrentReachedRoller = 0.0;
 
     private boolean debugMode = false;
 
@@ -38,7 +47,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Override Bounds", m_intakeModule.getOverrideBounds());
     }
 
-    public void loadPositionButtonHandler() {
+    public void homePositionButtonHandler() {
         m_intakeModule.setTargetPosition(IntakeConstants.kTopPosition);
     }
 
@@ -46,7 +55,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_intakeModule.setTargetPosition(IntakeConstants.kAmpShootingPosition);
     }
 
-    public void intakePositionButtonHandler() {
+    public void floorPositionButtonHandler() {
         m_intakeModule.setTargetPosition(IntakeConstants.kFloorIntakePosition);
     }
 
@@ -116,17 +125,32 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_intakeModule.setTargetVelocity(armJoystick);
         m_intakeModule.setIntakeSpeed(m_rollerSpeed);
 
-        double intakeCurrent = m_intakeModule.getRollerCurrent();
-        double armCurrent = m_intakeModule.getArmCurrent();
+        double currentArmPos = m_intakeModule.getCurrentPosition();
+        if (currentArmPos == IntakeConstants.kTopPosition) {
+            currentPos = ARM_POS.HOME;
+        } else if (currentArmPos <= IntakeConstants.kAmpShootingPosition + 1 && currentArmPos >= IntakeConstants.kAmpShootingPosition - 1) {
+            currentPos = ARM_POS.AMP;
+        } else if (currentArmPos >= IntakeConstants.kFloorIntakePosition) {
+            currentPos = ARM_POS.FLOOR;
+        } else {
+            currentPos = ARM_POS.FREE;
+        }
+    }
 
-        if (intakeCurrent > maxCurrentReachedRoller) {
-            maxCurrentReachedRoller = intakeCurrent;
-            SmartDashboard.putNumber("Max Roller Current", maxCurrentReachedRoller);
-        }
-        if (armCurrent > maxCurrentReachedArm) {
-            maxCurrentReachedArm = armCurrent;
-            SmartDashboard.putNumber("Max Arm Current", maxCurrentReachedArm);
-        }
+    public boolean getNoteSwitch() {
+        return m_intakeModule.getNoteLimitSwitch();
+    }
+
+    public Command intakeRollersCommand() {
+        return new Intake(this);
+    }
+
+    public Command intakeFloorPosCommand() {
+        return new IntakeFloor(this);
+    }
+
+    public Command intakeHomePosCommand() {
+        return new IntakeHome(this);
     }
 
     public Command shootSpeakerCommand() {

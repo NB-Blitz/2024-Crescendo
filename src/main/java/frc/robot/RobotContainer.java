@@ -57,6 +57,9 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
         NamedCommands.registerCommand("resetGyroToBackwards", new InstantCommand(() -> m_robotDrive.resetGyroToBackwards(), m_robotDrive));
+        NamedCommands.registerCommand("intakeRollers", m_robotManipulator.intakeRollersCommand());
+        NamedCommands.registerCommand("intakeFloorPos", m_robotManipulator.intakeFloorPosCommand());
+        NamedCommands.registerCommand("intakeHomePos", m_robotManipulator.intakeHomePosCommand());
         NamedCommands.registerCommand("shootSpeaker", m_robotManipulator.shootSpeakerCommand());
         
         // Configure the button bindings
@@ -144,12 +147,12 @@ public class RobotContainer {
 
             m_manipController.leftBumper()
                 .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.intakePositionButtonHandler(),
+                    () -> m_robotManipulator.floorPositionButtonHandler(),
                     m_robotManipulator));
 
             m_manipController.rightBumper()
                 .whileTrue(new RunCommand(
-                    () -> m_robotManipulator.loadPositionButtonHandler(),
+                    () -> m_robotManipulator.homePositionButtonHandler(),
                     m_robotManipulator));
 
             m_manipController.leftTrigger(0.5)

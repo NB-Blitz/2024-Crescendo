@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFloorPos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeRollers"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Sub -- Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeHomePos"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Note -- Sub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -68,14 +68,6 @@ public class IntakeModule {
         Timer.delay(1);
     }
 
-    public double getArmCurrent() {
-        return m_armMotor.getOutputCurrent();
-    }
-
-    public double getRollerCurrent() {
-        return m_intakeMotor.getOutputCurrent();
-    }
-
     /**
      * Setting the encoder position when the intake oart is up.
      * @return True when calibration is complete, false when calibration is in progress.
