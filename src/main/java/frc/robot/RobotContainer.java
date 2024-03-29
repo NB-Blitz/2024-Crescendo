@@ -42,7 +42,8 @@ public class RobotContainer {
     private ClimberSubsystem m_robotClimber;
 
     // The drivers' controllers
-    Joystick m_driverController = new Joystick(IOConstants.kDriverControllerPort);
+    Joystick m_driverController;
+    CommandXboxController m_driveXbox;
     CommandXboxController m_manipController;
 
     /**
@@ -55,6 +56,13 @@ public class RobotContainer {
            m_manipController = new CommandXboxController(IOConstants.kManipControllerPort);
         }
 
+        if (IOConstants.kJoystickDrive) {
+            m_driverController = new Joystick(IOConstants.kDriverControllerPort);
+        }
+        else {
+            m_driveXbox = new CommandXboxController(IOConstants.kDriverControllerPort);
+        }
+
         NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
         NamedCommands.registerCommand("resetGyroToBackwards", new InstantCommand(() -> m_robotDrive.resetGyroToBackwards(), m_robotDrive));
         NamedCommands.registerCommand("intakeRollers", m_robotManipulator.intakeRollersCommand());
@@ -65,24 +73,38 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        // Configure default commands
-        m_robotDrive.setDefaultCommand(
-            // The left stick controls translation of the robot.
-            // Turning is controlled by the X axis of the right stick.
-            new RunCommand(
-                () -> m_robotDrive.drive(
-                    -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
-                    0.5 * (1 + -m_driverController.getRawAxis(IOConstants.kDriveSpeedScalerAxis)),
-                    true, false),
-                m_robotDrive));
-
+        if (IOConstants.kJoystickDrive){
+            // Configure default commands
+            m_robotDrive.setDefaultCommand(
+                // The left stick controls translation of the robot.
+                // Turning is controlled by the X axis of the right stick.
+                new RunCommand(
+                    () -> m_robotDrive.scaledDrive(
+                        -MathUtil.applyDeadband(m_driverController.getY(), IOConstants.kDriveDeadband),
+                        -MathUtil.applyDeadband(m_driverController.getX(), IOConstants.kDriveDeadband),
+                        -MathUtil.applyDeadband(m_driverController.getTwist(), IOConstants.kTwistDeadband),
+                        0.5 * (1 + -m_driverController.getRawAxis(IOConstants.kDriveSpeedScalerAxis))),
+                    m_robotDrive));
+        }
+        else{
+            // Configure default commands
+            m_robotDrive.setDefaultCommand(
+                // The left stick controls translation of the robot.
+                // Turning is controlled by the X axis of the right stick.
+                new RunCommand(
+                    () -> m_robotDrive.scaledDrive(
+                        -MathUtil.applyDeadband(m_driveXbox.getLeftY(), IOConstants.kDriveDeadband),
+                        -MathUtil.applyDeadband(m_driveXbox.getLeftX(), IOConstants.kDriveDeadband),
+                        -MathUtil.applyDeadband(m_driveXbox.getRightX(), IOConstants.kTwistDeadband),
+                        1),
+                    m_robotDrive));
+        }
+                
         if (DriveConstants.isMAXSwerveModules) {
             m_robotManipulator.setDefaultCommand(
                 new RunCommand(
                     () -> m_robotManipulator.run(
-                        IntakeConstants.kArmMaxOutput * -MathUtil.applyDeadband(m_manipController.getLeftY(), IOConstants.kDriveDeadband)),
+                        IntakeConstants.kArmSpeed * -MathUtil.applyDeadband(m_manipController.getLeftY(), IOConstants.kDriveDeadband)),
                     m_robotManipulator));
 
             m_robotClimber.setDefaultCommand(
@@ -109,25 +131,53 @@ public class RobotContainer {
      * then passing it to a {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(m_driverController, IOConstants.kDriveBrakeButton)
-            .whileTrue(new RunCommand(
-                () -> m_robotDrive.setX(),
-                m_robotDrive));
+        if (IOConstants.kJoystickDrive){
+            new JoystickButton(m_driverController, IOConstants.kDriveBrakeButton)
+                .whileTrue(new RunCommand(
+                    () -> m_robotDrive.setX(),
+                    m_robotDrive));
 
-        new JoystickButton(m_driverController, IOConstants.kDriveGyroResetButton)
-            .whileTrue(new RunCommand(
-                () -> m_robotDrive.zeroHeading(),
-                m_robotDrive));
-        
-        new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
-            .whileTrue(new RepeatCommand(new InstantCommand(
-                () -> m_robotDrive.driveRobotRelative(new ChassisSpeeds(0.25 * DriveConstants.kMaxSpeedMetersPerSecond, 0, 0)),
-                m_robotDrive)));
-        
-        // new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
-        //     .whileTrue(new RepeatCommand(new InstantCommand(
-        //         () -> m_robotDrive.aimSpeaker(),
-        //         m_robotDrive)));
+            new JoystickButton(m_driverController, IOConstants.kDriveGyroResetButton)
+                .whileTrue(new RunCommand(
+                    () -> m_robotDrive.zeroHeading(),
+                    m_robotDrive));
+            
+            new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+                .whileTrue(new RepeatCommand(new InstantCommand(
+                    () -> m_robotDrive.driveRobotRelative(new ChassisSpeeds(0.25 * DriveConstants.kMaxSpeedMetersPerSecond, 0, 0)),
+                    m_robotDrive)));
+            
+            // new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+            //     .whileTrue(new RepeatCommand(new InstantCommand(
+            //         () -> m_robotDrive.aimSpeaker(),
+            //         m_robotDrive)));
+        }
+        else{
+            m_driveXbox.b()
+                .whileTrue(new RunCommand(
+                    () -> m_robotDrive.setX(),
+                    m_robotDrive));
+
+            m_driveXbox.povDown()
+                .whileTrue(new RunCommand(
+                    () -> m_robotDrive.zeroHeading(),
+                    m_robotDrive));
+
+            m_driveXbox.rightTrigger(0.5)
+                .whileTrue(new RunCommand(
+                    () -> m_robotDrive.setXboxFast(),
+                    m_robotDrive));
+            
+            m_driveXbox.rightTrigger(0.5)
+                .onFalse(new InstantCommand(
+                    () -> m_robotDrive.resetXboxSpeed(),
+                    m_robotDrive));
+            
+            //new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+            //    .whileTrue(new RepeatCommand(new InstantCommand(
+            //        () -> m_robotDrive.driveRobotRelative(new ChassisSpeeds(0.25 * DriveConstants.kMaxSpeedMetersPerSecond, 0, 0)),
+            //        m_robotDrive)));
+        }
 
         if (DriveConstants.isMAXSwerveModules){
             m_manipController.a()

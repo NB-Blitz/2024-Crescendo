@@ -6,8 +6,11 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import javax.xml.namespace.QName;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -29,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.MAXModuleConstants;
 import frc.robot.Constants.SDSModuleConstants;
 import frc.robot.subsystems.swervemodules.MAXSwerveModule;
@@ -43,6 +47,8 @@ public class DriveSubsystem extends SubsystemBase {
     private final SwerveModule m_frontRight; 
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
+
+    private double xboxSpeed = 0.5;
 
     // The gyro sensor
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -340,6 +346,51 @@ public class DriveSubsystem extends SubsystemBase {
                 : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
         
         setModuleStates(swerveModuleStates);
+    }
+
+    public void setXboxFast(){
+        xboxSpeed = 1;
+    }
+
+    public void resetXboxSpeed(){
+        xboxSpeed = 0.5;
+    }
+/*
+ * scaledDrive scales the inputs 
+ */
+    public void scaledDrive(double xSpeed, double ySpeed, double rot, double speedScale){
+      // Exponential Scaling
+      /*double curve = 3; // 3 is almost quadratic and 2 almost is linear
+      double adjustment = 2 - curve;
+      double xScaled = Math.pow(curve, Math.abs(xSpeed)) - 1 + (adjustment * xSpeed);
+      double yScaled = Math.pow(curve, Math.abs(ySpeed)) - 1 + (adjustment * ySpeed);
+      double rotScaled = Math.pow(curve, Math.abs(rot)) - 1 + (adjustment * rot);
+      */
+
+      // Polynomial Scaling
+      double exponent;
+      if (IOConstants.kJoystickDrive){
+        exponent = 4;
+      }
+      else{
+        exponent = 2;
+        speedScale = xboxSpeed;
+      }
+      double xScaled = Math.pow(Math.abs(xSpeed),exponent);
+      double yScaled = Math.pow(Math.abs(ySpeed),exponent);
+      double rotScaled = Math.pow(Math.abs(rot),exponent);
+
+      if(xSpeed<0){
+        xScaled = -xScaled;
+      }
+      if(ySpeed<0){
+        yScaled = -yScaled;
+      }
+      if(rot<0){
+        rotScaled = -rotScaled;
+      }
+
+      drive(xScaled, yScaled, rotScaled, speedScale, true, false);
     }
 
     /**
