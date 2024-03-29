@@ -142,15 +142,15 @@ public class RobotContainer {
                     () -> m_robotDrive.zeroHeading(),
                     m_robotDrive));
             
-            new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+            new JoystickButton(m_driverController, IOConstants.kStraightFwdButton)
                 .whileTrue(new RepeatCommand(new InstantCommand(
                     () -> m_robotDrive.driveRobotRelative(new ChassisSpeeds(0.25 * DriveConstants.kMaxSpeedMetersPerSecond, 0, 0)),
                     m_robotDrive)));
             
-            // new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
-            //     .whileTrue(new RepeatCommand(new InstantCommand(
-            //         () -> m_robotDrive.aimSpeaker(),
-            //         m_robotDrive)));
+            new JoystickButton(m_driverController, IOConstants.kAimSpeakerButton)
+                .whileTrue(new RepeatCommand(new InstantCommand(
+                    () -> m_robotDrive.aimSpeaker(),
+                    m_robotDrive)));
         }
         else{
             m_driveXbox.b()

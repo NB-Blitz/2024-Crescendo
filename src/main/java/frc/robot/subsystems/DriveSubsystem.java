@@ -6,11 +6,8 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import javax.xml.namespace.QName;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
-
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -457,11 +454,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void aimSpeaker() {
-        final double rotLimelight = limelightAimProportional();
+        //final double rotLimelight = limelightAngleProportional();
+        final double strafeLimelight = limelightStrafeProportional();
+        //final double forwardLimelight = limelightRangeProportional();
 
-        final double forwardLimelight = limelightRangeProportional();
-
-        driveRobotRelative(new ChassisSpeeds(forwardLimelight, 0, rotLimelight));
+        driveRobotRelative(new ChassisSpeeds(0, strafeLimelight, 0));
     }
 
     /**
@@ -470,7 +467,7 @@ public class DriveSubsystem extends SubsystemBase {
      * 
      * @return Angular velocity proportional to the "tx" value from the Limelight
      */
-    public double limelightAimProportional() {    
+    public double limelightAngleProportional() {    
         // kP (constant of proportionality)
         // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
         // if it is too high, the robot will oscillate.
@@ -489,6 +486,14 @@ public class DriveSubsystem extends SubsystemBase {
         targetingAngularVelocity *= -1.0;
 
         return targetingAngularVelocity;
+    }
+
+    public double limelightStrafeProportional() {
+        double kP = .1;
+        double targetingStrafeSpeed = LimelightHelpers.getTX("limelight") * kP;
+        targetingStrafeSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+        targetingStrafeSpeed *= -1.0;
+        return targetingStrafeSpeed;
     }
 
     /**

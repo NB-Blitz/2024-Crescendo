@@ -36,7 +36,8 @@ public final class Constants {
         public static final double kDriveDeadband = 0.15;
         public static final double kTwistDeadband = 0.3;
         public static final int kDriveSpeedScalerAxis = 3;
-        public static final int kAimSpeakerButton = 3;
+        public static final int kStraightFwdButton = 3;
+        public static final int kAimSpeakerButton = 4;
         public static final int kDriveBrakeButton = 6;
         public static final int kDriveGyroResetButton = 11;
 
@@ -132,7 +133,7 @@ public final class Constants {
         // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
         // This changes the drive speed of the module (a pinion gear with more teeth will result in a
         // robot that drives faster).
-        public static final int kDrivingMotorPinionTeeth = 12;
+        public static final int kDrivingMotorPinionTeeth = 14;
 
         // Invert the turning encoder, since the output shaft rotates in the opposite direction of
         // the steering motor in the MAXSwerve Module.
