@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.Intake;
 import frc.robot.commands.IntakeFloor;
 import frc.robot.commands.IntakeHome;
 import frc.robot.commands.ShootSpeaker;
@@ -139,10 +138,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public boolean getNoteSwitch() {
         return m_intakeModule.getNoteLimitSwitch();
-    }
-
-    public Command intakeRollersCommand() {
-        return new Intake(this);
     }
 
     public Command intakeFloorPosCommand() {

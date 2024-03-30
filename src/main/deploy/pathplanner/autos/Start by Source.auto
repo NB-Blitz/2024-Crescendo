@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
-      "y": 5.55
+      "x": 0.49,
+      "y": 2.08
     },
     "rotation": 0
   },
@@ -11,6 +11,12 @@
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Side -- Sub"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -20,12 +26,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Sub -- Leave"
+            "pathName": "Source Sub -- Leave"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "1-Note Autos",
   "choreoAuto": false
 }

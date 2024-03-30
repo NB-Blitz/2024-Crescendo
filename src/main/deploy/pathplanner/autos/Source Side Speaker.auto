@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.35,
-      "y": 1.95
+      "x": 0.73,
+      "y": 4.43
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HP Side -- Sub"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -26,12 +20,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP Sub -- Leave"
+            "pathName": "Source Sub -- Leave"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "resetGyro"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "1-Note Autos",
   "choreoAuto": false
 }

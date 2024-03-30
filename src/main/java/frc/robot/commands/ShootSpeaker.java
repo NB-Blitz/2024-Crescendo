@@ -23,7 +23,7 @@ public class ShootSpeaker extends Command {
     @Override
     public void execute() {
         manipulatorSubsystem.shootButtonHandler(false);
-        if (timer.get() >= 2) {
+        if (timer.get() >= 1) {
             manipulatorSubsystem.shootButtonHandler(true);
         }
     }

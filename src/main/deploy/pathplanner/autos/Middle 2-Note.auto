@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
+      "x": 1.33,
       "y": 5.55
     },
     "rotation": 0
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Sub -- Note"
+            "pathName": "Sub -- Mid Note"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Note -- Sub"
+            "pathName": "Mid Note -- Sub"
           }
         },
         {

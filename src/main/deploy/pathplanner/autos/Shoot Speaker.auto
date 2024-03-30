@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 1.33,
+      "y": 5.55
     },
     "rotation": 0
   },
@@ -20,6 +20,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "1-Note Autos",
   "choreoAuto": false
 }
