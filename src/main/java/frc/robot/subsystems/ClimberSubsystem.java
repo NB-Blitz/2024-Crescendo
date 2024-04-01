@@ -20,8 +20,8 @@ public class ClimberSubsystem extends SubsystemBase{
     private final DigitalInput m_rightClimberUpSwitch = new DigitalInput(ClimberConstants.kRightClimberUpSwitchID);
     private final RelativeEncoder m_climberLeftArmEncoder = m_climberArmLeft.getEncoder();
     private final RelativeEncoder m_climberRightArmEncoder = m_climberArmRight.getEncoder();
-    private Double leftPreviousDirection = Double.valueOf(-1);
-    private Double rightPreviousDirection = Double.valueOf(-1);
+    private double leftPreviousDirection = -1;
+    private double rightPreviousDirection = -1;
     public ClimberSubsystem(){
         m_climberArmLeft.restoreFactoryDefaults();
         m_climberArmRight.restoreFactoryDefaults();
@@ -80,24 +80,33 @@ public class ClimberSubsystem extends SubsystemBase{
     public boolean getLeftLimit(){
           return !m_leftClimberUpSwitch.get();
     }
-    private double calcArmOutput(Double pDir, double in, boolean limit){
-     double output = in;
-          if(limit == true){
-               if ((pDir < 0 && in < 0) || (pDir > 0 && in > 0)){
-                 output = 0;
-               }
-          }
 
-          if (in != 0 && !limit){
-               if (pDir > 0 && in < 0){
-                    pDir = Double.valueOf(-1); // TODO sad
-               }
-               else if (pDir < 0 && in > 0){
-                    pDir = Double.valueOf(1); // TODO sad
-               }
+    private double calcArmOutput(double pDir, double in, boolean limit, boolean rightArm){
+     double output = in;
+     if(limit == true){
+          if ((pDir < 0 && in < 0) || (pDir > 0 && in > 0)){
+               output = 0;
           }
-          return output;
+     }
+
+     if (in != 0 && !limit){
+          if (pDir > 0 && in < 0){
+               pDir = -1;
+          }
+          else if (pDir < 0 && in > 0){
+               pDir = 1;
+          }
+     }
+
+     if (rightArm){
+          rightPreviousDirection = pDir;
+     }
+     else{
+          leftPreviousDirection = pDir;
+     }
+     return output;
     }
+
     public void move(double joystick) {
           /*if (direction == true) {
                if (isUp()) {
@@ -119,8 +128,8 @@ public class ClimberSubsystem extends SubsystemBase{
                     m_climberArmRight.set(-ClimberConstants.kClimbArmSpeed);
                }
           }*/
-          double leftMotorSpeed = calcArmOutput(leftPreviousDirection, joystick, getLeftLimit());
-          double rightMotorSpeed = calcArmOutput(rightPreviousDirection, joystick, getRightLimit());
+          double leftMotorSpeed = calcArmOutput(leftPreviousDirection, joystick, getLeftLimit(), false);
+          double rightMotorSpeed = calcArmOutput(rightPreviousDirection, joystick, getRightLimit(), true);
           
 
           m_climberArmLeft.set(leftMotorSpeed);

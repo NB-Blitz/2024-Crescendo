@@ -310,7 +310,7 @@ public final class Constants {
         public static final int kUpPosition = 1; 
         public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake; 
         public static final int kArmMotorCurrentLimit = 39; 
-        public static final double kClimbArmSpeed = 0.25; //TODO: fix this
+        public static final double kClimbArmSpeed = 1.0; //TODO: fix this
         public static final double kClimbGearRatio = 1/12;
         public static final double kClimbScaleFactor = 0.0; //TODO: fix this
         public static final boolean kLeftInverted = true; //TODO: fix me
