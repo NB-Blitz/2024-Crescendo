@@ -36,31 +36,45 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "intakeFloorPos"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "intakeRollers"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeFloorPos"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeRollers"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Sub -- Mid Note"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Sub -- Mid Note"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -104,31 +118,45 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "intakeFloorPos"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "intakeRollers"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeFloorPos"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeRollers"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Sub -- Amp Note"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Sub -- Amp Note"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -172,31 +200,45 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "intakeFloorPos"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "intakeRollers"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeFloorPos"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeRollers"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Sub -- Source Note"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Sub -- Source Note"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -231,6 +273,18 @@
           "type": "named",
           "data": {
             "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
           }
         }
       ]
