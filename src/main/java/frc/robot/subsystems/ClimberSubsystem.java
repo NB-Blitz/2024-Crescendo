@@ -11,9 +11,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.ClimberConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class ClimberSubsystem extends SubsystemBase{
+public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax m_climberArmRight = new CANSparkMax(ClimberConstants.kRightMotorCANID, MotorType.kBrushless);
-    private final CANSparkMax m_climberArmLeft = new CANSparkMax(ClimberConstants.kLeftMotorCANID, MotorType.kBrushless);/*TODO: Find out if the motor type is right*/
+    private final CANSparkMax m_climberArmLeft = new CANSparkMax(ClimberConstants.kLeftMotorCANID, MotorType.kBrushless);
     //private boolean direction = false;
 
     private final DigitalInput m_leftClimberUpSwitch = new DigitalInput(ClimberConstants.kLeftClimberUpSwitchID);
@@ -22,8 +22,8 @@ public class ClimberSubsystem extends SubsystemBase{
     private final RelativeEncoder m_climberRightArmEncoder = m_climberArmRight.getEncoder();
     private double leftPreviousDirection = -1;
     private double rightPreviousDirection = -1;
-    public ClimberSubsystem(){
-        m_climberArmLeft.restoreFactoryDefaults();
+
+    public ClimberSubsystem() {m_climberArmLeft.restoreFactoryDefaults();
         m_climberArmRight.restoreFactoryDefaults();
 
         m_climberArmLeft.setInverted(ClimberConstants.kLeftInverted);
@@ -34,8 +34,8 @@ public class ClimberSubsystem extends SubsystemBase{
         m_climberArmRight.setIdleMode(ClimberConstants.kArmMotorIdleMode);
         m_climberArmRight.setSmartCurrentLimit(ClimberConstants.kArmMotorCurrentLimit);
 
-        m_climberLeftArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio);//ClimberConstants.kClimbScaleFactor);
-        m_climberRightArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio);//ClimberConstants.kClimbScaleFactor);
+        m_climberLeftArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio);
+        m_climberRightArmEncoder.setPositionConversionFactor(ClimberConstants.kClimbGearRatio);
 
         // Save the SPARK configurations. If a SPARK browns out during
         // operation, it will maintain the above configurations.
@@ -46,100 +46,88 @@ public class ClimberSubsystem extends SubsystemBase{
         Timer.delay(1);
     }
     
-    /*private boolean isDown(){
-       if(m_climberArmEncoder.getPosition() <= ClimberConstants.kDownPosition){
+    /*private boolean isDown() {
+        if (m_climberArmEncoder.getPosition() <= ClimberConstants.kDownPosition) {
             return true;
-       } else{
+        } else {
             System.out.println("Climber arm about to self destruct ;D");
             return false;
-       }
+        }
     }
 
-    private boolean isUp(){
-       if(m_climbArmEncoder.getPosition() >= ClimberConstants.kUpPosition){
+    private boolean isUp() {
+        if (m_climbArmEncoder.getPosition() >= ClimberConstants.kUpPosition) {
             return true;
-       } else{
+        } else {
             System.out.println("Climber arm about to self destruct ;D");
             return false;
-       }
+        }
     }*/
 
     /*private void buttonPressed() {
-          direction = !direction;
+        direction = !direction;
     }*/
 
     @Override
-    public void periodic() {
+    public void periodic() {}
 
+    public boolean getRightLimit() {
+        return !m_rightClimberUpSwitch.get();
     }
 
-    public boolean getRightLimit(){
-          return !m_rightClimberUpSwitch.get();
+    public boolean getLeftLimit() {
+        return !m_leftClimberUpSwitch.get();
     }
 
-    public boolean getLeftLimit(){
-          return !m_leftClimberUpSwitch.get();
-    }
+    private double calcArmOutput(double pDir, double in, boolean limit, boolean rightArm) {
+        double output = in;
+        if (limit == true) {
+            if ((pDir < 0 && in < 0) || (pDir > 0 && in > 0)) {
+                output = 0;
+            }
+        }
 
-    private double calcArmOutput(double pDir, double in, boolean limit, boolean rightArm){
-     double output = in;
-     if(limit == true){
-          if ((pDir < 0 && in < 0) || (pDir > 0 && in > 0)){
-               output = 0;
-          }
-     }
+        if (in != 0 && !limit) {
+            if (pDir > 0 && in < 0) {
+                pDir = -1;
+            } else if (pDir < 0 && in > 0){
+                pDir = 1;
+            }
+        }
 
-     if (in != 0 && !limit){
-          if (pDir > 0 && in < 0){
-               pDir = -1;
-          }
-          else if (pDir < 0 && in > 0){
-               pDir = 1;
-          }
-     }
-
-     if (rightArm){
-          rightPreviousDirection = pDir;
-     }
-     else{
-          leftPreviousDirection = pDir;
-     }
-     return output;
+        if (rightArm) {
+            rightPreviousDirection = pDir;
+        } else {
+            leftPreviousDirection = pDir;
+        }
+        return output;
     }
 
     public void move(double joystick) {
-          /*if (direction == true) {
-               if (isUp()) {
-                    m_climberArmLeft.set(0);
-                    m_climberArmRight.set(0);
-               }
-               else {
-                    m_climberArmLeft.set(ClimberConstants.kClimbArmSpeed);
-                    m_climberArmRight.set(ClimberConstants.kClimbArmSpeed);
-               }
-          }
-          else {
-               if (isDown()) {
-                    m_climberArmLeft.set(0);
-                    m_climberArmRight.set(0);
-               }
-               else {
-                    m_climberArmLeft.set(-ClimberConstants.kClimbArmSpeed);
-                    m_climberArmRight.set(-ClimberConstants.kClimbArmSpeed);
-               }
-          }*/
-          double leftMotorSpeed = calcArmOutput(leftPreviousDirection, joystick, getLeftLimit(), false);
-          double rightMotorSpeed = calcArmOutput(rightPreviousDirection, joystick, getRightLimit(), true);
+        /*if (direction == true) {
+            if (isUp()) {
+                m_climberArmLeft.set(0);
+                m_climberArmRight.set(0);
+            } else {
+                m_climberArmLeft.set(ClimberConstants.kClimbArmSpeed);
+                m_climberArmRight.set(ClimberConstants.kClimbArmSpeed);
+            }
+        } else {
+            if (isDown()) {
+                m_climberArmLeft.set(0);
+                m_climberArmRight.set(0);
+            } else {
+                m_climberArmLeft.set(-ClimberConstants.kClimbArmSpeed);
+                m_climberArmRight.set(-ClimberConstants.kClimbArmSpeed);
+            }
+        }*/
+        double leftMotorSpeed = calcArmOutput(leftPreviousDirection, joystick, getLeftLimit(), false);
+        double rightMotorSpeed = calcArmOutput(rightPreviousDirection, joystick, getRightLimit(), true);  
+
+        m_climberArmLeft.set(leftMotorSpeed);
+        m_climberArmRight.set(rightMotorSpeed);
           
-
-          m_climberArmLeft.set(leftMotorSpeed);
-          m_climberArmRight.set(rightMotorSpeed);
-          
-
-          SmartDashboard.putNumber("Left Climber Position", m_climberLeftArmEncoder.getPosition());
-          SmartDashboard.putNumber("Right Climber Position", m_climberRightArmEncoder.getPosition());
-          SmartDashboard.putBoolean("Left Climber Switch", getLeftLimit());
-          SmartDashboard.putBoolean("Right Climber Switch", getRightLimit());
-
+        SmartDashboard.putBoolean("Left Climber Switch", getLeftLimit());
+        SmartDashboard.putBoolean("Right Climber Switch", getRightLimit());
     }
 }

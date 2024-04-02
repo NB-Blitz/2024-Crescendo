@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
-      "y": 5.55
+      "x": 0.73,
+      "y": 4.44
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub -- Mid Note"
+                  "pathName": "Sub -- Bottom Note"
                 }
               }
             ]
@@ -80,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid Note -- Sub"
+                  "pathName": "Bottom Note -- Sub"
                 }
               }
             ]
@@ -118,7 +118,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub -- Amp Note"
+                  "pathName": "Sub -- 2nd Note"
                 }
               }
             ]
@@ -143,70 +143,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp Note -- Sub"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intakeFloorPos"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intakeRollers"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Sub -- Source Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeHomePos"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Source Note -- Sub"
+                  "pathName": "2nd Note -- Sub"
                 }
               }
             ]

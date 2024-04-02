@@ -3,8 +3,9 @@
   "robotLength": 0.8636,
   "holonomicMode": true,
   "pathFolders": [
-    "Sub -- Leave",
+    "Sub -- Midline",
     "Start Wall",
+    "Sub -- Leave",
     "Sub -- Note"
   ],
   "autoFolders": [

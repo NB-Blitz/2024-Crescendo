@@ -68,7 +68,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("intakeRollers", new InstantCommand(() -> m_robotManipulator.intakeButtonHandler()));
         NamedCommands.registerCommand("intakeFloorPos", m_robotManipulator.intakeFloorPosCommand());
         NamedCommands.registerCommand("intakeHomePos", m_robotManipulator.intakeHomePosCommand());
-        NamedCommands.registerCommand("shootSpeaker", m_robotManipulator.shootSpeakerCommand());
+        NamedCommands.registerCommand("startShooter", new InstantCommand(() -> m_robotManipulator.shootButtonHandler(false)));
+        NamedCommands.registerCommand("shootSpeaker", new InstantCommand(() -> m_robotManipulator.shootButtonHandler(true)));
         
         // Configure the button bindings
         configureButtonBindings();

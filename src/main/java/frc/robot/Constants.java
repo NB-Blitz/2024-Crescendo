@@ -158,12 +158,12 @@ public final class Constants {
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = TWO_PI; // radians
 
-        public static final double kDrivingP = 0.04; // TODO: Tune PID values
+        public static final double kDrivingP = 0.04;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
         public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
 
-        public static final double kTurningP = 0.5;
+        public static final double kTurningP = 0.45;
         public static final double kTurningI = 0;
         public static final double kTurningD = 0;
         public static final double kTurningFF = 0;
@@ -281,6 +281,24 @@ public final class Constants {
         public static final double kCalibrationSpeed = 0.05;
     }
 
+    public static final class ClimberConstants { 
+        public static final int kRightMotorCANID = 14;
+        public static final int kLeftMotorCANID = 13;
+        public static final int kLeftClimberUpSwitchID = 3;
+        public static final int kRightClimberUpSwitchID = 4;
+
+        public static final double kClimbGearRatio = 1/12;
+        public static final double kClimbArmSpeed = 1.0;
+        public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake;
+        public static final int kArmMotorCurrentLimit = 39;
+
+        public static final int kDownPosition = 0;
+        public static final int kUpPosition = 1;
+
+        public static final boolean kLeftInverted = true;
+        public static final boolean kRightInverted = false;
+    }
+
     public static final class AutoConstants {
         public static final HolonomicPathFollowerConfig kPathFollowerConfig = DriveConstants.isMAXSwerveModules ?
             new HolonomicPathFollowerConfig(
@@ -302,20 +320,4 @@ public final class Constants {
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
     }
-     
-    public static final class ClimberConstants { 
-        public static final int kRightMotorCANID = 14;
-        public static final int kLeftMotorCANID = 13;
-        public static final int kDownPosition = 0; 
-        public static final int kUpPosition = 1; 
-        public static final IdleMode kArmMotorIdleMode = IdleMode.kBrake; 
-        public static final int kArmMotorCurrentLimit = 39; 
-        public static final double kClimbArmSpeed = 1.0; //TODO: fix this
-        public static final double kClimbGearRatio = 1/12;
-        public static final double kClimbScaleFactor = 0.0; //TODO: fix this
-        public static final boolean kLeftInverted = true; //TODO: fix me
-        public static final boolean kRightInverted = false; //TODO: fix me
-        public static final int kLeftClimberUpSwitchID = 3; // TODO: Set this ID
-        public static final int kRightClimberUpSwitchID = 4; // TODO: Set this ID
-    } 
 }
