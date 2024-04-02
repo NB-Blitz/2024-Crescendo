@@ -66,8 +66,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("resetGyro", new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
         NamedCommands.registerCommand("resetGyroToBackwards", new InstantCommand(() -> m_robotDrive.resetGyroToBackwards(), m_robotDrive));
         NamedCommands.registerCommand("intakeRollers", new InstantCommand(() -> m_robotManipulator.intakeButtonHandler()));
-        NamedCommands.registerCommand("intakeFloorPos", m_robotManipulator.intakeFloorPosCommand());
-        NamedCommands.registerCommand("intakeHomePos", m_robotManipulator.intakeHomePosCommand());
+        NamedCommands.registerCommand("intakeFloorPos", new InstantCommand(() -> m_robotManipulator.floorPositionButtonHandler()));
+        NamedCommands.registerCommand("intakeHomePos", new InstantCommand(() -> m_robotManipulator.homePositionButtonHandler()));
         NamedCommands.registerCommand("startShooter", new InstantCommand(() -> m_robotManipulator.shootButtonHandler(false)));
         NamedCommands.registerCommand("shootSpeaker", new InstantCommand(() -> m_robotManipulator.shootButtonHandler(true)));
         
