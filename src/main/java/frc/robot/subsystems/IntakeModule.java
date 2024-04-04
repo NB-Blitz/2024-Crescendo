@@ -73,7 +73,6 @@ public class IntakeModule {
      * @return True when calibration is complete, false when calibration is in progress.
      */
     /*public boolean calibrate() {
-        // TODO Use calibrate function in manipulator
         if (!calibrated) {
             if(getArmSwitch() == true){
                 m_armMotor.set(0);
@@ -81,7 +80,7 @@ public class IntakeModule {
                 calibrated = true;
             }
             else{
-                m_armMotor.set(0.1); //TODO Replace with constant
+                m_armMotor.set(IntakeConstants.kArmSpeed);
                 calibrated = false;
             }
         }

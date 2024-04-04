@@ -158,7 +158,7 @@ public final class Constants {
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = TWO_PI; // radians
 
-        public static final double kDrivingP = 0.04;
+        public static final double kDrivingP = 0.05;
         public static final double kDrivingI = 0;
         public static final double kDrivingD = 0;
         public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
@@ -302,15 +302,15 @@ public final class Constants {
     public static final class AutoConstants {
         public static final HolonomicPathFollowerConfig kPathFollowerConfig = DriveConstants.isMAXSwerveModules ?
             new HolonomicPathFollowerConfig(
-                new PIDConstants(MAXModuleConstants.kDrivingP, MAXModuleConstants.kDrivingI, MAXModuleConstants.kDrivingD), // Translation PID constants
-                new PIDConstants(MAXModuleConstants.kTurningP, MAXModuleConstants.kTurningI, MAXModuleConstants.kTurningD), // Rotation PID constants
+                new PIDConstants(1, MAXModuleConstants.kDrivingI, MAXModuleConstants.kDrivingD), // Translation PID constants
+                new PIDConstants(1, MAXModuleConstants.kTurningI, MAXModuleConstants.kTurningD), // Rotation PID constants
                 DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
                 MAXModuleConstants.kDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
             ) :
             new HolonomicPathFollowerConfig(
-                new PIDConstants(SDSModuleConstants.kDrivingP, SDSModuleConstants.kDrivingI, SDSModuleConstants.kDrivingD), // Translation PID constants
-                new PIDConstants(SDSModuleConstants.kTurningP, SDSModuleConstants.kTurningI, SDSModuleConstants.kTurningD), // Rotation PID constants
+                new PIDConstants(1, SDSModuleConstants.kDrivingI, SDSModuleConstants.kDrivingD), // Translation PID constants
+                new PIDConstants(1, SDSModuleConstants.kTurningI, SDSModuleConstants.kTurningD), // Rotation PID constants
                 DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
                 SDSModuleConstants.kDriveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
