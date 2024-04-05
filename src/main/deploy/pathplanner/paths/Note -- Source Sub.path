@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.33,
-        "y": 5.55
+        "x": 0.73,
+        "y": 4.44
       },
       "prevControl": {
-        "x": 1.6835533905932738,
-        "y": 5.196446609406726
+        "x": 0.9550000000000002,
+        "y": 4.050288568297003
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "rotation": -60.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Middle Sub -- Note",
+  "folder": "Side Sub -- Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

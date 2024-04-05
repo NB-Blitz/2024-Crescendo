@@ -3,13 +3,15 @@
   "robotLength": 0.8636,
   "holonomicMode": true,
   "pathFolders": [
-    "Sub -- Midline",
+    "Middle Sub -- Note",
+    "Side Sub -- Note",
     "Start Wall",
     "Sub -- Leave",
-    "Sub -- Note"
+    "Sub -- Midline"
   ],
   "autoFolders": [
-    "1-Note Autos"
+    "1-Note Autos",
+    "2-Note Autos"
   ],
   "defaultMaxVel": 4.8,
   "defaultMaxAccel": 4.8,
