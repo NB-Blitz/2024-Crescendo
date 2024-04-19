@@ -67,6 +67,8 @@ public class DriveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry m_odometry;
     //public SwerveDrivePoseEstimator m_poseEstimator;
 
+    private boolean m_demoMode = true;
+
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
         if (DriveConstants.isMAXSwerveModules) {
@@ -118,6 +120,8 @@ public class DriveSubsystem extends SubsystemBase {
 
             m_kinematics = SDSModuleConstants.kDriveKinematics;
         }
+
+        SmartDashboard.putBoolean("TURBO MODE", false);
 
         m_odometry = new SwerveDriveOdometry(
             m_kinematics,
@@ -187,6 +191,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("bl_absolute", m_backLeft.getAbsoluteEncoderPos());
         SmartDashboard.putNumber("br_relative", m_backRight.getState().angle.getDegrees());
         SmartDashboard.putNumber("br_absolute", m_backRight.getAbsoluteEncoderPos());
+        m_demoMode = !SmartDashboard.getBoolean("TURBO MODE", false);
     }
 
     /**
@@ -287,6 +292,9 @@ public class DriveSubsystem extends SubsystemBase {
     public void drive(double xSpeed, double ySpeed, double rot, double speedScale, boolean fieldRelative, boolean rateLimit) {
         double xSpeedCommanded;
         double ySpeedCommanded;
+        if(m_demoMode){
+            speedScale = 0.2;
+        }
 
         if (rateLimit) {
             // Convert XY to polar for rate limiting
