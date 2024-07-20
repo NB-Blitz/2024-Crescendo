@@ -322,31 +322,18 @@
           },
           "16,0": {
             "size": [
-              1,
-              1
+              2,
+              2
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
-              "_title": "limelight_PipelineName",
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/Demo Mode",
+              "_title": "Demo Mode",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "17,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/limelight_Stream",
-              "_title": "limelight_Stream",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "18,0": {
+          "11,2": {
             "size": [
               1,
               1

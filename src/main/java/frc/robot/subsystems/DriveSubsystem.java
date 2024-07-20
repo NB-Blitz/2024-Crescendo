@@ -67,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry m_odometry;
     //public SwerveDrivePoseEstimator m_poseEstimator;
 
-    private boolean m_demoMode = true;
+    private boolean m_demoMode = false;
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -121,7 +121,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_kinematics = SDSModuleConstants.kDriveKinematics;
         }
 
-        SmartDashboard.putBoolean("TURBO MODE", false);
+        SmartDashboard.putBoolean("Demo Mode", false);
 
         m_odometry = new SwerveDriveOdometry(
             m_kinematics,
@@ -191,7 +191,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("bl_absolute", m_backLeft.getAbsoluteEncoderPos());
         SmartDashboard.putNumber("br_relative", m_backRight.getState().angle.getDegrees());
         SmartDashboard.putNumber("br_absolute", m_backRight.getAbsoluteEncoderPos());
-        m_demoMode = !SmartDashboard.getBoolean("TURBO MODE", false);
+        m_demoMode = SmartDashboard.getBoolean("Demo Mode", false);
     }
 
     /**
