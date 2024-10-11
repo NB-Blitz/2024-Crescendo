@@ -24,6 +24,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private double m_rollerSpeed = 0;
     private double m_shooterSpeed = 0;
 
+    private boolean idleIntakeMode = false;
     private boolean debugMode = false;
 
     public ManipulatorSubsystem() {}
@@ -39,8 +40,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_shooterModule.runShooter();
 
         SmartDashboard.putNumber("Arm Angle", m_intakeModule.getCurrentPosition());
-        SmartDashboard.putBoolean("Arm Switch", m_intakeModule.getArmSwitch());
-        SmartDashboard.putBoolean("Note Switch", m_intakeModule.getNoteLimitSwitch());
+        SmartDashboard.putBoolean("Arm Switch", getArmSwitch());
+        SmartDashboard.putBoolean("Note Switch", getNoteSwitch());
         SmartDashboard.putBoolean("Arm Calibrated", m_intakeModule.isIntakeArmCalibrated());
         SmartDashboard.putBoolean("Debug Mode", debugMode);
         SmartDashboard.putBoolean("Override Bounds", m_intakeModule.getOverrideBounds());
@@ -59,32 +60,31 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void intakeButtonHandler() {
-        if (!m_intakeModule.getNoteLimitSwitch()) {
-            if(m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer) { // This means you are in loading position
+        if (!getNoteSwitch()) {
+            idleIntakeMode = false;
+            if(m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer) { // This means you are in top position
                 m_rollerSpeed = IntakeConstants.kIntakePlayerSpeed;
                 m_shooterSpeed = ShooterConstants.kIntakeSpeed;
-            }
-            else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kFloorIntakePosition-IntakeConstants.kArmAngleBuffer &&
-                    m_intakeModule.getCurrentPosition() < IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer) { // This means you are in shooting position
-                m_rollerSpeed = IntakeConstants.kIntakeGroundSpeed;
-            }
-            else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer &&
-                    m_intakeModule.getCurrentPosition() < IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer) { // This means you are in the amp position
+            } else {
                 m_rollerSpeed = IntakeConstants.kIntakeGroundSpeed;
             }
         }
     }
 
     public void shootButtonHandler(boolean runIntake) {
-        if(m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer) { // This means you are in loading position
+        if (m_intakeModule.getCurrentPosition() < IntakeConstants.kTopPosition+IntakeConstants.kArmAngleBuffer) { // This means you are in loading position
             m_shooterSpeed = ShooterConstants.kShootingSpeakerSpeed;
             if(runIntake) {
                 m_rollerSpeed = IntakeConstants.kFeedingSpeed;
             }
+        } else if (runIntake) {
+            idleIntakeMode = false;
+            m_rollerSpeed = IntakeConstants.kAmpShooterSpeed;
         }
     }
 
     public void stopButtonHandler() {
+        idleIntakeMode = false;
         m_rollerSpeed = 0;
         m_shooterSpeed = 0;
     }
@@ -111,13 +111,19 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void run(double armJoystick) {
-        if (m_intakeModule.getNoteLimitSwitch()) {
-            if (m_rollerSpeed > 0) {
-                m_rollerSpeed = 0;
-            }
+        if (getNoteSwitch()) {
+            idleIntakeMode = true;
             if (m_shooterSpeed > 0) {
                 m_shooterSpeed = 0;
             }
+        }
+
+        if (getArmSwitch()) {
+            idleIntakeMode = false;
+        }
+
+        if (idleIntakeMode) {
+            m_rollerSpeed = IntakeConstants.kIntakeIdleSpeed;
         }
 
         m_shooterModule.setShooterSpeed(m_shooterSpeed);
@@ -134,6 +140,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         } else {
             currentPos = ARM_POS.FREE;
         }
+    }
+
+    public boolean getArmSwitch() {
+        return m_intakeModule.getArmSwitch();
     }
 
     public boolean getNoteSwitch() {
