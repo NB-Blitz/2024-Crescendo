@@ -68,6 +68,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
                     m_intakeModule.getCurrentPosition() < IntakeConstants.kFloorIntakePosition+IntakeConstants.kArmAngleBuffer) { // This means you are in shooting position
                 m_rollerSpeed = IntakeConstants.kIntakeGroundSpeed;
             }
+            else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer &&
+                    m_intakeModule.getCurrentPosition() < IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer) { // This means you are in the amp position
+                m_rollerSpeed = IntakeConstants.kIntakeGroundSpeed;
+            }
         }
     }
 
@@ -77,10 +81,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
             if(runIntake) {
                 m_rollerSpeed = IntakeConstants.kFeedingSpeed;
             }
-        }
-        else if (m_intakeModule.getCurrentPosition() > IntakeConstants.kAmpShootingPosition-IntakeConstants.kArmAngleBuffer &&
-                m_intakeModule.getCurrentPosition() < IntakeConstants.kAmpShootingPosition+IntakeConstants.kArmAngleBuffer) { // This means you are aiming for the amp
-            m_rollerSpeed = IntakeConstants.kAmpShooterSpeed;
         }
     }
 
